@@ -3,6 +3,7 @@ from typing import Dict, Optional
 from app.data.knowledge_service import BiologicalKnowledgeService
 from app.analysis.perturbation import simulate_perturbation
 from app.analysis.cell_state import interpret_cell_state
+from app.analysis.evidence_reasoning import EvidenceReasoningEngine
 from app.analysis.target_analysis import TargetAnalysisEngine
 from app.models.features.protein_features import ProteinFeatureService
 from app.models.features.molecule_features import MoleculeFeatureService
@@ -23,6 +24,7 @@ class BiologicalInferenceEngine:
         self.protein_features = ProteinFeatureService()
         self.molecule_features = MoleculeFeatureService()
         self.cell_features = CellFeatureService()
+        self.evidence_reasoning = EvidenceReasoningEngine()
         self.target_analysis = TargetAnalysisEngine()
 
     def analyze_gene(
@@ -155,6 +157,16 @@ class BiologicalInferenceEngine:
 
         result["target_analysis"] = target_result
 
+        # ---------------------------------------------------------
+        # Evidence reasoning
+        # ---------------------------------------------------------
+
+        reasoning_result = self.evidence_reasoning.reason(
+            biological_context=context,
+            target_analysis=target_result,
+        )
+
+        result["evidence_reasoning"] = reasoning_result
         return result
 
     def analyze_molecule(
@@ -167,7 +179,7 @@ class BiologicalInferenceEngine:
 
         return self.molecule_features.extract_features(
             smiles
-        )
+       )
 
     def analyze_protein_sequence(
         self,
