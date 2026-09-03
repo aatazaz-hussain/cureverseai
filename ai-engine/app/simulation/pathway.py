@@ -1,39 +1,40 @@
-import networkx as nx
+from app.data.biological_data import GENES, PATHWAYS
 
 
-def simulate_pathway(
-    graph: nx.DiGraph,
-    initial_gene: str,
-    initial_value: float = 1.0,
-    steps: int = 3,
-):
-    if initial_gene not in graph:
-        raise ValueError(f"Unknown gene: {initial_gene}")
+def analyze_gene_pathways(gene: str):
+    gene = gene.upper()
 
-    state = {node: 0.0 for node in graph.nodes}
-    state[initial_gene] = initial_value
+    gene_data = GENES.get(gene)
 
-    history = [state.copy()]
+    if not gene_data:
+        return {
+            "gene": gene,
+            "found": False,
+            "pathways": [],
+        }
 
-    for _ in range(steps):
-        new_state = state.copy()
+    pathway_results = []
 
-        for source, target in graph.edges:
-            signal = state[source]
+    for pathway_name in gene_data["pathways"]:
+        pathway = PATHWAYS.get(pathway_name)
 
-            if signal > 0:
-                new_state[target] = min(
-                    1.0,
-                    new_state[target] + signal * 0.5
-                )
+        if not pathway:
+            continue
 
-        state = new_state
-        history.append(state.copy())
+        related_genes = []
+
+        for related_gene in pathway["genes"]:
+            if related_gene != gene:
+                related_genes.append(related_gene)
+
+        pathway_results.append({
+            "pathway": pathway_name,
+            "description": pathway["description"],
+            "related_genes": related_genes,
+        })
 
     return {
-        "initial_gene": initial_gene,
-        "initial_value": initial_value,
-        "steps": steps,
-        "history": history,
-        "final_state": state,
+        "gene": gene,
+        "found": True,
+        "pathways": pathway_results,
     }
