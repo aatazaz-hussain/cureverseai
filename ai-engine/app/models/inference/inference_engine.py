@@ -3,6 +3,7 @@ from typing import Dict, Optional
 from app.data.knowledge_service import BiologicalKnowledgeService
 from app.analysis.perturbation import simulate_perturbation
 from app.analysis.cell_state import interpret_cell_state
+from app.analysis.target_analysis import TargetAnalysisEngine
 from app.models.features.protein_features import ProteinFeatureService
 from app.models.features.molecule_features import MoleculeFeatureService
 from app.models.features.cell_features import CellFeatureService
@@ -13,8 +14,8 @@ class BiologicalInferenceEngine:
     Unified biological inference engine.
 
     Combines biological knowledge, pretrained protein and molecular
-    representations, cellular state analysis, pathway analysis,
-    and perturbation analysis into a single inference workflow.
+    representations, cellular context, pathway information,
+    perturbation analysis, and target analysis.
     """
 
     def __init__(self):
@@ -22,22 +23,101 @@ class BiologicalInferenceEngine:
         self.protein_features = ProteinFeatureService()
         self.molecule_features = MoleculeFeatureService()
         self.cell_features = CellFeatureService()
+        self.target_analysis = TargetAnalysisEngine()
 
     def analyze_gene(
         self,
         gene: str,
         perturbation: Optional[float] = None,
+        smiles: Optional[str] = None,
     ) -> Dict:
         """
         Run an integrated biological analysis for a gene.
+
+        Parameters
+        ----------
+        gene:
+            Gene symbol or supported biological identifier.
+
+        perturbation:
+            Optional perturbation value used to generate
+            cellular-state context.
+
+        smiles:
+            Optional molecular SMILES string for compound context.
         """
 
         context = self.knowledge.get_biological_context(gene)
 
         result = {
+            "analysis_type": "integrated_gene_analysis",
             "gene": gene,
             "biological_context": context,
         }
+
+        protein_result = None
+        molecule_result = None
+        cell_result = None
+
+        # ---------------------------------------------------------
+        # Protein representation
+        # ---------------------------------------------------------
+        gene_record = context.get("gene")
+
+        if gene_record:
+            ensembl_id = self._get_value(
+                gene_record,
+                "ensembl_id",
+            )
+
+            transcript_id = self._get_value(
+                gene_record,
+                "canonical_transcript",
+            )
+
+            if transcript_id:
+                try:
+                    from app.data.sources.ensembl_sequence import (
+                        EnsemblSequenceClient,
+                    )
+
+                    sequence_client = EnsemblSequenceClient()
+
+                    sequence = sequence_client.get_protein_sequence(
+                        transcript_id
+                    )
+
+                    if sequence:
+                        protein_result = (
+                            self.protein_features.extract_features(
+                                sequence
+                            )
+                        )
+
+                        result["protein_features"] = protein_result
+
+                except Exception as exc:
+                    result["protein_features_error"] = str(exc)
+        # ---------------------------------------------------------
+        # Molecular representation
+        # ---------------------------------------------------------
+
+        if smiles:
+            try:
+                molecule_result = (
+                    self.molecule_features.extract_features(
+                        smiles
+                    )
+                )
+
+                result["molecule_features"] = molecule_result
+
+            except Exception as exc:
+                result["molecule_features_error"] = str(exc)
+
+        # ---------------------------------------------------------
+        # Cellular context
+        # ---------------------------------------------------------
 
         if perturbation is not None:
             perturbation_result = simulate_perturbation(
@@ -54,22 +134,59 @@ class BiologicalInferenceEngine:
             result["cell_state"] = cell_state
 
             if cell_state.get("status") == "success":
-                result["cell_features"] = self.cell_features.extract_features(
-                    cell_state["cell_state"]
+                cell_result = (
+                    self.cell_features.extract_features(
+                        cell_state["cell_state"]
+                    )
                 )
+
+                result["cell_features"] = cell_result
+
+        # ---------------------------------------------------------
+        # Target analysis
+        # ---------------------------------------------------------
+
+        target_result = self.target_analysis.analyze(
+            biological_context=context,
+            protein_features=protein_result,
+            molecule_features=molecule_result,
+            cell_features=cell_result,
+        )
+
+        result["target_analysis"] = target_result
 
         return result
 
-    def analyze_molecule(self, smiles: str) -> Dict:
+    def analyze_molecule(
+        self,
+        smiles: str,
+    ) -> Dict:
         """
         Generate molecular representation for a compound.
         """
 
-        return self.molecule_features.extract_features(smiles)
+        return self.molecule_features.extract_features(
+            smiles
+        )
 
-    def analyze_protein_sequence(self, sequence: str) -> Dict:
+    def analyze_protein_sequence(
+        self,
+        sequence: str,
+    ) -> Dict:
         """
         Generate protein representation for a sequence.
         """
 
-        return self.protein_features.extract_features(sequence)
+        return self.protein_features.extract_features(
+            sequence
+        )
+
+    @staticmethod
+    def _get_value(
+        obj,
+        key: str,
+    ):
+        if isinstance(obj, dict):
+            return obj.get(key)
+
+        return getattr(obj, key, None)
