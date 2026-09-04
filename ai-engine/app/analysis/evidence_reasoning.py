@@ -7,18 +7,20 @@ class EvidenceReasoningEngine:
 
     Separates:
     - directly observed biological evidence
+    - external curated/aggregated evidence
     - model-derived representations
     - contextual evidence
     - inferred conclusions
 
-    The engine produces transparent reasoning metadata rather
-    than presenting model representations as established facts.
+    External evidence is kept separate from direct biological
+    observations and model-derived representations.
     """
 
     def reason(
         self,
         biological_context: Dict[str, Any],
         target_analysis: Dict[str, Any],
+        open_targets_evidence: Dict[str, Any] | None = None,
     ) -> Dict[str, Any]:
 
         evidence = target_analysis.get("evidence", [])
@@ -38,6 +40,10 @@ class EvidenceReasoningEngine:
 
             else:
                 contextual_evidence.append(item)
+
+        external_evidence = self._extract_external_evidence(
+            open_targets_evidence
+        )
 
         gene = self._extract_gene(
             biological_context
@@ -61,34 +67,116 @@ class EvidenceReasoningEngine:
             variant_count=variant_count,
             direct_evidence=direct_evidence,
             model_evidence=model_evidence,
+            external_evidence=external_evidence,
         )
 
         coverage = self._calculate_coverage(
             direct_evidence=direct_evidence,
             model_evidence=model_evidence,
             contextual_evidence=contextual_evidence,
+            external_evidence=external_evidence,
         )
 
         return {
-            "reasoning_type": "evidence_based_biological_reasoning",
+            "reasoning_type": (
+                "evidence_based_biological_reasoning"
+            ),
             "gene": gene,
             "evidence_summary": {
-                "total": len(evidence),
+                "total": (
+                    len(direct_evidence)
+                    + len(model_evidence)
+                    + len(contextual_evidence)
+                    + len(external_evidence)
+                ),
                 "direct": len(direct_evidence),
+                "external": len(external_evidence),
                 "model_derived": len(model_evidence),
                 "contextual": len(contextual_evidence),
             },
             "coverage": coverage,
             "findings": findings,
+            "external_sources": self._extract_external_sources(
+                open_targets_evidence
+            ),
             "limitations": [
                 "Model-derived representations are not treated "
                 "as direct biological evidence.",
+                "External association scores are preserved as "
+                "source evidence and are not interpreted as "
+                "clinical probabilities or therapeutic efficacy.",
                 "Evidence coverage does not establish clinical "
                 "validity or therapeutic efficacy.",
                 "Task-specific experimental validation is required "
                 "for biological claims.",
             ],
         }
+
+    @staticmethod
+    def _extract_external_evidence(
+        open_targets_evidence: Dict[str, Any] | None,
+    ) -> List[Dict[str, Any]]:
+
+        if not isinstance(
+            open_targets_evidence,
+            dict,
+        ):
+            return []
+
+        evidence = open_targets_evidence.get(
+            "evidence",
+            [],
+        )
+
+        if not isinstance(
+            evidence,
+            list,
+        ):
+            return []
+
+        return [
+            item
+            for item in evidence
+            if isinstance(item, dict)
+        ]
+
+    @staticmethod
+    def _extract_external_sources(
+        open_targets_evidence: Dict[str, Any] | None,
+    ) -> List[str]:
+
+        if not isinstance(
+            open_targets_evidence,
+            dict,
+        ):
+            return []
+
+        summary = open_targets_evidence.get(
+            "summary",
+            {},
+        )
+
+        if not isinstance(
+            summary,
+            dict,
+        ):
+            return []
+
+        sources = summary.get(
+            "sources",
+            [],
+        )
+
+        if not isinstance(
+            sources,
+            list,
+        ):
+            return []
+
+        return [
+            str(source)
+            for source in sources
+        ]
 
     @staticmethod
     def _extract_gene(
@@ -120,7 +208,10 @@ class EvidenceReasoningEngine:
             {},
         )
 
-        if not isinstance(value, dict):
+        if not isinstance(
+            value,
+            dict,
+        ):
             return 0
 
         count = value.get(
@@ -135,12 +226,14 @@ class EvidenceReasoningEngine:
         direct_evidence: List[Dict[str, Any]],
         model_evidence: List[Dict[str, Any]],
         contextual_evidence: List[Dict[str, Any]],
+        external_evidence: List[Dict[str, Any]],
     ) -> Dict[str, Any]:
 
         total = (
             len(direct_evidence)
             + len(model_evidence)
             + len(contextual_evidence)
+            + len(external_evidence)
         )
 
         if total == 0:
@@ -153,10 +246,19 @@ class EvidenceReasoningEngine:
             len(direct_evidence) / total
         )
 
+        external_ratio = (
+            len(external_evidence) / total
+        )
+
         if direct_ratio >= 0.5:
             level = "strong"
-        elif direct_ratio >= 0.25:
+        elif (
+            direct_ratio >= 0.25
+            or external_ratio >= 0.25
+        ):
             level = "moderate"
+        elif external_evidence:
+            level = "externally_supported"
         else:
             level = "model_supported"
 
@@ -166,6 +268,14 @@ class EvidenceReasoningEngine:
                 2,
             ),
             "level": level,
+            "direct_ratio": round(
+                direct_ratio,
+                2,
+            ),
+            "external_ratio": round(
+                external_ratio,
+                2,
+            ),
         }
 
     @staticmethod
@@ -175,6 +285,7 @@ class EvidenceReasoningEngine:
         variant_count: int,
         direct_evidence: List[Dict[str, Any]],
         model_evidence: List[Dict[str, Any]],
+        external_evidence: List[Dict[str, Any]],
     ) -> List[Dict[str, Any]]:
 
         findings = []
@@ -218,13 +329,63 @@ class EvidenceReasoningEngine:
                 }
             )
 
+        if external_evidence:
+            diseases = []
+
+            for item in external_evidence:
+                metadata = item.get(
+                    "metadata",
+                    {},
+                )
+
+                if not isinstance(
+                    metadata,
+                    dict,
+                ):
+                    continue
+
+                disease_name = metadata.get(
+                    "disease_name"
+                )
+
+                score = metadata.get(
+                    "association_score"
+                )
+
+                if disease_name:
+                    diseases.append(
+                        {
+                            "name": disease_name,
+                            "association_score": score,
+                        }
+                    )
+
+            findings.append(
+                {
+                    "type": "target_disease_associations",
+                    "statement": (
+                        f"{gene} has {len(external_evidence)} "
+                        "retrieved target-disease associations "
+                        "from Open Targets."
+                    ),
+                    "evidence_type": "external",
+                    "source": "Open Targets",
+                    "associations": diseases,
+                }
+            )
+
         if model_evidence:
             models = []
 
             for item in model_evidence:
-                model = item.get("model")
+                model = item.get(
+                    "model"
+                )
 
-                if isinstance(model, dict):
+                if isinstance(
+                    model,
+                    dict,
+                ):
                     checkpoint = model.get(
                         "checkpoint"
                     )
@@ -234,17 +395,22 @@ class EvidenceReasoningEngine:
                     )
 
                     if checkpoint:
-                        models.append(checkpoint)
+                        models.append(
+                            checkpoint
+                        )
                     elif model_name:
-                        models.append(model_name)
+                        models.append(
+                            model_name
+                        )
 
             findings.append(
                 {
                     "type": "multimodal_representation",
                     "statement": (
-                        "The target context includes model-derived "
-                        "representations that can support downstream "
-                        "biological inference."
+                        "The target context includes "
+                        "model-derived representations that "
+                        "can support downstream biological "
+                        "inference."
                     ),
                     "models": models,
                     "evidence_type": "model_derived",

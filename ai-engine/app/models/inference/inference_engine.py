@@ -8,6 +8,9 @@ from app.analysis.target_analysis import TargetAnalysisEngine
 from app.models.features.protein_features import ProteinFeatureService
 from app.models.features.molecule_features import MoleculeFeatureService
 from app.models.features.cell_features import CellFeatureService
+from app.drug_development.sources.open_targets_evidence import (
+    OpenTargetsEvidenceService,
+)
 
 
 class BiologicalInferenceEngine:
@@ -16,7 +19,8 @@ class BiologicalInferenceEngine:
 
     Combines biological knowledge, pretrained protein and molecular
     representations, cellular context, pathway information,
-    perturbation analysis, and target analysis.
+    perturbation analysis, target analysis, and external
+    drug-development evidence.
     """
 
     def __init__(self):
@@ -26,6 +30,7 @@ class BiologicalInferenceEngine:
         self.cell_features = CellFeatureService()
         self.evidence_reasoning = EvidenceReasoningEngine()
         self.target_analysis = TargetAnalysisEngine()
+        self.open_targets = OpenTargetsEvidenceService()
 
     def analyze_gene(
         self,
@@ -60,10 +65,12 @@ class BiologicalInferenceEngine:
         protein_result = None
         molecule_result = None
         cell_result = None
+        ensembl_id = None
 
         # ---------------------------------------------------------
         # Protein representation
         # ---------------------------------------------------------
+
         gene_record = context.get("gene")
 
         if gene_record:
@@ -100,6 +107,7 @@ class BiologicalInferenceEngine:
 
                 except Exception as exc:
                     result["protein_features_error"] = str(exc)
+
         # ---------------------------------------------------------
         # Molecular representation
         # ---------------------------------------------------------
@@ -158,15 +166,68 @@ class BiologicalInferenceEngine:
         result["target_analysis"] = target_result
 
         # ---------------------------------------------------------
+        # Open Targets drug-development evidence
+        # ---------------------------------------------------------
+
+        if ensembl_id:
+            try:
+                open_targets_evidence = (
+                    self.open_targets.get_target_disease_evidence(
+                        target_id=ensembl_id,
+                        size=10,
+                    )
+                )
+
+                result["open_targets_evidence"] = {
+                    "summary": (
+                        open_targets_evidence.summary()
+                    ),
+                    "provenance": (
+                        open_targets_evidence.provenance
+                    ),
+                    "evidence": [
+                        {
+                            "target": item.target,
+                            "target_id": item.target_id,
+                            "source": item.source,
+                            "evidence_type": (
+                                item.evidence_type
+                            ),
+                            "description": (
+                                item.description
+                            ),
+                            "identifiers": (
+                                item.identifiers
+                            ),
+                            "metadata": (
+                                item.metadata
+                            ),
+                        }
+                        for item in (
+                            open_targets_evidence.targets
+                        )
+                    ],
+                }
+
+            except Exception as exc:
+                result["open_targets_evidence_error"] = str(
+                    exc
+                )
+
+        # ---------------------------------------------------------
         # Evidence reasoning
         # ---------------------------------------------------------
 
         reasoning_result = self.evidence_reasoning.reason(
             biological_context=context,
             target_analysis=target_result,
+            open_targets_evidence=result.get(
+                "open_targets_evidence"
+            ),
         )
 
         result["evidence_reasoning"] = reasoning_result
+
         return result
 
     def analyze_molecule(
@@ -179,7 +240,7 @@ class BiologicalInferenceEngine:
 
         return self.molecule_features.extract_features(
             smiles
-       )
+        )
 
     def analyze_protein_sequence(
         self,
@@ -201,4 +262,8 @@ class BiologicalInferenceEngine:
         if isinstance(obj, dict):
             return obj.get(key)
 
-        return getattr(obj, key, None)
+        return getattr(
+            obj,
+            key,
+            None,
+        )
