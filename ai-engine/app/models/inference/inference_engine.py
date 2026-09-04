@@ -11,7 +11,10 @@ from app.models.features.cell_features import CellFeatureService
 from app.drug_development.sources.open_targets_evidence import (
     OpenTargetsEvidenceService,
 )
-
+from app.data.sources.ensembl import EnsemblClient
+from app.drug_development.sources.chembl_evidence import (
+    ChEMBLEvidenceService,
+)
 
 class BiologicalInferenceEngine:
     """
@@ -31,7 +34,8 @@ class BiologicalInferenceEngine:
         self.evidence_reasoning = EvidenceReasoningEngine()
         self.target_analysis = TargetAnalysisEngine()
         self.open_targets = OpenTargetsEvidenceService()
-
+        self.ensembl = EnsemblClient()
+        self.chembl_evidence = ChEMBLEvidenceService()
     def analyze_gene(
         self,
         gene: str,
@@ -213,7 +217,143 @@ class BiologicalInferenceEngine:
                 result["open_targets_evidence_error"] = str(
                     exc
                 )
+        if ensembl_id:
+            try:
+                uniprot_resolution = (
+                    self.ensembl
+                    .resolve_reviewed_uniprot_accession(
+                        ensembl_id=ensembl_id,
+                    )
+                )
 
+                result["uniprot_resolution"] = (
+                    uniprot_resolution
+                )
+
+                if uniprot_resolution:
+                    uniprot_accession = (
+                        uniprot_resolution["accession"]
+                    )
+
+                    preferred_name = (
+                        uniprot_resolution.get(
+                            "protein_name"
+                        )
+                    )
+
+                    if preferred_name:
+                        chembl_evidence = (
+                            self.chembl_evidence
+                            .get_target_evidence_bundle(
+                                gene_symbol=gene,
+                                uniprot_id=(
+                                    uniprot_accession
+                                ),
+                                preferred_name=(
+                                    preferred_name
+                                ),
+                                limit=20,
+                                standard_types=[
+                                    "IC50",
+                                    "EC50",
+                                    "Ki",
+                                    "Kd",
+                                    "AC50",
+                                ],
+                            )
+                        )
+
+                        result["chembl_evidence"] = {
+                            "summary": (
+                                self.chembl_evidence
+                                .summarize(
+                                    chembl_evidence
+                                )
+                            ),
+                            "provenance": (
+                                chembl_evidence
+                                .provenance
+                            ),
+                            "targets": [
+                                {
+                                    "target": item.target,
+                                    "target_id": (
+                                        item.target_id
+                                    ),
+                                    "source": item.source,
+                                    "evidence_type": (
+                                        item.evidence_type
+                                    ),
+                                    "description": (
+                                        item.description
+                                    ),
+                                    "identifiers": (
+                                        item.identifiers
+                                    ),
+                                    "metadata": (
+                                        item.metadata
+                                    ),
+                                }
+                                for item in (
+                                    chembl_evidence.targets
+                                )
+                            ],
+                            "compounds": [
+                                {
+                                    "compound_id": (
+                                        item.compound_id
+                                    ),
+                                    "name": item.name,
+                                    "source": item.source,
+                                    "evidence_type": (
+                                        item.evidence_type
+                                    ),
+                                    "description": (
+                                        item.description
+                                    ),
+                                    "identifiers": (
+                                        item.identifiers
+                                    ),
+                                    "metadata": (
+                                        item.metadata
+                                    ),
+                                }
+                                for item in (
+                                    chembl_evidence.compounds
+                                )
+                            ],
+                            "relationships": [
+                                {
+                                    "target": item.target,
+                                    "compound": item.compound,
+                                    "source": item.source,
+                                    "relationship_type": (
+                                        item.relationship_type
+                                    ),
+                                    "evidence_level": (
+                                        item.evidence_level
+                                    ),
+                                    "description": (
+                                        item.description
+                                    ),
+                                    "identifiers": (
+                                        item.identifiers
+                                    ),
+                                    "metadata": (
+                                        item.metadata
+                                    ),
+                                }
+                                for item in (
+                                    chembl_evidence
+                                    .relationships
+                                )
+                            ],
+                        }
+
+            except Exception as exc:
+                result[
+                    "chembl_evidence_error"
+                ] = str(exc)
         # ---------------------------------------------------------
         # Evidence reasoning
         # ---------------------------------------------------------
@@ -224,12 +364,14 @@ class BiologicalInferenceEngine:
             open_targets_evidence=result.get(
                 "open_targets_evidence"
             ),
+            chembl_evidence=result.get(
+                "chembl_evidence"
+            ),
         )
 
         result["evidence_reasoning"] = reasoning_result
 
         return result
-
     def analyze_molecule(
         self,
         smiles: str,
