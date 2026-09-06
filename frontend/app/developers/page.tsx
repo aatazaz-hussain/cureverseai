@@ -1,4 +1,5 @@
 "use client";
+import Footer from "@/components/Footer";
 
 import { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
@@ -349,12 +350,7 @@ export default function DevelopersPage() {
           </div>
         </div>
       </section>
-
-      <footer className="developers-footer">
-        <span>CUREVERSEAI</span>
-        <span>BS SOFTWARE ENGINEERING · PMAS-AAUR</span>
-        <span>2026</span>
-      </footer>
+      <Footer />
     </main>
   );
 }

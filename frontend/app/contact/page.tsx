@@ -1,4 +1,5 @@
 "use client";
+import Footer from "@/components/Footer";
 
 import Navbar from "../../components/Navbar";
 import "./contact.css";
@@ -162,11 +163,80 @@ export default function ContactPage() {
 
             <form
               className="contact-form"
-              onSubmit={(e) => {
+              onSubmit={async (e) => {
                 e.preventDefault();
-                alert(
-                  "Thank you. Your message interface is ready to be connected to the CureVerseAI backend."
-                );
+
+                const form = e.currentTarget;
+                const formData = new FormData(form);
+
+                const payload = {
+                  name: String(formData.get("name") || ""),
+                  email: String(formData.get("email") || ""),
+                  conversation_type: String(formData.get("type") || ""),
+                  message: String(formData.get("message") || ""),
+                };
+
+                const button = form.querySelector("button[type=\"submit\"]");
+                const buttonText = button?.querySelector("span");
+
+                if (button instanceof HTMLButtonElement) {
+                  button.disabled = true;
+                }
+
+                if (buttonText) {
+                  buttonText.textContent = "TRANSMITTING...";
+                }
+
+                try {
+                  const response = await fetch(
+                    "http://localhost:8000/api/v1/contact",
+                    {
+                      method: "POST",
+                      headers: {
+                        "Content-Type": "application/json",
+                      },
+                      body: JSON.stringify(payload),
+                    }
+                  );
+
+                  const result = await response.json();
+
+                  if (!response.ok) {
+                    throw new Error(
+                      result?.detail?.message ||
+                      result?.detail ||
+                      "Unable to send your message."
+                    );
+                  }
+
+                  form.reset();
+
+                  if (buttonText) {
+                    buttonText.textContent = "MESSAGE RECEIVED ✓";
+                  }
+
+                  setTimeout(() => {
+                    if (buttonText) {
+                      buttonText.textContent = "TRANSMIT MESSAGE";
+                    }
+                  }, 3000);
+                } catch (error) {
+                  console.error("Contact submission failed:", error);
+
+                  if (buttonText) {
+                    buttonText.textContent = "TRANSMISSION FAILED";
+                  }
+
+                  setTimeout(() => {
+                    if (buttonText) {
+                      buttonText.textContent = "TRANSMIT MESSAGE";
+                    }
+                  }, 3000);
+                } finally {
+                  if (button instanceof HTMLButtonElement) {
+                    button.disabled = false;
+                  }
+                }
               }}
             >
               <div className="form-row">
@@ -326,12 +396,7 @@ export default function ContactPage() {
           </div>
         </div>
       </section>
-
-      <footer className="contact-footer">
-        <span>CUREVERSEAI</span>
-        <span>CONTACT / CONNECTION</span>
-        <span>2026</span>
-      </footer>
+      <Footer />
     </main>
   );
 }

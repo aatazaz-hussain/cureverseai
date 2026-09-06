@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from app.api.routes.analyze import router as analyze_router
+from app.api.routes.contact import router as contact_router
 from app.api.routes.drug_development import router as drug_development_router
 
 
@@ -14,6 +15,10 @@ app = FastAPI(
 
 app.include_router(
     drug_development_router,
+    prefix="/internal",
+)
+app.include_router(
+    contact_router,
     prefix="/internal",
 )
 app.include_router(

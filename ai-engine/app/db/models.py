@@ -402,3 +402,37 @@ class Report(Base):
         DateTime,
         server_default=func.now(),
     )
+
+
+class ContactMessage(Base):
+    __tablename__ = "contact_messages"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+
+    name: Mapped[str] = mapped_column(
+        String(255),
+        index=True,
+    )
+
+    email: Mapped[str] = mapped_column(
+        String(255),
+        index=True,
+    )
+
+    conversation_type: Mapped[Optional[str]] = mapped_column(
+        String(150),
+    )
+
+    message: Mapped[str] = mapped_column(Text)
+
+    status: Mapped[str] = mapped_column(
+        String(50),
+        default="new",
+        index=True,
+    )
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        server_default=func.now(),
+        index=True,
+    )

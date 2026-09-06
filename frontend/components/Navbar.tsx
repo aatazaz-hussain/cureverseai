@@ -1,6 +1,49 @@
+"use client";
+
+import { usePathname } from "next/navigation";
+
 export default function Navbar() {
+  const pathname = usePathname();
+
+  const isHome = pathname === "/";
+  const isDevelopers = pathname === "/developers";
+  const isIdea = pathname === "/idea";
+
+  const navItems = [];
+
+  if (!isHome) {
+    navItems.push({
+      label: "Home",
+      href: "/",
+    });
+  }
+
+  navItems.push({
+    label: "Domains",
+    href: "/#domains",
+  });
+
+  navItems.push({
+    label: "Intelligence",
+    href: "/#intelligence",
+  });
+
+  if (isHome || isIdea) {
+    navItems.push({
+      label: "Developers",
+      href: "/developers",
+    });
+  }
+
+  if (isHome || isDevelopers) {
+    navItems.push({
+      label: "About",
+      href: "/idea",
+    });
+  }
+
   return (
-    <header className="cv-nav">
+    <header className="cv-nav cv-nav-sticky">
       <a href="/" className="cv-brand">
         <span className="cv-brand-mark">
           <i />
@@ -14,10 +57,11 @@ export default function Navbar() {
       </a>
 
       <nav className="cv-nav-links">
-        <a href="/#domains">Domains</a>
-        <a href="/#intelligence">Intelligence</a>
-        <a href="/#team">Developers</a>
-        <a href="/#about">About</a>
+        {navItems.map((item) => (
+          <a key={item.label} href={item.href}>
+            {item.label}
+          </a>
+        ))}
       </nav>
 
       <a href="/#domains" className="cv-nav-action">

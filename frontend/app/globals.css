@@ -802,27 +802,7 @@ button {
    HERO META
 ========================================================= */
 
-.cv-hero-meta {
-  position: absolute;
-  z-index: 6;
 
-  right: 4vw;
-  top: 180px;
-
-  display: flex;
-  flex-direction: column;
-  gap: 11px;
-
-  color: rgba(243,239,232,0.45);
-
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.17em;
-}
-
-.cv-hero-meta span:first-child {
-  color: var(--red);
-}
 
 .cv-scroll-hint {
   position: absolute;
@@ -2867,32 +2847,6 @@ button {
 .cv-final-dna span:nth-child(4) { top: 84%; }
 
 /* =========================================================
-   FOOTER
-========================================================= */
-
-.cv-footer {
-  min-height: 90px;
-
-  padding: 0 7vw;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  border-top: 1px solid var(--line);
-
-  color: rgba(243,239,232,0.4);
-
-  font-size: 8px;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-}
-
-.cv-footer .cv-brand {
-  color: var(--white);
-}
-
-/* =========================================================
    PROGRESS
 ========================================================= */
 
@@ -3026,10 +2980,6 @@ button {
   .cv-character-right {
     right: -2%;
     height: 320px;
-  }
-
-  .cv-hero-meta {
-    display: none;
   }
 
   .cv-scroll-hint {
@@ -3184,13 +3134,6 @@ button {
 
   .cv-team-person > div {
     display: none;
-  }
-
-  .cv-footer {
-    padding: 25px 22px;
-
-    flex-direction: column;
-    gap: 14px;
   }
 }
 
@@ -6583,5 +6526,658 @@ button {
   .cv-team-cta {
     margin-top: 25px;
   }
+}
+
+
+/* =========================================================
+   HERO — REBALANCE AFTER REMOVING DOMAIN META
+========================================================= */
+
+.cv-hero {
+  min-height: 100vh;
+  height: 900px;
+  padding: 90px 4vw 40px;
+}
+
+/* Move the biological core slightly upward */
+.cv-bio-core {
+  left: 48%;
+  top: 42%;
+}
+
+/* Give the character composition more presence */
+.cv-character-field {
+  right: -2vw;
+  bottom: 30px;
+  width: 68vw;
+  height: 720px;
+}
+
+/* Keep the hero copy visually balanced */
+.cv-hero-copy {
+  left: 2.8vw;
+  top: 23%;
+}
+
+/* The hero no longer contains the vertical domain list */
+.cv-hero-meta {
+  display: none !important;
+}
+
+/* Slightly reduce the unused vertical gap before the scroll cue */
+.cv-scroll-hint {
+  bottom: 32px;
+}
+
+@media (max-width: 1100px) {
+  .cv-character-field {
+    width: 72vw;
+    right: -5vw;
+    bottom: 20px;
+  }
+
+  .cv-bio-core {
+    left: 46%;
+    top: 44%;
+  }
+}
+
+@media (max-width: 768px) {
+  .cv-hero {
+    height: auto;
+    min-height: 850px;
+    padding: 110px 6vw 40px;
+  }
+
+  .cv-hero-copy {
+    top: 18%;
+    left: 6vw;
+    width: 88vw;
+  }
+
+  .cv-character-field {
+    width: 105vw;
+    height: 520px;
+    right: -18vw;
+    bottom: 0;
+  }
+
+  .cv-bio-core {
+    left: 50%;
+    top: 58%;
+    width: 300px;
+    height: 300px;
+  }
+}
+
+
+/* =========================================================
+   HERO — TIGHTER CINEMATIC COMPOSITION
+========================================================= */
+
+.cv-hero {
+  height: 820px;
+  min-height: 820px;
+  padding: 70px 4vw 25px;
+}
+
+/* Bring the main copy slightly upward */
+.cv-hero-copy {
+  top: 19%;
+}
+
+/* Bring the biological core closer to the visual center */
+.cv-bio-core {
+  left: 47%;
+  top: 38%;
+  width: 390px;
+  height: 390px;
+}
+
+/* Move characters upward and slightly left,
+   filling the unused hero area */
+.cv-character-field {
+  right: -1vw;
+  bottom: 0;
+  width: 70vw;
+  height: 700px;
+}
+
+/* Keep the scroll indicator close to the bottom */
+.cv-scroll-hint {
+  bottom: 22px;
+}
+
+/* Desktop-wide refinement */
+@media (min-width: 1400px) {
+  .cv-hero {
+    height: 850px;
+    min-height: 850px;
+  }
+
+  .cv-hero-copy {
+    top: 18%;
+  }
+
+  .cv-character-field {
+    width: 68vw;
+    height: 720px;
+    right: 0;
+    bottom: 0;
+  }
+
+  .cv-bio-core {
+    left: 47%;
+    top: 39%;
+  }
+}
+
+/* Laptop */
+@media (max-width: 1200px) {
+  .cv-hero {
+    height: 800px;
+    min-height: 800px;
+  }
+
+  .cv-hero-copy {
+    top: 18%;
+  }
+
+  .cv-character-field {
+    width: 72vw;
+    height: 670px;
+    right: -4vw;
+  }
+
+  .cv-bio-core {
+    left: 45%;
+    top: 39%;
+  }
+}
+
+/* Tablet / mobile */
+@media (max-width: 768px) {
+  .cv-hero {
+    height: 820px;
+    min-height: 820px;
+    padding: 100px 6vw 25px;
+  }
+
+  .cv-hero-copy {
+    top: 15%;
+  }
+
+  .cv-character-field {
+    width: 108vw;
+    height: 520px;
+    right: -16vw;
+    bottom: 0;
+  }
+
+  .cv-bio-core {
+    left: 50%;
+    top: 55%;
+    width: 290px;
+    height: 290px;
+  }
+
+  .cv-scroll-hint {
+    bottom: 18px;
+  }
+}
+
+
+/* =========================================================
+   HERO — FINAL CHARACTER / CTA CLEARANCE
+========================================================= */
+
+@media (min-width: 1201px) {
+  .cv-character-field {
+    width: 66vw;
+    right: -2vw;
+  }
+
+  .cv-bio-core {
+    left: 49%;
+  }
+}
+
+@media (min-width: 1400px) {
+  .cv-character-field {
+    width: 64vw;
+    right: -1vw;
+  }
+
+  .cv-bio-core {
+    left: 48%;
+  }
+}
+
+/* =========================================================
+   INTELLIGENCE FACTS — SUBTLE HOVER
+========================================================= */
+
+.cv-intelligence-facts > div {
+  position: relative;
+  overflow: hidden;
+  cursor: default;
+
+  transition:
+    background 260ms ease,
+    border-color 260ms ease,
+    transform 260ms ease,
+    box-shadow 260ms ease;
+}
+
+.cv-intelligence-facts > div::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: var(--red);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 300ms ease;
+}
+
+.cv-intelligence-facts > div:hover {
+  background: rgba(255, 255, 255, 0.025);
+  border-color: rgba(233, 197, 140, 0.28);
+  transform: translateY(-3px);
+  box-shadow:
+    0 12px 30px rgba(0, 0, 0, 0.22),
+    0 0 22px rgba(224, 82, 90, 0.05);
+}
+
+.cv-intelligence-facts > div:hover::before {
+  transform: scaleX(1);
+}
+
+.cv-intelligence-facts > div strong {
+  transition:
+    color 260ms ease,
+    transform 260ms ease;
+}
+
+.cv-intelligence-facts > div:hover strong {
+  color: var(--red);
+  transform: translateX(2px);
+}
+
+.cv-intelligence-facts > div span,
+.cv-intelligence-facts > div p {
+  transition: color 260ms ease;
+}
+
+.cv-intelligence-facts > div:hover span {
+  color: var(--gold);
+}
+
+.cv-intelligence-facts > div:hover p {
+  color: #c7cccc;
+}
+
+/* =========================================================
+   CUREVERSEAI — SHARED PREMIUM FOOTER
+   ========================================================= */
+
+.cv-footer {
+  position: relative;
+  width: 100%;
+  margin-top: 80px;
+  padding: 78px 5vw 0;
+  background:
+    radial-gradient(circle at 15% 0%, rgba(224,82,90,.08), transparent 30%),
+    radial-gradient(circle at 85% 100%, rgba(233,197,140,.05), transparent 28%),
+    #060708;
+  border-top: 1px solid rgba(255,255,255,.09);
+  overflow: hidden;
+  color: #eee9e1;
+}
+
+.cv-footer::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, transparent 0%, rgba(255,255,255,.025) 50%, transparent 100%);
+  opacity: .7;
+}
+
+.cv-footer-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 1500px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(260px, 1.25fr) 2.75fr;
+  gap: 90px;
+}
+
+.cv-footer-intro {
+  max-width: 390px;
+}
+
+.cv-footer-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  text-decoration: none;
+  color: #eee9e1;
+  margin-bottom: 24px;
+}
+
+.cv-footer-brand > span:last-child {
+  font-size: 21px;
+  letter-spacing: -.04em;
+}
+
+.cv-footer-brand strong {
+  font-weight: 600;
+}
+
+.cv-footer-brand b {
+  color: var(--red, #e0525a);
+  font-weight: 700;
+}
+
+.cv-footer-brand .cv-brand-mark {
+  position: relative;
+  width: 29px;
+  height: 29px;
+  display: block;
+}
+
+.cv-footer-brand .cv-brand-mark i {
+  position: absolute;
+  display: block;
+  width: 19px;
+  height: 19px;
+  border: 1.5px solid var(--red, #e0525a);
+  border-radius: 50%;
+}
+
+.cv-footer-brand .cv-brand-mark i:first-child {
+  left: 0;
+  top: 5px;
+}
+
+.cv-footer-brand .cv-brand-mark i:last-child {
+  right: 0;
+  top: 0;
+  border-color: rgba(233,197,140,.75);
+}
+
+.cv-footer-intro p {
+  margin: 0;
+  max-width: 360px;
+  color: #969b9d;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.cv-footer-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin-top: 27px;
+  color: #b8bcbc;
+  font-size: 10px;
+  letter-spacing: .18em;
+  font-weight: 600;
+}
+
+.cv-footer-status i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #7bcf8b;
+  box-shadow: 0 0 12px rgba(123,207,139,.65);
+}
+
+.cv-footer-links {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(120px, 1fr));
+  gap: 42px;
+}
+
+.cv-footer-column {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.cv-footer-column small {
+  margin-bottom: 22px;
+  color: #777d80;
+  font-size: 9px;
+  letter-spacing: .2em;
+  font-weight: 700;
+}
+
+.cv-footer-column a,
+.cv-footer-column span {
+  margin-bottom: 13px;
+  color: #b9bdbe;
+  font-size: 13px;
+  line-height: 1.45;
+  text-decoration: none;
+  transition:
+    color 220ms ease,
+    transform 220ms ease;
+}
+
+.cv-footer-column a:hover {
+  color: #eee9e1;
+  transform: translateX(4px);
+}
+
+.cv-footer-column a::before {
+  content: "";
+  display: inline-block;
+  width: 0;
+  height: 1px;
+  margin-right: 0;
+  vertical-align: middle;
+  background: var(--red, #e0525a);
+  transition: width 220ms ease, margin-right 220ms ease;
+}
+
+.cv-footer-column a:hover::before {
+  width: 12px;
+  margin-right: 7px;
+}
+
+.cv-footer-column span {
+  color: #888e90;
+}
+
+.cv-footer-signal {
+  position: relative;
+  z-index: 1;
+  max-width: 1500px;
+  margin: 70px auto 0;
+  padding: 19px 0;
+  border-top: 1px solid rgba(255,255,255,.07);
+  border-bottom: 1px solid rgba(255,255,255,.07);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  color: #666b6d;
+  font-size: 8px;
+  letter-spacing: .22em;
+  font-weight: 700;
+}
+
+.cv-footer-signal i {
+  width: 22px;
+  height: 1px;
+  background: rgba(224,82,90,.55);
+}
+
+.cv-footer-signal strong {
+  color: #d7d0c5;
+  font-size: 9px;
+}
+
+.cv-footer-bottom {
+  position: relative;
+  z-index: 1;
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 23px 0 27px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 20px;
+  color: #5f6466;
+  font-size: 8px;
+  letter-spacing: .16em;
+  font-weight: 600;
+}
+
+.cv-footer-bottom span:nth-child(2) {
+  text-align: center;
+}
+
+.cv-footer-bottom span:last-child {
+  text-align: right;
+}
+
+.cv-footer-wordmark {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  font-size: clamp(52px, 10vw, 150px);
+  line-height: .72;
+  letter-spacing: -.08em;
+  font-weight: 700;
+  color: rgba(255,255,255,.035);
+  user-select: none;
+}
+
+.cv-footer-wordmark span {
+  color: rgba(224,82,90,.10);
+}
+
+@media (max-width: 1000px) {
+  .cv-footer {
+    padding-left: 6vw;
+    padding-right: 6vw;
+  }
+
+  .cv-footer-inner {
+    grid-template-columns: 1fr;
+    gap: 55px;
+  }
+
+  .cv-footer-intro {
+    max-width: 600px;
+  }
+
+  .cv-footer-links {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 42px 55px;
+  }
+}
+
+@media (max-width: 600px) {
+  .cv-footer {
+    margin-top: 55px;
+    padding: 58px 7vw 0;
+  }
+
+  .cv-footer-links {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 38px 25px;
+  }
+
+  .cv-footer-column a,
+  .cv-footer-column span {
+    font-size: 12px;
+  }
+
+  .cv-footer-signal {
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 52px;
+  }
+
+  .cv-footer-signal i {
+    width: 12px;
+  }
+
+  .cv-footer-bottom {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .cv-footer-bottom span,
+  .cv-footer-bottom span:nth-child(2),
+  .cv-footer-bottom span:last-child {
+    text-align: left;
+  }
+
+  .cv-footer-wordmark {
+    font-size: 19vw;
+  }
+}
+
+
+/* =========================================================
+   CUREVERSEAI — GLOBAL NAVBAR FIX
+   ========================================================= */
+
+.cv-nav {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 9999 !important;
+}
+
+.cv-nav-sticky {
+  position: fixed !important;
+  top: 0 !important;
+  z-index: 9999 !important;
+}
+
+
+/* =========================================================
+   CUREVERSEAI — FORCE NAVBAR ABOVE ALL PAGE CONTENT
+   ========================================================= */
+
+.cv-nav,
+.cv-nav-sticky {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  height: 78px !important;
+  z-index: 2147483647 !important;
+
+  transform: none !important;
+  animation: none !important;
+}
+
+/* Prevent page sections from creating a competing stacking layer */
+.cv-idea-page {
+  position: relative;
+  z-index: 1;
+}
+
+.cv-idea-page::before,
+.cv-idea-page::after {
+  z-index: 0;
+}
+
+/* Navbar must always sit above Idea content */
+.cv-nav {
+  isolation: isolate;
+  pointer-events: auto !important;
 }
 

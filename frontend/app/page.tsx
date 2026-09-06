@@ -1,4 +1,7 @@
 "use client";
+import Footer from "@/components/Footer";
+
+import Navbar from "@/components/Navbar";
 
 import { useEffect, useMemo, useState } from "react";
 
@@ -111,31 +114,7 @@ export default function Home() {
       {/* =====================================================
           NAVIGATION
       ====================================================== */}
-      <header className="cv-nav">
-        <a href="/" className="cv-brand">
-          <span className="cv-brand-mark">
-            <i />
-            <i />
-          </span>
-
-          <span>
-            <strong>CureVerse</strong>
-            <b>AI</b>
-          </span>
-        </a>
-
-        <nav className="cv-nav-links">
-          <a href="#domains">Domains</a>
-          <a href="#intelligence">Intelligence</a>
-          <a href="#team">Developers</a>
-          <a href="#about">About</a>
-        </nav>
-
-        <a href="#domains" className="cv-nav-action">
-          Explore Platform
-          <span>↗</span>
-        </a>
-      </header>
+      <Navbar />
 
       {/* =====================================================
           HERO / CINEMATIC OPENING
@@ -247,14 +226,6 @@ export default function Home() {
             alt="CureVerseAI researcher"
             className="cv-character character-girl-two"
           />
-        </div>
-
-        <div className="cv-hero-meta">
-          <span>RESEARCH</span>
-          <span>DRUG DEVELOPMENT</span>
-          <span>MEDICINE</span>
-          <span>BIOTECHNOLOGY</span>
-          <span>EDUCATION</span>
         </div>
 
         <div className="cv-scroll-hint">
@@ -643,21 +614,21 @@ export default function Home() {
       <section className="cv-final">
         <div className="cv-final-grid" />
 
-        <span className="cv-kicker">THE VERSE IS OPEN</span>
+        <span className="cv-kicker">THE CONVERSATION IS OPEN</span>
 
         <h2>
-          Better science.
+          Build what
           <br />
-          <span>Brighter tomorrow.</span>
+          <span>comes next.</span>
         </h2>
 
         <p>
-          Explore biological intelligence across research, drug development,
-          medicine, biotechnology and education.
+          Have a research question, technical idea, collaboration opportunity,
+          or simply want to understand CureVerseAI?
         </p>
 
-        <a href="#domains" className="cv-button cv-button-primary cv-final-button">
-          Explore CureVerseAI
+        <a href="/contact" className="cv-button cv-button-primary cv-final-button">
+          Start a Conversation
           <span>→</span>
         </a>
 
@@ -669,28 +640,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* =====================================================
-          FOOTER
-      ====================================================== */}
-      <footer className="cv-footer">
-        <div className="cv-brand">
-          <span className="cv-brand-mark">
-            <i />
-            <i />
-          </span>
-
-          <span>
-            <strong>CureVerse</strong>
-            <b>AI</b>
-          </span>
-        </div>
-
-        <span>SCIENCE FOR A HEALTHIER TOMORROW</span>
-
-        <span>
-          © {new Date().getFullYear()} CUREVERSEAI
-        </span>
-      </footer>
+      <Footer />
 
       <div
         className="cv-progress"

@@ -1,4 +1,5 @@
 "use client";
+import Footer from "@/components/Footer";
 
 import { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
@@ -1101,6 +1102,7 @@ export default function IdeaPage() {
           <strong>↗</strong>
         </a>
       </section>
+      <Footer />
     </main>
   );
 }

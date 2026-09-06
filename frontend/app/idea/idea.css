@@ -1677,3 +1677,133 @@
     transition-duration: 0.001ms !important;
   }
 }
+
+/* =========================================================
+   IDEA PAGE — STICKY NAVBAR
+   ========================================================= */
+
+.cv-nav-sticky {
+  position: sticky !important;
+  top: 0;
+  z-index: 1000;
+}
+
+
+/* =========================================================
+   IDEA PAGE — TIGHTER EDITORIAL SECTION RHYTHM
+   ========================================================= */
+
+.idea-page section {
+  padding-top: 58px;
+  padding-bottom: 58px;
+}
+
+.idea-page section + section {
+  margin-top: 0;
+}
+
+/* Hero remains spacious */
+.idea-page .idea-hero {
+  padding-top: 74px;
+  padding-bottom: 70px;
+}
+
+/* Major content blocks */
+.idea-page .idea-section,
+.idea-page .idea-story-section,
+.idea-page .idea-domain-section,
+.idea-page .idea-final-section {
+  padding-top: 58px;
+  padding-bottom: 58px;
+}
+
+/* Reduce oversized gaps created by section headers */
+.idea-page .idea-section-header {
+  margin-bottom: 34px;
+}
+
+/* Keep visual panels close to their explanatory content */
+.idea-page .idea-grid,
+.idea-page .idea-content-grid {
+  row-gap: 38px;
+}
+
+/* Final section gets a little breathing room */
+.idea-page .idea-final-section {
+  padding-bottom: 72px;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .idea-page section {
+    padding-top: 42px;
+    padding-bottom: 42px;
+  }
+
+  .idea-page .idea-hero {
+    padding-top: 58px;
+    padding-bottom: 52px;
+  }
+
+  .idea-page .idea-section-header {
+    margin-bottom: 26px;
+  }
+}
+
+
+/* =========================================================
+   CUREVERSEAI IDEA — COMPACT SECTION RHYTHM
+   ========================================================= */
+
+.cv-idea-page > .cv-idea-book-section {
+  padding-top: 48px !important;
+  padding-bottom: 48px !important;
+}
+
+.cv-idea-page > .cv-idea-book-section + .cv-idea-book-section {
+  margin-top: 0 !important;
+}
+
+/* Keep section headings closer to their content */
+.cv-idea-heading-row {
+  margin-bottom: 32px !important;
+}
+
+/* Overview needs slightly more breathing room */
+.cv-idea-page > .cv-idea-overview {
+  padding-top: 62px !important;
+  padding-bottom: 54px !important;
+}
+
+/* Final ecosystem remains visually strong */
+.cv-idea-page > .cv-idea-final-ecosystem {
+  padding-top: 52px !important;
+  padding-bottom: 52px !important;
+}
+
+/* Final book section */
+.cv-idea-page > .cv-idea-final-book {
+  padding-top: 48px !important;
+  padding-bottom: 55px !important;
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 768px) {
+  .cv-idea-page > .cv-idea-book-section {
+    padding-top: 36px !important;
+    padding-bottom: 36px !important;
+  }
+
+  .cv-idea-heading-row {
+    margin-bottom: 25px !important;
+  }
+
+  .cv-idea-page > .cv-idea-overview {
+    padding-top: 48px !important;
+    padding-bottom: 40px !important;
+  }
+}
+
