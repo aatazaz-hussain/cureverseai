@@ -6,41 +6,12 @@ export default function Navbar() {
   const pathname = usePathname();
 
   const isHome = pathname === "/";
-  const isDevelopers = pathname === "/developers";
-  const isIdea = pathname === "/idea";
 
-  const navItems = [];
+  const developersLabel = pathname === "/developers" ? "Home" : "Developers";
+  const developersHref = pathname === "/developers" ? "/" : "/developers";
 
-  if (!isHome) {
-    navItems.push({
-      label: "Home",
-      href: "/",
-    });
-  }
-
-  navItems.push({
-    label: "Domains",
-    href: "/#domains",
-  });
-
-  navItems.push({
-    label: "Intelligence",
-    href: "/#intelligence",
-  });
-
-  if (isHome || isIdea) {
-    navItems.push({
-      label: "Developers",
-      href: "/developers",
-    });
-  }
-
-  if (isHome || isDevelopers) {
-    navItems.push({
-      label: "About",
-      href: "/idea",
-    });
-  }
+  const aboutLabel = pathname === "/idea" ? "Home" : "About";
+  const aboutHref = pathname === "/idea" ? "/" : "/idea";
 
   return (
     <header className="cv-nav cv-nav-sticky">
@@ -57,11 +28,13 @@ export default function Navbar() {
       </a>
 
       <nav className="cv-nav-links">
-        {navItems.map((item) => (
-          <a key={item.label} href={item.href}>
-            {item.label}
-          </a>
-        ))}
+        {!isHome && <a href="/">Home</a>}
+
+        <a href="/#domains">Domains</a>
+        <a href="/#intelligence">Intelligence</a>
+
+        <a href={developersHref}>{developersLabel}</a>
+        <a href={aboutHref}>{aboutLabel}</a>
       </nav>
 
       <a href="/#domains" className="cv-nav-action">

@@ -1,4 +1,5 @@
 "use client";
+import IntroAnimation from "@/components/IntroAnimation";
 import Footer from "@/components/Footer";
 
 import Navbar from "@/components/Navbar";
@@ -114,7 +115,8 @@ export default function Home() {
       {/* =====================================================
           NAVIGATION
       ====================================================== */}
-      <Navbar />
+      <IntroAnimation />
+    <Navbar />
 
       {/* =====================================================
           HERO / CINEMATIC OPENING
