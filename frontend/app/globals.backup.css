@@ -1,0 +1,93 @@
+@import "tailwindcss";
+
+:root {
+  --cv-bg: #080a0b;
+  --cv-text: #eee9e1;
+  --cv-red: #e0525a;
+  --cv-red-deep: #a82e38;
+  --cv-gold: #e9c58c;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--cv-bg);
+  color: var(--cv-text);
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 50% 20%, rgba(224, 82, 90, 0.08), transparent 32%),
+    var(--cv-bg);
+  color: var(--cv-text);
+  font-family: Arial, Helvetica, sans-serif;
+  overflow-x: hidden;
+}
+
+button,
+textarea,
+input {
+  font: inherit;
+}
+
+.developer-stage {
+  position: relative;
+  width: min(760px, 82vw);
+  margin: 0 auto;
+  will-change: transform;
+  transition: transform 180ms ease-out;
+  z-index: 5;
+}
+
+.developer-team-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  filter:
+    drop-shadow(0 25px 45px rgba(0, 0, 0, 0.55))
+    drop-shadow(0 0 35px rgba(224, 82, 90, 0.12));
+  user-select: none;
+  -webkit-user-drag: none;
+  animation: teamFloat 5s ease-in-out infinite;
+}
+
+@keyframes teamFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@media (max-width: 768px) {
+  .developer-stage {
+    width: 94vw;
+  }
+
+  .developer-team-image {
+    animation-duration: 6s;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .developer-stage {
+    transition: none;
+  }
+
+  .developer-team-image {
+    animation: none;
+  }
+}

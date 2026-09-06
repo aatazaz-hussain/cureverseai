@@ -1,0 +1,28 @@
+<<'EOF'
+@import "tailwindcss";
+
+:root {
+  background: #050816;
+  color: white;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: #050816;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: #050816;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+button,
+textarea {
+  font: inherit;
+}
+EOF

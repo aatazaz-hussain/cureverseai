@@ -1,0 +1,533 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import Navbar from "../components/Navbar";
+
+const domains = [
+  {
+    number: "01",
+    title: "Research",
+    subtitle: "Decode biological complexity",
+    description:
+      "Explore genes, proteins, pathways, variants and disease evidence through one connected biological intelligence layer.",
+    href: "/research",
+  },
+  {
+    number: "02",
+    title: "Drug Development",
+    subtitle: "From target to evidence",
+    description:
+      "Connect biological targets, compounds, bioactivity and disease associations to support evidence-driven drug discovery.",
+    href: "/drug-development",
+  },
+  {
+    number: "03",
+    title: "Medicine",
+    subtitle: "Translate biology into insight",
+    description:
+      "Bring biological context, molecular information and evidence together to support clearer scientific understanding.",
+    href: "/medicine",
+  },
+  {
+    number: "04",
+    title: "Biotechnology",
+    subtitle: "Engineer at biological scale",
+    description:
+      "Connect molecular, cellular and biological systems to explore biotechnology questions across multiple scales.",
+    href: "/biotechnology",
+  },
+  {
+    number: "05",
+    title: "Education",
+    subtitle: "Make biology understandable",
+    description:
+      "Turn complex biological concepts and evidence into structured, understandable learning experiences.",
+    href: "/education",
+  },
+];
+
+const pipeline = [
+  ["01", "Biological Sources", "ENSEMBL / REACTOME / UNIPROT"],
+  ["02", "Identity & Context", "GENE → PROTEIN → BIOLOGICAL CONTEXT"],
+  ["03", "Pretrained Models", "ESM-2 / CHEMBERTA / CELL"],
+  ["04", "Multimodal Fusion", "PROTEIN + MOLECULE + CELL → 256D"],
+  ["05", "External Evidence", "OPEN TARGETS / CHEMBL"],
+  ["06", "Evidence Reasoning", "DIRECT / DISEASE / EXPERIMENTAL / MODEL / CONTEXT"],
+];
+
+export default function Home() {
+  const [cursorZone, setCursorZone] = useState<"left" | "center" | "right">(
+    "center"
+  );
+  const [activeDomain, setActiveDomain] = useState(0);
+
+  useEffect(() => {
+    const handleMouseMove = (event: MouseEvent) => {
+      const x = event.clientX / window.innerWidth;
+
+      if (x < 0.33) setCursorZone("left");
+      else if (x > 0.67) setCursorZone("right");
+      else setCursorZone("center");
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
+
+  return (
+    <main className="cv-home">
+      <Navbar />
+
+      {/* =========================================================
+          HERO
+      ========================================================= */}
+      <section className="cv-hero">
+        <div className="cv-hero-grid" />
+        <div className="cv-hero-glow cv-hero-glow-one" />
+        <div className="cv-hero-glow cv-hero-glow-two" />
+
+        <div className="cv-hero-content">
+          <span className="cv-kicker">01 / CUREVERSEAI</span>
+
+          <h1>
+            Biological
+            <br />
+            <span>intelligence.</span>
+          </h1>
+
+          <p>
+            A connected intelligence platform bringing biological data,
+            pretrained models and external evidence together across research,
+            drug development, medicine, biotechnology and education.
+          </p>
+
+          <div className="cv-hero-actions">
+            <a href="#domains" className="cv-button cv-button-primary">
+              Explore the Platform
+              <span>↗</span>
+            </a>
+
+            <a href="/idea" className="cv-button cv-button-secondary">
+              Explore the Vision
+              <span>↗</span>
+            </a>
+          </div>
+        </div>
+
+        <div className="cv-hero-visual">
+          <div className="cv-hero-orbit orbit-one" />
+          <div className="cv-hero-orbit orbit-two" />
+          <div className="cv-hero-orbit orbit-three" />
+
+          <div className="cv-hero-core">
+            <div className="cv-dna">
+              <span />
+              <span />
+              <span />
+              <span />
+              <span />
+              <span />
+              <span />
+              <span />
+            </div>
+          </div>
+        </div>
+
+        <div className="cv-team-stage hero-team-stage">
+          <div
+            className={`cv-team-person person-one ${
+              cursorZone === "left" ? "swap-left" : ""
+            }`}
+          >
+            <img src="/team/girl-01.png" alt="Arooj Kanwal" />
+          </div>
+
+          <div
+            className={`cv-team-person person-two ${
+              cursorZone === "right" ? "swap-right" : ""
+            }`}
+          >
+            <img src="/team/boy.png" alt="Aatazaz Hussain" />
+          </div>
+
+          <div
+            className={`cv-team-person person-three ${
+              cursorZone === "right" ? "swap-right-second" : ""
+            }`}
+          >
+            <img src="/team/girl-02.png" alt="Umme Hani" />
+          </div>
+        </div>
+
+        <div className="cv-hero-bottom">
+          <span>CONNECTED BIOLOGICAL INTELLIGENCE</span>
+          <span>2026</span>
+          <span>RAWALPINDI / PAKISTAN</span>
+        </div>
+      </section>
+
+      {/* =========================================================
+          INTRO
+      ========================================================= */}
+      <section id="about" className="cv-section cv-intro">
+        <div className="cv-section-number">02</div>
+
+        <div className="cv-intro-heading">
+          <span className="cv-kicker">THE PROBLEM</span>
+
+          <h2>
+            Biology is
+            <br />
+            <span>connected.</span>
+          </h2>
+        </div>
+
+        <div className="cv-intro-copy">
+          <p>
+            Biological discovery rarely exists inside a single dataset.
+            A research question can move from a gene to a protein, from a
+            protein to a pathway, from a target to a compound, and from
+            experimental evidence to disease context.
+          </p>
+
+          <p>
+            CureVerseAI is designed around that reality. Instead of treating
+            biological intelligence as isolated tools, it creates a connected
+            layer where identity, context, pretrained representations,
+            external evidence and reasoning can work together.
+          </p>
+
+          <div className="cv-intro-formula">
+            <span>DATA</span>
+            <b>+</b>
+            <span>MODELS</span>
+            <b>+</b>
+            <span>EVIDENCE</span>
+            <b>→</b>
+            <strong>INSIGHT</strong>
+          </div>
+        </div>
+      </section>
+
+      {/* =========================================================
+          DOMAINS
+      ========================================================= */}
+      <section id="domains" className="cv-section cv-domains">
+        <div className="cv-section-header">
+          <span className="cv-kicker">03 / FIVE DOMAINS</span>
+
+          <h2>
+            One intelligence.
+            <br />
+            <span>Five directions.</span>
+          </h2>
+
+          <p>
+            The same connected biological intelligence architecture can serve
+            different scientific and learning workflows.
+          </p>
+        </div>
+
+        <div className="cv-domain-layout">
+          <div className="cv-domain-list">
+            {domains.map((domain, index) => (
+              <button
+                key={domain.number}
+                className={`cv-domain-item ${
+                  activeDomain === index ? "active" : ""
+                }`}
+                onMouseEnter={() => setActiveDomain(index)}
+                onFocus={() => setActiveDomain(index)}
+                onClick={() => setActiveDomain(index)}
+              >
+                <span>{domain.number}</span>
+                <strong>{domain.title}</strong>
+                <i>↗</i>
+              </button>
+            ))}
+          </div>
+
+          <div className="cv-domain-feature">
+            <div className="cv-domain-feature-number">
+              {domains[activeDomain].number}
+            </div>
+
+            <span className="cv-domain-feature-kicker">
+              {domains[activeDomain].subtitle}
+            </span>
+
+            <h3>{domains[activeDomain].title}</h3>
+
+            <p>{domains[activeDomain].description}</p>
+
+            <a
+              href={domains[activeDomain].href}
+              className="cv-text-link"
+            >
+              Enter Domain <span>↗</span>
+            </a>
+
+            <div className="cv-domain-circuit">
+              <span />
+              <span />
+              <span />
+              <span />
+              <span />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* =========================================================
+          PLATFORM INTELLIGENCE
+      ========================================================= */}
+      <section id="intelligence" className="cv-section cv-intelligence">
+        <div className="cv-intelligence-header">
+          <span className="cv-kicker">04 / PLATFORM INTELLIGENCE</span>
+
+          <h2>
+            From biological
+            <br />
+            <span>question to insight.</span>
+          </h2>
+
+          <p>
+            CureVerseAI connects biological sources, identity resolution,
+            pretrained representations, multimodal fusion, external evidence
+            and evidence reasoning into one analytical pipeline.
+          </p>
+        </div>
+
+        <div className="cv-intelligence-map">
+          <div className="cv-intelligence-row">
+            {pipeline.slice(0, 3).map(([number, title, detail]) => (
+              <div className="cv-intelligence-card" key={number}>
+                <span>{number}</span>
+                <strong>{title}</strong>
+                <small>{detail}</small>
+              </div>
+            ))}
+          </div>
+
+          <div className="cv-intelligence-engine">
+            <div className="cv-engine-ring ring-a" />
+            <div className="cv-engine-ring ring-b" />
+            <div className="cv-engine-ring ring-c" />
+
+            <div className="cv-engine-core">
+              <small>CUREVERSEAI</small>
+              <strong>INTELLIGENCE</strong>
+              <span>ENGINE</span>
+            </div>
+          </div>
+
+          <div className="cv-intelligence-fusion">
+            <span>04</span>
+            <strong>Multimodal Fusion</strong>
+            <small>
+              PROTEIN + MOLECULE + CELL → 256D INTEGRATED REPRESENTATION
+            </small>
+          </div>
+
+          <div className="cv-intelligence-row bottom">
+            {pipeline.slice(4).map(([number, title, detail]) => (
+              <div className="cv-intelligence-card" key={number}>
+                <span>{number}</span>
+                <strong>{title}</strong>
+                <small>{detail}</small>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="cv-intelligence-output">
+          <span>OUTPUT</span>
+          <strong>REASONED BIOLOGICAL INSIGHT</strong>
+          <i>↗</i>
+        </div>
+
+        <div className="cv-intelligence-facts">
+          <div>
+            <strong>05</strong>
+            <span>BIOLOGICAL DOMAINS</span>
+          </div>
+          <div>
+            <strong>03</strong>
+            <span>CORE MODALITIES</span>
+          </div>
+          <div>
+            <strong>256D</strong>
+            <span>FUSED REPRESENTATION</span>
+          </div>
+          <div>
+            <strong>05</strong>
+            <span>EVIDENCE CATEGORIES</span>
+          </div>
+        </div>
+      </section>
+
+      {/* =========================================================
+          VISION
+      ========================================================= */}
+      <section className="cv-section cv-vision">
+        <div className="cv-vision-header">
+          <span className="cv-kicker">05 / THE VISION</span>
+
+          <div className="cv-vision-status">
+            <span />
+            BUILDING BIOLOGICAL INTELLIGENCE
+          </div>
+        </div>
+
+        <div className="cv-vision-glass">
+          <div className="cv-vision-visual">
+            <img
+              src="/vision/cureverse-bio-visual.png"
+              alt="Connected biological intelligence ecosystem"
+            />
+          </div>
+
+          <div className="cv-vision-content">
+            <div className="cv-vision-index">01</div>
+
+            <h2>
+              Biology,
+              <br />
+              <span>connected.</span>
+            </h2>
+
+            <p>
+              The long-term vision of CureVerseAI is not another isolated
+              biological AI tool. It is an intelligence layer where biological
+              information can move naturally between data, models, evidence
+              and human understanding.
+            </p>
+
+            <div className="cv-vision-formula">
+              <span>DATA</span>
+              <b>+</b>
+              <span>MODELS</span>
+              <b>+</b>
+              <span>EVIDENCE</span>
+            </div>
+
+            <a href="/idea" className="cv-vision-link">
+              Explore the Vision
+              <span>↗</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* =========================================================
+          DEVELOPERS
+      ========================================================= */}
+      <section id="team" className="cv-team">
+        <div className="cv-team-heading">
+          <span className="cv-kicker">06 / THE PEOPLE</span>
+
+          <h2>
+            Three minds.
+            <br />
+            <span>One mission.</span>
+          </h2>
+        </div>
+
+        <div className="cv-team-stage">
+          <div className="cv-team-glow" />
+
+          <div className="cv-team-person person-one">
+            <img src="/team/girl-01.png" alt="Arooj Kanwal" />
+
+            <div className="cv-team-name">
+              <span>01</span>
+              <strong>Arooj Kanwal</strong>
+            </div>
+          </div>
+
+          <div className="cv-team-person person-two">
+            <img src="/team/boy.png" alt="Aatazaz Hussain" />
+
+            <div className="cv-team-name">
+              <span>02</span>
+              <strong>Aatazaz Hussain</strong>
+            </div>
+          </div>
+
+          <div className="cv-team-person person-three">
+            <img src="/team/girl-02.png" alt="Umme Hani" />
+
+            <div className="cv-team-name">
+              <span>03</span>
+              <strong>Umme Hani</strong>
+            </div>
+          </div>
+        </div>
+
+        <div className="cv-team-cta">
+          <a href="/developers" className="cv-button cv-button-primary">
+            Meet the Developers
+            <span>↗</span>
+          </a>
+        </div>
+      </section>
+
+      {/* =========================================================
+          FINAL CONNECTION
+      ========================================================= */}
+      <section className="cv-final-cta">
+        <div className="cv-final-cta-grid" />
+
+        <div className="cv-final-cta-content">
+          <span className="cv-kicker">07 / CONNECTION</span>
+
+          <h2>
+            The conversation
+            <br />
+            <span>is open.</span>
+          </h2>
+
+          <p>
+            Have a research question, technical idea, collaboration
+            opportunity, or simply want to understand CureVerseAI?
+          </p>
+
+          <a href="/contact" className="cv-button cv-button-primary">
+            Start a Conversation
+            <span>↗</span>
+          </a>
+        </div>
+
+        <div className="cv-final-cta-mark">
+          <span>CV</span>
+          <small>AI</small>
+        </div>
+      </section>
+
+      {/* =========================================================
+          FOOTER
+      ========================================================= */}
+      <footer className="cv-footer">
+        <div className="cv-footer-brand">
+          <strong>CureVerse</strong>
+          <b>AI</b>
+        </div>
+
+        <p>
+          Connected biological intelligence for research, discovery,
+          medicine, biotechnology and education.
+        </p>
+
+        <div className="cv-footer-links">
+          <a href="/idea">Vision</a>
+          <a href="/developers">Developers</a>
+          <a href="/contact">Contact</a>
+        </div>
+
+        <span className="cv-footer-copy">
+          © 2026 CureVerseAI
+        </span>
+      </footer>
+    </main>
+  );
+}

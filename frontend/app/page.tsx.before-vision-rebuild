@@ -341,11 +341,37 @@ export default function Home() {
           </div>
 
           <div className="cv-vision-panel-visual">
-            <img
-              src="/vision/cureverse-bio-visual.png"
-              alt="CureVerseAI biological intelligence visualization"
-              className="cv-bio-visual"
-            />
+            <div className="cv-visual-label label-top">
+              BIOLOGICAL SIGNAL
+            </div>
+
+            <div className="cv-visual-core">
+              <div className="cv-visual-core-ring ring-1" />
+              <div className="cv-visual-core-ring ring-2" />
+              <div className="cv-visual-core-ring ring-3" />
+
+              <div className="cv-visual-dna">
+                <i />
+                <i />
+                <i />
+                <i />
+                <i />
+                <i />
+              </div>
+
+              <div className="cv-visual-core-center">
+                <small>CV</small>
+                <strong>AI</strong>
+              </div>
+            </div>
+
+            <div className="cv-visual-label label-bottom">
+              CONNECTED INTELLIGENCE
+            </div>
+
+            <div className="cv-signal signal-one" />
+            <div className="cv-signal signal-two" />
+            <div className="cv-signal signal-three" />
           </div>
         </div>
 
@@ -438,7 +464,7 @@ export default function Home() {
       ====================================================== */}
       <section id="intelligence" className="cv-intelligence">
         <div className="cv-intelligence-top">
-          <span className="cv-kicker">04 / PLATFORM INTELLIGENCE</span>
+          <span className="cv-kicker">04 / PLATFORM SIGNAL</span>
 
           <h2>
             From biological
@@ -447,139 +473,63 @@ export default function Home() {
           </h2>
 
           <p>
-            CureVerseAI connects biological databases, pretrained models,
-            multimodal representations and external evidence into a single
-            reasoning workflow — turning a biological question into a
-            traceable, evidence-aware analysis.
+            The platform connects real biological sources, pretrained models
+            and evidence reasoning into a single analysis workflow.
           </p>
         </div>
 
-        <div className="cv-intelligence-system">
-          <div className="cv-intelligence-line line-one" />
-          <div className="cv-intelligence-line line-two" />
-          <div className="cv-intelligence-line line-three" />
-          <div className="cv-intelligence-line line-four" />
-          <div className="cv-intelligence-line line-five" />
+        <div className="cv-intelligence-visual">
+          <div className="cv-intelligence-ring ring-a" />
+          <div className="cv-intelligence-ring ring-b" />
+          <div className="cv-intelligence-ring ring-c" />
 
-          <div className="cv-intelligence-stage stage-data">
-            <span className="stage-index">01</span>
-            <small>BIOLOGICAL SOURCES</small>
-            <div className="stage-items">
-              <b>ENSEMBL</b>
-              <b>REACTOME</b>
-              <b>UNIPROT</b>
-            </div>
-            <p>Gene identity, canonical sequences, pathways and biological context.</p>
+          <div className="cv-intelligence-node node-a">
+            <span>DATA</span>
+            <b>ENSEMBL</b>
           </div>
 
-          <div className="cv-intelligence-stage stage-context">
-            <span className="stage-index">02</span>
-            <small>IDENTITY &amp; CONTEXT</small>
-            <div className="stage-core">
-              <strong>GENE</strong>
-              <span>→</span>
-              <strong>PROTEIN</strong>
-            </div>
-            <p>Biological entities are resolved before intelligence is applied.</p>
+          <div className="cv-intelligence-node node-b">
+            <span>EVIDENCE</span>
+            <b>OPEN TARGETS</b>
           </div>
 
-          <div className="cv-intelligence-stage stage-models">
-            <span className="stage-index">03</span>
-            <small>PRETRAINED MODELS</small>
-            <div className="model-grid">
-              <div>
-                <strong>ESM-2</strong>
-                <span>PROTEIN</span>
-              </div>
-              <div>
-                <strong>ChemBERTa</strong>
-                <span>MOLECULE</span>
-              </div>
-              <div>
-                <strong>CELL</strong>
-                <span>CELLULAR STATE</span>
-              </div>
-            </div>
-            <p>Different biological modalities become machine-readable representations.</p>
+          <div className="cv-intelligence-node node-c">
+            <span>MOLECULES</span>
+            <b>ChEMBL</b>
           </div>
 
-          <div className="cv-intelligence-stage stage-fusion">
-            <span className="stage-index">04</span>
-            <small>MULTIMODAL FUSION</small>
-            <div className="fusion-orbit">
-              <i />
-              <i />
-              <i />
-              <strong>256D</strong>
-            </div>
-            <p>Protein, molecular and cellular signals are aligned into a unified feature representation.</p>
+          <div className="cv-intelligence-node node-d">
+            <span>MODELS</span>
+            <b>ESM-2</b>
           </div>
 
-          <div className="cv-intelligence-stage stage-evidence">
-            <span className="stage-index">05</span>
-            <small>EXTERNAL EVIDENCE</small>
-            <div className="evidence-stack">
-              <div>
-                <strong>OPEN TARGETS</strong>
-                <span>DISEASE ASSOCIATIONS</span>
-              </div>
-              <div>
-                <strong>ChEMBL</strong>
-                <span>EXPERIMENTAL BIOACTIVITY</span>
-              </div>
-            </div>
-            <p>External evidence is retrieved separately from model-derived signals.</p>
-          </div>
-
-          <div className="cv-intelligence-stage stage-reasoning">
-            <span className="stage-index">06</span>
-            <small>EVIDENCE REASONING</small>
-            <div className="reasoning-pills">
-              <span>DIRECT</span>
-              <span>DISEASE</span>
-              <span>EXPERIMENTAL</span>
-              <span>MODEL</span>
-              <span>CONTEXT</span>
-            </div>
-            <p>Evidence types remain distinct so the system can explain what supports an insight.</p>
-          </div>
-
-          <div className="cv-intelligence-output">
-            <span className="output-pulse" />
-            <small>CUREVERSEAI</small>
-            <strong>REASONED</strong>
-            <strong>BIOLOGICAL</strong>
-            <strong>INSIGHT</strong>
-            <span className="output-caption">DATA + MODELS + EVIDENCE</span>
+          <div className="cv-intelligence-core">
+            <small>CUREVERSE</small>
+            <strong>AI</strong>
+            <span>INTELLIGENCE ENGINE</span>
           </div>
         </div>
 
-        <div className="cv-intelligence-facts">
+        <div className="cv-metrics">
           <div>
             <strong>05</strong>
-            <span>BIOLOGICAL DOMAINS</span>
-            <p>Research · Drug Development · Medicine · Biotechnology · Education</p>
+            <span>INTELLIGENCE DOMAINS</span>
           </div>
-          <div>
-            <strong>03</strong>
-            <span>BIOLOGICAL MODALITIES</span>
-            <p>Protein · Molecule · Cellular State</p>
-          </div>
-          <div>
-            <strong>256D</strong>
-            <span>FUSED REPRESENTATION</span>
-            <p>Unified multimodal feature space</p>
-          </div>
-          <div>
-            <strong>MULTI-SOURCE</strong>
-            <span>EVIDENCE REASONING</span>
-            <p>Direct · Disease · Experimental · Model · Context</p>
-          </div>
-        </div>
 
-        <div className="cv-intelligence-note">
-          <span>FOLLOW THE SIGNAL</span>
-          <p>Biological identity → models → multimodal features → external evidence → reasoning → insight.</p>
+          <div>
+            <strong>∞</strong>
+            <span>BIOLOGICAL QUESTIONS</span>
+          </div>
+
+          <div>
+            <strong>01</strong>
+            <span>CONNECTED PLATFORM</span>
+          </div>
+
+          <div>
+            <strong>24/7</strong>
+            <span>EXPLORATION</span>
+          </div>
         </div>
       </section>
 
@@ -595,45 +545,34 @@ export default function Home() {
             <br />
             <span>One mission.</span>
           </h2>
-
-          <p>
-            Meet the people behind CureVerseAI.
-          </p>
         </div>
 
         <div className="cv-team-stage">
           <div className="cv-team-glow" />
 
           <div className="cv-team-person person-one">
-            <img src="/team/girl-01.png" alt="Arooj Kanwal" />
-            <div className="cv-team-name">
+            <img src="/team/girl-01.png" alt="CureVerseAI developer" />
+            <div>
               <span>01</span>
-              <strong>Arooj Kanwal</strong>
+              <strong>Research</strong>
             </div>
           </div>
 
           <div className="cv-team-person person-two">
-            <img src="/team/boy.png" alt="Aatazaz Hussain" />
-            <div className="cv-team-name">
+            <img src="/team/boy.png" alt="CureVerseAI developer" />
+            <div>
               <span>02</span>
-              <strong>Aatazaz Hussain</strong>
+              <strong>AI / Biology</strong>
             </div>
           </div>
 
           <div className="cv-team-person person-three">
-            <img src="/team/girl-02.png" alt="Umme Hani" />
-            <div className="cv-team-name">
+            <img src="/team/girl-02.png" alt="CureVerseAI developer" />
+            <div>
               <span>03</span>
-              <strong>Umme Hani</strong>
+              <strong>Technology</strong>
             </div>
           </div>
-        </div>
-
-        <div className="cv-team-cta">
-          <a href="/developers" className="cv-button cv-button-primary">
-            Meet the Developers
-            <span>↗</span>
-          </a>
         </div>
       </section>
 
