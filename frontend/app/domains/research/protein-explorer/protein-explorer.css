@@ -1,0 +1,1634 @@
+:root {
+  --protein-red: #e0525a;
+  --protein-deep: #a82e38;
+  --protein-gold: #e9c58c;
+  --protein-ink: #080a0b;
+  --protein-text: #eee9e1;
+  --protein-muted: rgba(238, 233, 225, 0.66);
+  --protein-line: rgba(255, 255, 255, 0.09);
+}
+
+.protein-page {
+  background: var(--protein-ink);
+  color: var(--protein-text);
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.protein-hero {
+  min-height: 820px;
+  height: 820px;
+  position: relative;
+  padding: 135px 5vw 35px;
+  border-bottom: 1px solid var(--protein-line);
+  isolation: isolate;
+}
+
+.protein-hero-grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.18;
+
+  background-image:
+    linear-gradient(
+      rgba(255, 255, 255, 0.045) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.045) 1px,
+      transparent 1px
+    );
+
+  background-size: 70px 70px;
+
+  mask-image:
+    linear-gradient(
+      90deg,
+      #000,
+      transparent 82%
+    );
+
+  z-index: -3;
+}
+
+.protein-hero-glow {
+  position: absolute;
+  width: 700px;
+  height: 700px;
+  right: 4%;
+  top: 45px;
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(224, 82, 90, 0.15),
+      rgba(168, 46, 56, 0.05) 42%,
+      transparent 70%
+    );
+
+  filter: blur(10px);
+  z-index: -2;
+}
+
+.protein-hero-copy {
+  max-width: 700px;
+  position: relative;
+  z-index: 3;
+}
+
+.protein-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  font-size: 10px;
+  letter-spacing: 0.22em;
+
+  color: rgba(238, 233, 225, 0.6);
+}
+
+.protein-eyebrow span {
+  color: var(--protein-red);
+  font-weight: 700;
+}
+
+.protein-eyebrow i {
+  width: 42px;
+  height: 1px;
+  background: var(--protein-red);
+  display: block;
+}
+
+.protein-eyebrow strong {
+  font-weight: 600;
+}
+
+.protein-hero h1 {
+  margin: 35px 0 22px;
+
+  font-size: clamp(58px, 7vw, 108px);
+  line-height: 0.9;
+
+  letter-spacing: -0.065em;
+  font-weight: 500;
+
+  transition: 0.35s ease;
+}
+
+.protein-hero h1 em,
+.protein-section-head h2 em,
+.protein-principle-copy h2 em {
+  color: var(--protein-red);
+  font-style: normal;
+}
+
+.protein-hero h1:hover {
+  transform: translateX(4px);
+  text-shadow:
+    0 0 32px rgba(224, 82, 90, 0.2);
+}
+
+.protein-hero-copy > p {
+  max-width: 600px;
+
+  font-size: 17px;
+  line-height: 1.72;
+
+  color: var(--protein-muted);
+}
+
+.protein-hero-stats {
+  display: flex;
+  gap: 55px;
+  margin-top: 48px;
+}
+
+.protein-hero-stats div {
+  transition: 0.3s ease;
+}
+
+.protein-hero-stats div:hover {
+  transform: translateY(-4px);
+}
+
+.protein-hero-stats strong {
+  display: block;
+
+  font-size: 25px;
+  font-weight: 500;
+
+  color: var(--protein-gold);
+}
+
+.protein-hero-stats span {
+  display: block;
+
+  margin-top: 6px;
+
+  font-size: 9px;
+  letter-spacing: 0.18em;
+
+  color: rgba(238, 233, 225, 0.5);
+}
+
+/* =========================================================
+   MOLECULAR ORBIT
+========================================================= */
+
+.protein-orbit {
+  position: absolute;
+
+  right: 7vw;
+  top: 105px;
+
+  width: 560px;
+  height: 560px;
+
+  display: grid;
+  place-items: center;
+}
+
+.protein-orbit-ring {
+  position: absolute;
+
+  border: 1px solid
+    rgba(224, 82, 90, 0.25);
+
+  border-radius: 50%;
+
+  transform: rotate(-18deg);
+}
+
+.ring-one {
+  width: 510px;
+  height: 290px;
+
+  animation:
+    orbitSpin
+    16s
+    linear
+    infinite;
+}
+
+.ring-two {
+  width: 400px;
+  height: 400px;
+
+  border-color:
+    rgba(233, 197, 140, 0.2);
+
+  animation:
+    orbitSpin
+    22s
+    linear
+    reverse
+    infinite;
+}
+
+.ring-three {
+  width: 265px;
+  height: 470px;
+
+  border-color:
+    rgba(255, 255, 255, 0.1);
+
+  transform: rotate(54deg);
+
+  animation:
+    orbitSpin
+    19s
+    linear
+    infinite;
+}
+
+.protein-core {
+  width: 245px;
+  height: 245px;
+
+  position: relative;
+
+  border-radius: 50%;
+
+  display: grid;
+  place-items: center;
+
+  background:
+    radial-gradient(
+      circle at 38% 32%,
+      rgba(224, 82, 90, 0.25),
+      rgba(11, 13, 15, 0.8) 55%,
+      #050607
+    );
+
+  box-shadow:
+    0 0 80px
+      rgba(224, 82, 90, 0.13),
+    inset 0 0 40px
+      rgba(255, 255, 255, 0.04);
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.12);
+}
+
+.protein-helix {
+  width: 92px;
+  height: 180px;
+
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+
+  justify-content: space-around;
+  align-items: center;
+
+  transform: rotate(-12deg);
+}
+
+.protein-helix i {
+  width: 72px;
+  height: 9px;
+
+  border-radius: 50%;
+
+  border:
+    2px solid
+    var(--protein-red);
+
+  transform: rotate(24deg);
+
+  box-shadow:
+    0 0 12px
+      rgba(224, 82, 90, 0.45);
+}
+
+.protein-helix i:nth-child(even) {
+  transform: rotate(-24deg);
+  border-color: var(--protein-gold);
+}
+
+.core-dot {
+  position: absolute;
+
+  width: 7px;
+  height: 7px;
+
+  border-radius: 50%;
+
+  background: var(--protein-red);
+
+  top: 28px;
+  right: 42px;
+
+  box-shadow:
+    0 0 15px
+    var(--protein-red);
+}
+
+.dot-two {
+  top: auto;
+  right: auto;
+
+  bottom: 45px;
+  left: 28px;
+
+  background: var(--protein-gold);
+}
+
+.dot-three {
+  top: 50%;
+  right: -12px;
+
+  background: white;
+}
+
+.orbit-label {
+  position: absolute;
+
+  font-size: 9px;
+  letter-spacing: 0.2em;
+
+  color:
+    rgba(238, 233, 225, 0.5);
+}
+
+.label-top {
+  top: 25px;
+  left: 48%;
+}
+
+.label-right {
+  right: 0;
+  top: 48%;
+}
+
+.label-bottom {
+  bottom: 25px;
+  left: 44%;
+}
+
+/* =========================================================
+   HERO BOTTOM
+========================================================= */
+
+.protein-hero-bottom {
+  position: absolute;
+
+  bottom: 30px;
+  left: 5vw;
+  right: 5vw;
+
+  display: flex;
+  justify-content: space-between;
+
+  border-top:
+    1px solid
+    var(--protein-line);
+
+  padding-top: 13px;
+
+  font-size: 9px;
+  letter-spacing: 0.15em;
+
+  color:
+    rgba(238, 233, 225, 0.4);
+}
+
+/* =========================================================
+   WORKSPACE
+========================================================= */
+
+.protein-workspace {
+  padding: 125px 5vw 105px;
+
+  max-width: 1500px;
+  margin: auto;
+}
+
+.protein-section-head {
+  max-width: 780px;
+}
+
+.protein-section-head h2 {
+  margin: 24px 0 15px;
+
+  font-size: clamp(44px, 5vw, 76px);
+  line-height: 0.95;
+
+  letter-spacing: -0.05em;
+  font-weight: 500;
+}
+
+.protein-section-head p {
+  color: var(--protein-muted);
+
+  font-size: 16px;
+  line-height: 1.7;
+
+  max-width: 680px;
+}
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+.protein-search {
+  display: flex;
+  gap: 14px;
+
+  margin-top: 55px;
+}
+
+.protein-input-wrap {
+  min-height: 72px;
+
+  flex: 1;
+
+  display: flex;
+  align-items: center;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.14);
+
+  background:
+    rgba(255, 255, 255, 0.025);
+
+  transition: 0.3s ease;
+}
+
+.protein-input-wrap:focus-within {
+  border-color:
+    rgba(224, 82, 90, 0.6);
+
+  box-shadow:
+    0 0 35px
+    rgba(224, 82, 90, 0.08);
+}
+
+.input-index {
+  padding-left: 22px;
+
+  font-size: 9px;
+  letter-spacing: 0.18em;
+
+  color: var(--protein-red);
+}
+
+.protein-input-wrap input {
+  flex: 1;
+  min-width: 0;
+
+  background: transparent;
+  border: 0;
+  outline: 0;
+
+  color: var(--protein-text);
+
+  padding: 0 20px;
+
+  font: inherit;
+  font-size: 17px;
+}
+
+.protein-input-wrap input::placeholder {
+  color:
+    rgba(238, 233, 225, 0.32);
+}
+
+.input-status {
+  padding-right: 20px;
+
+  font-size: 9px;
+  letter-spacing: 0.15em;
+
+  color: var(--protein-gold);
+}
+
+.protein-search button {
+  border: 0;
+
+  padding: 0 28px;
+
+  background:
+    var(--protein-red);
+
+  color: white;
+
+  font: inherit;
+  font-size: 11px;
+
+  letter-spacing: 0.1em;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: 0.3s ease;
+}
+
+.protein-search button:hover:not(:disabled) {
+  background: #ef6b72;
+
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 14px 35px
+    rgba(224, 82, 90, 0.18);
+}
+
+.protein-search button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* =========================================================
+   PIPELINE
+========================================================= */
+
+.protein-pipeline {
+  display: grid;
+
+  grid-template-columns:
+    1fr 35px
+    1fr 35px
+    1fr 35px
+    1fr;
+
+  align-items: center;
+
+  margin-top: 24px;
+
+  border-bottom:
+    1px solid
+    var(--protein-line);
+
+  padding-bottom: 40px;
+}
+
+.protein-pipeline div {
+  padding: 22px 0;
+}
+
+.protein-pipeline span {
+  color: var(--protein-red);
+  font-size: 10px;
+}
+
+.protein-pipeline strong {
+  display: block;
+
+  margin-top: 9px;
+
+  font-size: 13px;
+  letter-spacing: 0.12em;
+}
+
+.protein-pipeline small {
+  display: block;
+
+  margin-top: 7px;
+
+  color:
+    rgba(238, 233, 225, 0.48);
+
+  font-size: 12px;
+}
+
+.protein-pipeline b {
+  color:
+    rgba(238, 233, 225, 0.22);
+
+  font-weight: 400;
+
+  text-align: center;
+}
+
+/* =========================================================
+   STATES
+========================================================= */
+
+.protein-empty,
+.protein-loading,
+.protein-error {
+  margin-top: 55px;
+
+  min-height: 245px;
+
+  border:
+    1px solid
+    var(--protein-line);
+
+  display: flex;
+  align-items: center;
+
+  gap: 35px;
+
+  padding: 55px;
+
+  background:
+    linear-gradient(
+      110deg,
+      rgba(255, 255, 255, 0.025),
+      transparent
+    );
+}
+
+.empty-orbit,
+.loading-pulse {
+  width: 92px;
+  height: 92px;
+
+  flex: 0 0 92px;
+
+  border:
+    1px solid
+    rgba(224, 82, 90, 0.4);
+
+  border-radius: 50%;
+
+  display: grid;
+  place-items: center;
+
+  color: var(--protein-red);
+
+  box-shadow:
+    0 0 45px
+    rgba(224, 82, 90, 0.08);
+}
+
+.protein-empty span,
+.protein-loading span {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+
+  color: var(--protein-red);
+}
+
+.protein-empty h3,
+.protein-loading h3 {
+  font-size: 30px;
+
+  margin: 10px 0;
+
+  font-weight: 500;
+}
+
+.protein-empty p,
+.protein-loading p {
+  color: var(--protein-muted);
+  font-size: 15px;
+}
+
+.protein-error {
+  color: #ffb1b5;
+
+  border-color:
+    rgba(224, 82, 90, 0.4);
+}
+
+/* =========================================================
+   RESULTS
+========================================================= */
+
+.protein-results {
+  margin-top: 65px;
+}
+
+.protein-result-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  padding: 38px 0 30px;
+
+  border-top:
+    1px solid
+    var(--protein-line);
+
+  border-bottom:
+    1px solid
+    var(--protein-line);
+}
+
+.protein-result-top
+  > div:first-child
+  > span,
+.card-head,
+.protein-insight
+  > div
+  > span {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+
+  color: var(--protein-red);
+}
+
+.protein-result-top h3 {
+  margin: 10px 0 5px;
+
+  font-size: 43px;
+
+  letter-spacing: -0.04em;
+
+  font-weight: 500;
+}
+
+.protein-result-top p {
+  margin: 0;
+
+  color: var(--protein-muted);
+
+  font-size: 16px;
+}
+
+.resolved-badge {
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  padding: 9px 13px;
+
+  border:
+    1px solid
+    rgba(233, 197, 140, 0.3);
+
+  color: var(--protein-gold);
+
+  font-size: 9px;
+  letter-spacing: 0.16em;
+}
+
+.resolved-badge i {
+  width: 6px;
+  height: 6px;
+
+  border-radius: 50%;
+
+  background:
+    var(--protein-gold);
+
+  box-shadow:
+    0 0 10px
+    var(--protein-gold);
+}
+
+/* =========================================================
+   METRICS
+========================================================= */
+
+.protein-metrics {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, 1fr);
+
+  border-bottom:
+    1px solid
+    var(--protein-line);
+}
+
+.protein-metrics div {
+  padding: 28px 24px;
+
+  border-right:
+    1px solid
+    var(--protein-line);
+
+  transition: 0.3s ease;
+}
+
+.protein-metrics div:first-child {
+  padding-left: 0;
+}
+
+.protein-metrics div:last-child {
+  border-right: 0;
+}
+
+.protein-metrics div:hover {
+  background:
+    rgba(224, 82, 90, 0.035);
+}
+
+.protein-metrics span {
+  display: block;
+
+  font-size: 9px;
+  letter-spacing: 0.16em;
+
+  color:
+    rgba(238, 233, 225, 0.42);
+}
+
+.protein-metrics strong {
+  display: block;
+
+  margin-top: 9px;
+
+  font-size: 20px;
+
+  color: var(--protein-gold);
+
+  font-weight: 500;
+}
+
+/* =========================================================
+   DASHBOARD
+========================================================= */
+
+.protein-dashboard {
+  display: grid;
+
+  grid-template-columns:
+    1.2fr 0.8fr;
+
+  gap: 18px;
+
+  margin-top: 18px;
+}
+
+.protein-card {
+  min-height: 430px;
+
+  border:
+    1px solid
+    var(--protein-line);
+
+  background:
+    rgba(255, 255, 255, 0.018);
+
+  padding: 28px;
+
+  transition: 0.35s ease;
+}
+
+.protein-card:hover {
+  transform: translateY(-5px);
+
+  border-color:
+    rgba(224, 82, 90, 0.32);
+
+  box-shadow:
+    0 22px 55px
+    rgba(0, 0, 0, 0.2);
+}
+
+.card-head {
+  display: flex;
+  justify-content: space-between;
+
+  color:
+    rgba(238, 233, 225, 0.52);
+}
+
+.card-head strong {
+  color: var(--protein-gold);
+
+  font-size: 9px;
+  letter-spacing: 0.15em;
+}
+
+.protein-card h4 {
+  font-size: 27px;
+
+  margin: 24px 0 9px;
+
+  font-weight: 500;
+}
+
+.protein-card > p {
+  font-size: 14px;
+  line-height: 1.65;
+
+  color: var(--protein-muted);
+
+  max-width: 590px;
+}
+
+/* =========================================================
+   SEQUENCE
+========================================================= */
+
+.sequence-box {
+  margin-top: 25px;
+
+  min-height: 210px;
+
+  padding: 20px;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.07);
+
+  background: #050607;
+
+  color:
+    rgba(238, 233, 225, 0.62);
+
+  font-family: monospace;
+
+  font-size: 12px;
+  line-height: 1.7;
+
+  word-break: break-all;
+
+  overflow: hidden;
+}
+
+.card-foot {
+  display: flex;
+  justify-content: space-between;
+
+  margin-top: 12px;
+
+  font-size: 9px;
+  letter-spacing: 0.13em;
+
+  color:
+    rgba(238, 233, 225, 0.35);
+}
+
+/* =========================================================
+   EMBEDDING
+========================================================= */
+
+.embedding-visual {
+  height: 160px;
+
+  margin-top: 34px;
+
+  display: flex;
+  align-items: flex-end;
+
+  gap: 5px;
+
+  padding: 12px;
+
+  border-bottom:
+    1px solid
+    rgba(255, 255, 255, 0.09);
+}
+
+.embedding-visual i {
+  flex: 1;
+  min-width: 2px;
+
+  background:
+    linear-gradient(
+      to top,
+      var(--protein-red),
+      var(--protein-gold)
+    );
+
+  opacity: 0.7;
+
+  transition: 0.3s;
+}
+
+.representation-card:hover
+  .embedding-visual i {
+  opacity: 1;
+  transform: scaleY(1.05);
+}
+
+.representation-readout {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+
+  margin-top: 18px;
+}
+
+.representation-readout strong {
+  font-size: 42px;
+
+  font-weight: 500;
+
+  color:
+    var(--protein-gold);
+}
+
+.representation-readout span {
+  font-size: 10px;
+
+  color:
+    rgba(238, 233, 225, 0.4);
+}
+
+/* =========================================================
+   CONTEXT
+========================================================= */
+
+.context-list {
+  margin-top: 24px;
+
+  max-height: 260px;
+
+  overflow: auto;
+}
+
+.context-list div {
+  display: grid;
+
+  grid-template-columns:
+    30px 1fr auto;
+
+  gap: 10px;
+
+  align-items: center;
+
+  padding: 12px 0;
+
+  border-top:
+    1px solid
+    rgba(255, 255, 255, 0.07);
+}
+
+.context-list span {
+  color: var(--protein-red);
+
+  font-size: 10px;
+}
+
+.context-list strong {
+  font-size: 13px;
+
+  font-weight: 500;
+}
+
+.context-list small {
+  font-size: 8px;
+
+  letter-spacing: 0.13em;
+
+  color:
+    rgba(238, 233, 225, 0.35);
+}
+
+/* =========================================================
+   EVIDENCE
+========================================================= */
+
+.evidence-lines {
+  margin-top: 25px;
+}
+
+.evidence-lines div {
+  display: grid;
+
+  grid-template-columns:
+    1fr auto 70px;
+
+  align-items: center;
+
+  gap: 15px;
+
+  padding: 17px 0;
+
+  border-top:
+    1px solid
+    rgba(255, 255, 255, 0.07);
+}
+
+.evidence-lines span {
+  font-size: 14px;
+}
+
+.evidence-lines b {
+  font-size: 9px;
+
+  color:
+    rgba(238, 233, 225, 0.45);
+
+  letter-spacing: 0.13em;
+
+  font-weight: 500;
+}
+
+.evidence-lines i {
+  height: 2px;
+
+  background:
+    linear-gradient(
+      90deg,
+      var(--protein-red),
+      var(--protein-gold)
+    );
+}
+
+/* =========================================================
+   INSIGHT
+========================================================= */
+
+.protein-insight {
+  margin-top: 18px;
+
+  display: flex;
+
+  gap: 28px;
+
+  padding: 38px;
+
+  border:
+    1px solid
+    rgba(224, 82, 90, 0.25);
+
+  background:
+    linear-gradient(
+      110deg,
+      rgba(224, 82, 90, 0.08),
+      rgba(233, 197, 140, 0.025),
+      transparent
+    );
+
+  transition: 0.35s ease;
+}
+
+.protein-insight:hover {
+  border-color:
+    rgba(224, 82, 90, 0.55);
+
+  transform: translateY(-3px);
+}
+
+.insight-mark {
+  font-size: 32px;
+
+  color:
+    var(--protein-gold);
+}
+
+.protein-insight h3 {
+  margin: 9px 0;
+
+  font-size: 24px;
+
+  font-weight: 500;
+
+  text-transform: capitalize;
+}
+
+.protein-insight p {
+  margin: 0;
+
+  max-width: 900px;
+
+  color:
+    var(--protein-muted);
+
+  line-height: 1.7;
+
+  font-size: 15px;
+}
+
+/* =========================================================
+   RAW
+========================================================= */
+
+.protein-raw {
+  margin-top: 15px;
+
+  border-top:
+    1px solid
+    var(--protein-line);
+}
+
+.protein-raw summary {
+  cursor: pointer;
+
+  list-style: none;
+
+  padding: 22px 0;
+
+  font-size: 10px;
+
+  letter-spacing: 0.16em;
+
+  color:
+    rgba(238, 233, 225, 0.45);
+
+  display: flex;
+  justify-content: space-between;
+}
+
+.protein-raw pre {
+  max-height: 500px;
+
+  overflow: auto;
+
+  padding: 25px;
+
+  background: #050607;
+
+  color:
+    rgba(238, 233, 225, 0.55);
+
+  font-size: 11px;
+
+  line-height: 1.6;
+}
+
+/* =========================================================
+   PRINCIPLES
+========================================================= */
+
+.protein-principles {
+  padding: 115px 5vw 130px;
+
+  border-top:
+    1px solid
+    var(--protein-line);
+
+  background:
+    radial-gradient(
+      circle at 80% 30%,
+      rgba(224, 82, 90, 0.08),
+      transparent 35%
+    );
+
+  display: grid;
+
+  grid-template-columns:
+    1fr 1.2fr;
+
+  gap: 10vw;
+}
+
+.protein-principle-copy h2 {
+  font-size:
+    clamp(43px, 4.8vw, 72px);
+
+  line-height: 0.98;
+
+  letter-spacing: -0.055em;
+
+  font-weight: 500;
+
+  margin-top: 28px;
+}
+
+.protein-principles-grid {
+  display: grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap: 1px;
+
+  background:
+    var(--protein-line);
+}
+
+.protein-principles-grid div {
+  background:
+    var(--protein-ink);
+
+  padding: 35px;
+
+  transition: 0.3s ease;
+}
+
+.protein-principles-grid div:hover {
+  background:
+    rgba(224, 82, 90, 0.045);
+
+  transform: translateY(-3px);
+}
+
+.protein-principles-grid strong {
+  font-size: 11px;
+
+  letter-spacing: 0.16em;
+
+  color:
+    var(--protein-gold);
+}
+
+.protein-principles-grid p {
+  color:
+    var(--protein-muted);
+
+  font-size: 14px;
+
+  line-height: 1.7;
+
+  margin-top: 14px;
+}
+
+/* =========================================================
+   ANIMATION
+========================================================= */
+
+@keyframes orbitSpin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1100px) {
+
+  .protein-orbit {
+    right: -100px;
+    opacity: 0.65;
+  }
+
+  .protein-dashboard {
+    grid-template-columns: 1fr;
+  }
+
+  .protein-principles {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+
+  .protein-hero {
+    min-height: 850px;
+    height: 850px;
+
+    padding:
+      110px
+      6vw
+      25px;
+  }
+
+  .protein-hero h1 {
+    font-size: 58px;
+  }
+
+  .protein-hero-copy > p {
+    font-size: 15px;
+  }
+
+  .protein-hero-stats {
+    gap: 22px;
+    margin-top: 35px;
+  }
+
+  .protein-hero-stats strong {
+    font-size: 19px;
+  }
+
+  .protein-orbit {
+    width: 380px;
+    height: 380px;
+
+    right: -80px;
+    top: 430px;
+
+    opacity: 0.5;
+  }
+
+  .ring-one {
+    width: 350px;
+    height: 205px;
+  }
+
+  .ring-two {
+    width: 290px;
+    height: 290px;
+  }
+
+  .ring-three {
+    width: 200px;
+    height: 330px;
+  }
+
+  .protein-core {
+    width: 175px;
+    height: 175px;
+  }
+
+  .protein-hero-bottom {
+    display: none;
+  }
+
+  .protein-workspace {
+    padding:
+      85px
+      6vw;
+  }
+
+  .protein-search {
+    flex-direction: column;
+  }
+
+  .protein-search button {
+    min-height: 64px;
+  }
+
+  .protein-input-wrap {
+    min-height: 64px;
+  }
+
+  .input-status {
+    display: none;
+  }
+
+  .protein-pipeline {
+    grid-template-columns:
+      1fr 25px 1fr;
+  }
+
+  .protein-pipeline
+    div:nth-of-type(n + 3),
+  .protein-pipeline
+    b:nth-of-type(n + 2) {
+    display: none;
+  }
+
+  .protein-empty,
+  .protein-loading {
+    padding: 35px 25px;
+  }
+
+  .protein-result-top {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .protein-result-top h3 {
+    font-size: 34px;
+  }
+
+  .protein-metrics {
+    grid-template-columns:
+      1fr 1fr;
+  }
+
+  .protein-metrics div {
+    border-bottom:
+      1px solid
+      var(--protein-line);
+  }
+
+  .protein-dashboard {
+    grid-template-columns: 1fr;
+  }
+
+  .protein-card {
+    min-height: auto;
+  }
+
+  .protein-insight {
+    padding: 28px;
+  }
+
+  .protein-principles {
+    padding:
+      85px
+      6vw;
+  }
+
+  .protein-principles-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =========================================================
+   PROTEIN SEQUENCE VIEWER
+========================================================= */
+
+.sequence-content {
+  width: 100%;
+}
+
+.sequence-ruler {
+  display: flex;
+  justify-content: space-between;
+
+  margin-bottom: 10px;
+
+  padding-bottom: 8px;
+
+  border-bottom:
+    1px solid
+    rgba(255, 255, 255, 0.07);
+
+  font-family: monospace;
+
+  font-size: 9px;
+
+  color:
+    rgba(233, 197, 140, 0.45);
+}
+
+.sequence-text {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sequence-line {
+  display: grid;
+
+  grid-template-columns: 42px 1fr;
+
+  gap: 14px;
+
+  align-items: baseline;
+}
+
+.sequence-line > span {
+  font-family: monospace;
+
+  font-size: 9px;
+
+  color:
+    rgba(224, 82, 90, 0.55);
+}
+
+.sequence-line code {
+  font-family: "SFMono-Regular",
+    Consolas,
+    "Liberation Mono",
+    monospace;
+
+  font-size: 12px;
+
+  letter-spacing: 0.08em;
+
+  color:
+    rgba(238, 233, 225, 0.78);
+
+  word-break: break-all;
+}
+
+.sequence-more {
+  margin-top: 10px;
+
+  padding-top: 10px;
+
+  border-top:
+    1px solid
+    rgba(255, 255, 255, 0.06);
+
+  font-size: 10px;
+
+  letter-spacing: 0.08em;
+
+  color:
+    rgba(233, 197, 140, 0.65);
+}
+
+.sequence-unavailable {
+  min-height: 160px;
+
+  display: flex;
+  flex-direction: column;
+
+  justify-content: center;
+}
+
+.sequence-unavailable span {
+  font-size: 10px;
+
+  letter-spacing: 0.18em;
+
+  color:
+    var(--protein-red);
+}
+
+.sequence-unavailable p {
+  max-width: 500px;
+
+  margin-top: 10px;
+
+  color:
+    rgba(238, 233, 225, 0.48);
+
+  font-size: 13px;
+
+  line-height: 1.6;
+}
+
+@media (max-width: 760px) {
+
+  .sequence-line {
+    grid-template-columns: 34px 1fr;
+    gap: 9px;
+  }
+
+  .sequence-line code {
+    font-size: 10px;
+    letter-spacing: 0.045em;
+  }
+}
+

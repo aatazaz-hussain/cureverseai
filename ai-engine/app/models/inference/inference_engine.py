@@ -230,6 +230,34 @@ class BiologicalInferenceEngine:
                     uniprot_resolution
                 )
 
+                # -------------------------------------------------
+                # Canonical UniProt sequence exposure
+                # Additive only: existing ESM-2 pipeline is untouched.
+                # -------------------------------------------------
+
+                if uniprot_resolution:
+                    try:
+                        uniprot_sequence = (
+                            self.ensembl
+                            .get_uniprot_sequence(
+                                uniprot_resolution["accession"]
+                            )
+                        )
+
+                        if uniprot_sequence:
+                            result["canonical_sequence"] = (
+                                uniprot_sequence["sequence"]
+                            )
+                            result["canonical_sequence_length"] = (
+                                uniprot_sequence["length"]
+                            )
+                            result["canonical_sequence_source"] = (
+                                uniprot_sequence["source"]
+                            )
+
+                    except Exception as exc:
+                        result["canonical_sequence_error"] = str(exc)
+
                 if uniprot_resolution:
                     uniprot_accession = (
                         uniprot_resolution["accession"]

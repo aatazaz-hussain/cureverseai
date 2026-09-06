@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.api.routes.health import router as health_router
 from app.api.routes.analyze import router as analyze_router
 from app.api.routes.contact import router as contact_router
+from app.api.routes.protein import router as protein_router
 
 
 app = FastAPI(
@@ -31,6 +32,7 @@ app.include_router(
 )
 
 app.include_router(analyze_router, prefix="/api/v1")
+app.include_router(protein_router, prefix="/api/v1")
 app.include_router(contact_router, prefix="/api/v1")
 
 
