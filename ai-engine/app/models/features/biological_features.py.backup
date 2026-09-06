@@ -57,8 +57,7 @@ class BiologicalFeatureService:
         )
 
         mutations = extract_mutations(
-            reactome_entities,
-            gene_symbol=symbol,
+            reactome_entities
         )
 
         return {

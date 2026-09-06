@@ -1,0 +1,77 @@
+from typing import Any, Dict
+
+from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel, Field
+
+from app.models.inference.inference_engine import BiologicalInferenceEngine
+
+router = APIRouter(prefix="/variants", tags=["Variants"])
+
+engine = BiologicalInferenceEngine()
+
+
+class VariantRequest(BaseModel):
+    gene: str = Field(..., min_length=2, max_length=30)
+    variant: str = Field(..., min_length=2, max_length=50)
+
+
+@router.post("/analyze")
+def analyze_variant(request: VariantRequest) -> Dict[str, Any]:
+    gene = request.gene.strip().upper()
+    variant = request.variant.strip().upper()
+
+    if not gene or not variant:
+        raise HTTPException(
+            status_code=400,
+            detail="Gene and variant are required.",
+        )
+
+    try:
+        result = engine.analyze_gene(
+            gene=gene,
+        )
+
+        integrated = result.get("integrated_features") or {}
+        context = result.get("biological_context") or {}
+        reactome = context.get("reactome_entities") or []
+
+        matching_entities = []
+
+        for entity in reactome:
+            if hasattr(entity, "name"):
+                name = str(entity.name or "")
+                entity_data = {
+                    "name": entity.name,
+                    "identifier": entity.identifier,
+                    "source": entity.source,
+                    "species": entity.species,
+                    "compartment": entity.compartment,
+                    "metadata": entity.metadata,
+                }
+            else:
+                name = str(entity.get("name") or "")
+                entity_data = entity
+            if variant in name.upper():
+                matching_entities.append(entity_data)
+
+        return {
+            "success": True,
+            "domain": "research",
+            "task": "variant_investigation",
+            "data": {
+                "gene": gene,
+                "variant": variant,
+                "match_count": len(matching_entities),
+                "variant_matches": matching_entities,
+                "analysis": result,
+            },
+        }
+
+    except Exception as exc:
+        raise HTTPException(
+            status_code=500,
+            detail={
+                "error": "Variant analysis failed.",
+                "message": str(exc),
+            },
+        ) from exc

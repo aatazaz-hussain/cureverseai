@@ -1,0 +1,387 @@
+"use client";
+
+import { FormEvent, useMemo, useState } from "react";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import "./variant-investigator.css";
+
+const API_BASE =
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+
+function cleanText(value: any) {
+  if (value === null || value === undefined) return "";
+  return String(value).replace(/\s+/g, " ").trim();
+}
+
+function getVariantType(variant: string) {
+  if (/fs/i.test(variant)) return "Frameshift";
+  if (/\*/.test(variant)) return "Stop / truncating";
+  if (/^[A-Z]\d+[A-Z]$/.test(variant)) return "Missense";
+  return "Protein-level variant";
+}
+
+export default function VariantInvestigatorPage() {
+  const [gene, setGene] = useState("TP53");
+  const [variant, setVariant] = useState("R175H");
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState<any>(null);
+  const [error, setError] = useState("");
+
+  async function investigate(event: FormEvent) {
+    event.preventDefault();
+
+    const cleanGene = gene.trim().toUpperCase();
+    const cleanVariant = variant.trim().toUpperCase();
+
+    if (!cleanGene || !cleanVariant) {
+      setError("Enter both a gene and a protein-level variant.");
+      return;
+    }
+
+    setLoading(true);
+    setError("");
+    setData(null);
+
+    try {
+      const response = await fetch(
+        `${API_BASE}/api/v1/variants/analyze`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            gene: cleanGene,
+            variant: cleanVariant,
+          }),
+        }
+      );
+
+      const payload = await response.json();
+
+      if (!response.ok || !payload.success) {
+        throw new Error(
+          payload?.detail?.message ||
+            payload?.detail ||
+            "Variant investigation failed."
+        );
+      }
+
+      setData(payload.data);
+    } catch (err: any) {
+      setError(err?.message || "Variant investigation failed.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const analysis = data?.analysis || {};
+  const context = analysis?.biological_context || {};
+  const geneRecord = context?.gene || {};
+  const entities = context?.reactome_entities || [];
+  const matches = data?.variant_matches || [];
+  const evidence = analysis?.evidence_reasoning || {};
+  const summary = evidence?.evidence_summary || {};
+  const composition = evidence?.evidence_composition || {};
+
+  const variantType = useMemo(
+    () => getVariantType(data?.variant || variant),
+    [data?.variant, variant]
+  );
+
+  return (
+    <main className="variant-page">
+      <Navbar />
+
+      <section className="variant-hero">
+        <div className="variant-hero-grid" />
+
+        <div className="variant-hero-copy">
+          <div className="variant-kicker">
+            <span>03</span>
+            VARIANT INVESTIGATOR
+          </div>
+
+          <h1>
+            Find the biological
+            <br />
+            meaning inside a <em>variant.</em>
+          </h1>
+
+          <p>
+            Move from a protein-level change to its biological context,
+            connected evidence, and reasoned interpretation.
+          </p>
+
+          <div className="variant-hero-stats">
+            <div>
+              <strong>01</strong>
+              <span>VARIANT</span>
+            </div>
+            <div>
+              <strong>∞</strong>
+              <span>CONTEXT</span>
+            </div>
+            <div>
+              <strong>05</strong>
+              <span>EVIDENCE LAYERS</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="variant-orbit">
+          <div className="variant-orbit-ring ring-one" />
+          <div className="variant-orbit-ring ring-two" />
+          <div className="variant-core">
+            <span />
+            <span />
+            <span />
+          </div>
+        </div>
+      </section>
+
+      <section className="variant-investigate section-shell">
+        <div className="section-intro">
+          <span className="section-number">01 / INVESTIGATE</span>
+          <h2>
+            Give the system a <em>variant.</em>
+          </h2>
+          <p>
+            Enter a gene symbol and protein-level variant. CureVerseAI
+            connects the requested variant to the existing biological
+            intelligence layer.
+          </p>
+        </div>
+
+        <form className="variant-form" onSubmit={investigate}>
+          <label>
+            <span>GENE</span>
+            <input
+              value={gene}
+              onChange={(e) => setGene(e.target.value)}
+              placeholder="TP53"
+              autoComplete="off"
+            />
+          </label>
+
+          <label>
+            <span>VARIANT</span>
+            <input
+              value={variant}
+              onChange={(e) => setVariant(e.target.value)}
+              placeholder="R175H"
+              autoComplete="off"
+            />
+          </label>
+
+          <button type="submit" disabled={loading}>
+            {loading ? "INVESTIGATING..." : "INVESTIGATE VARIANT"}
+            <span>↗</span>
+          </button>
+        </form>
+
+        {error && (
+          <div className="variant-error">
+            <strong>INVESTIGATION FAILED</strong>
+            <span>{error}</span>
+          </div>
+        )}
+      </section>
+
+      {data && (
+        <>
+          <section className="variant-dashboard section-shell">
+            <div className="section-intro compact">
+              <span className="section-number">02 / IDENTITY</span>
+              <h2>
+                Variant <em>identity.</em>
+              </h2>
+            </div>
+
+            <div className="identity-grid">
+              <article className="identity-main">
+                <span className="card-label">PROTEIN VARIANT</span>
+                <strong>
+                  {data.gene}{" "}
+                  <b>{data.variant}</b>
+                </strong>
+                <p>
+                  {cleanText(geneRecord.name) ||
+                    "Biological identity resolved through the CureVerseAI pipeline."}
+                </p>
+              </article>
+
+              <article>
+                <span className="card-label">TYPE</span>
+                <strong>{variantType}</strong>
+                <p>Protein-level interpretation</p>
+              </article>
+
+              <article>
+                <span className="card-label">MATCHES</span>
+                <strong>{data.match_count}</strong>
+                <p>Connected biological records</p>
+              </article>
+            </div>
+          </section>
+
+          <section className="variant-context section-shell">
+            <div className="section-intro">
+              <span className="section-number">03 / BIOLOGICAL CONTEXT</span>
+              <h2>
+                Where does it <em>belong?</em>
+              </h2>
+              <p>
+                Biological entities connected to the investigated gene and
+                matching variant are preserved as source-level context.
+              </p>
+            </div>
+
+            <div className="context-grid">
+              <div className="context-primary">
+                <div className="context-meta">
+                  <span>ENSEMBL</span>
+                  <strong>{geneRecord.ensembl_id || "—"}</strong>
+                </div>
+
+                <div className="context-meta">
+                  <span>CANONICAL TRANSCRIPT</span>
+                  <strong>{geneRecord.canonical_transcript || "—"}</strong>
+                </div>
+
+                <div className="context-meta">
+                  <span>SPECIES</span>
+                  <strong>{geneRecord.species || "—"}</strong>
+                </div>
+
+                <div className="context-meta">
+                  <span>CONNECTED ENTITIES</span>
+                  <strong>{entities.length}</strong>
+                </div>
+              </div>
+
+              <div className="entity-list">
+                {matches.length > 0 ? (
+                  matches.slice(0, 12).map((item: any, index: number) => (
+                    <div className="entity-row" key={`${item.identifier}-${index}`}>
+                      <span>{String(index + 1).padStart(2, "0")}</span>
+                      <strong>{cleanText(item.name)}</strong>
+                      <small>{item.source || "Biological source"}</small>
+                    </div>
+                  ))
+                ) : (
+                  <div className="entity-empty">
+                    <strong>NO DIRECT MATCH FOUND</strong>
+                    <p>
+                      The requested variant was not found in the currently
+                      connected Reactome entities. The surrounding gene
+                      analysis remains available.
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </section>
+
+          <section className="variant-evidence section-shell">
+            <div className="section-intro">
+              <span className="section-number">04 / EVIDENCE</span>
+              <h2>
+                Keep evidence <em>distinct.</em>
+              </h2>
+              <p>
+                CureVerseAI separates direct biology, disease association,
+                experimental observations, model-derived features, and
+                contextual information.
+              </p>
+            </div>
+
+            <div className="evidence-grid">
+              <div className="evidence-card">
+                <span>01</span>
+                <strong>DIRECT BIOLOGY</strong>
+                <p>Ensembl · Reactome</p>
+              </div>
+
+              <div className="evidence-card">
+                <span>02</span>
+                <strong>DISEASE</strong>
+                <p>Open Targets</p>
+              </div>
+
+              <div className="evidence-card">
+                <span>03</span>
+                <strong>EXPERIMENTAL</strong>
+                <p>ChEMBL</p>
+              </div>
+
+              <div className="evidence-card">
+                <span>04</span>
+                <strong>MODEL-DERIVED</strong>
+                <p>ESM-2 representation</p>
+              </div>
+            </div>
+
+            <div className="reasoning-panel">
+              <div>
+                <span className="section-number">✦ CUREVERSEAI / REASONED INSIGHT</span>
+                <h3>
+                  {composition?.level ||
+                    "Evidence-aware biological interpretation"}
+                </h3>
+              </div>
+
+              <p>
+                {summary?.summary ||
+                  "The system keeps evidence layers separate and presents the available biological context without collapsing it into an unsupported clinical claim."}
+              </p>
+
+              <div className="reasoning-meta">
+                <span>
+                  SOURCES{" "}
+                  <b>
+                    {Object.keys(evidence?.sources || {}).length ||
+                      "MULTI-SOURCE"}
+                  </b>
+                </span>
+                <span>
+                  MATCHED RECORDS <b>{matches.length}</b>
+                </span>
+              </div>
+            </div>
+          </section>
+
+          <section className="variant-principles section-shell">
+            <div>
+              <span className="section-number">05 / WHY IT MATTERS</span>
+              <h2>
+                A variant is not just a <em>label.</em>
+              </h2>
+            </div>
+
+            <div className="principle-list">
+              <article>
+                <strong>IDENTITY</strong>
+                <p>Resolve the gene and biological record first.</p>
+              </article>
+              <article>
+                <strong>CONTEXT</strong>
+                <p>Connect the change to pathways and biological entities.</p>
+              </article>
+              <article>
+                <strong>EVIDENCE</strong>
+                <p>Preserve where each observation comes from.</p>
+              </article>
+              <article>
+                <strong>REASONING</strong>
+                <p>Show what is supported without inventing certainty.</p>
+              </article>
+            </div>
+          </section>
+        </>
+      )}
+
+      <Footer />
+    </main>
+  );
+}

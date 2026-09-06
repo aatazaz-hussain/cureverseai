@@ -75,11 +75,16 @@ def extract_reactome_entities(data: dict):
     return entities
 
 
-def extract_mutations(entities, gene_symbol=None):
+def extract_mutations(entities):
     mutations = []
 
     # Common protein-level HGVS-like forms:
-    # K351R, K351N, Q5*, N210Hfs*5, L299Afs*6, D259Qfs*3
+    # K351R
+    # K351N
+    # Q5*
+    # N210Hfs*5
+    # L299Afs*6
+    # D259Qfs*3
     variant_pattern = re.compile(
         r"\b("
         r"[A-Z]\d+[A-Z*]"
@@ -88,20 +93,10 @@ def extract_mutations(entities, gene_symbol=None):
         r")\b"
     )
 
-    gene_symbol = (
-        str(gene_symbol).strip().upper()
-        if gene_symbol
-        else None
-    )
-
     for entity in entities:
         name = entity.name or ""
-        name_upper = name.upper()
 
-        if gene_symbol:
-            if not name_upper.startswith(gene_symbol):
-                continue
-        elif not name_upper.startswith("TP53"):
+        if not name.upper().startswith("TP53"):
             continue
 
         match = variant_pattern.search(name)
@@ -111,7 +106,7 @@ def extract_mutations(entities, gene_symbol=None):
 
         mutations.append(
             MutationRecord(
-                gene=gene_symbol or "TP53",
+                gene="TP53",
                 variant=match.group(1),
                 identifier=entity.identifier,
                 source=entity.source,
@@ -122,4 +117,3 @@ def extract_mutations(entities, gene_symbol=None):
         )
 
     return mutations
-
