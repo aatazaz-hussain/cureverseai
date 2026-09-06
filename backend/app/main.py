@@ -1,52 +1,33 @@
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
+from fastapi import FastAPI
 
-from app.simulation.virtual_cell import simulate_gene_perturbation
+from app.api.routes.health import router as health_router
+from app.api.routes.analyze import router as analyze_router
 
 
 app = FastAPI(
     title="CureVerseAI API",
-    description="AI-powered Virtual Cell platform",
-    version="0.2.0"
+    description=(
+        "AI-powered biomedical intelligence platform for "
+        "research, drug development, medicine, biotechnology, "
+        "and education."
+    ),
+    version="1.0.0",
 )
 
 
-class PerturbationRequest(BaseModel):
-    gene: str
-    effect: str = "inhibit"
+app.include_router(
+    health_router,
+    prefix="/api/v1",
+)
+
+app.include_router(analyze_router, prefix="/api/v1")
 
 
 @app.get("/")
 def root():
     return {
-        "project": "CureVerseAI",
+        "name": "CureVerseAI",
         "status": "online",
-        "message": "Virtual Cell AI Engine API"
+        "version": "1.0.0",
+        "message": "CureVerseAI API is running.",
     }
-
-
-@app.get("/health")
-def health():
-    return {
-        "status": "healthy"
-    }
-
-
-@app.post("/api/simulate/gene")
-def simulate_gene(request: PerturbationRequest):
-    try:
-        result = simulate_gene_perturbation(
-            request.gene,
-            request.effect
-        )
-
-        return {
-            "success": True,
-            "simulation": result
-        }
-
-    except ValueError as error:
-        raise HTTPException(
-            status_code=400,
-            detail=str(error)
-        )
