@@ -1,0 +1,2066 @@
+/* =========================================================
+   CUREVERSEAI
+   DRUG DEVELOPMENT MANUAL
+   MICROSCOPE × DARKROOM
+   ========================================================= */
+
+:root {
+  --dd-bg: #080a0b;
+  --dd-panel: #0d1012;
+  --dd-panel-2: #111518;
+  --dd-text: #eee9e1;
+  --dd-muted: #a8a29a;
+  --dd-dim: #696761;
+  --dd-red: #e0525a;
+  --dd-red-dark: #a82e38;
+  --dd-gold: #e9c58c;
+  --dd-line: rgba(238,233,225,.105);
+  --dd-soft-line: rgba(238,233,225,.055);
+}
+
+/* =========================================================
+   BASE
+   ========================================================= */
+
+.cv-dd-manual {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 82% 5%, rgba(224,82,90,.08), transparent 28%),
+    radial-gradient(circle at 8% 52%, rgba(233,197,140,.035), transparent 24%),
+    var(--dd-bg);
+  color: var(--dd-text);
+}
+
+.cv-dd-manual *,
+.cv-dd-manual *::before,
+.cv-dd-manual *::after {
+  box-sizing: border-box;
+}
+
+.cv-dd-manual section {
+  position: relative;
+}
+
+.cv-dd-grid {
+  position: absolute;
+  inset: 0;
+  opacity: .65;
+  background-image:
+    linear-gradient(rgba(238,233,225,.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(238,233,225,.025) 1px, transparent 1px);
+  background-size: 80px 80px;
+  mask-image: linear-gradient(to bottom, black, transparent 90%);
+  pointer-events: none;
+}
+
+.cv-section-number {
+  position: absolute;
+  top: 38px;
+  left: 5%;
+  color: rgba(238,233,225,.28);
+  font-size: 10px;
+  letter-spacing: .22em;
+}
+
+/* =========================================================
+   EYEBROW
+   ========================================================= */
+
+.cv-dd-manual .cv-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--dd-gold);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: .22em;
+}
+
+.cv-dd-manual .cv-eyebrow::before {
+  content: "";
+  width: 28px;
+  height: 1px;
+  background: var(--dd-red);
+  box-shadow: 0 0 14px rgba(224,82,90,.45);
+}
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.cv-dd-manual-hero {
+  min-height: 730px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  border-bottom: 1px solid var(--dd-line);
+  isolation: isolate;
+}
+
+.cv-dd-manual-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      circle at 78% 48%,
+      rgba(224,82,90,.09),
+      transparent 25%
+    ),
+    linear-gradient(
+      90deg,
+      rgba(8,10,11,.98) 0%,
+      rgba(8,10,11,.88) 42%,
+      rgba(8,10,11,.3) 100%
+    );
+  pointer-events: none;
+}
+
+.cv-dd-hero-glow {
+  position: absolute;
+  width: 650px;
+  height: 650px;
+  right: -170px;
+  top: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(224,82,90,.12);
+  box-shadow:
+    0 0 120px rgba(224,82,90,.08),
+    inset 0 0 100px rgba(224,82,90,.035);
+  animation: ddHeroRotate 18s linear infinite;
+}
+
+.cv-dd-hero-glow::before,
+.cv-dd-hero-glow::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+}
+
+.cv-dd-hero-glow::before {
+  inset: 65px;
+  border: 1px dashed rgba(233,197,140,.11);
+}
+
+.cv-dd-hero-glow::after {
+  inset: 150px;
+  border: 1px solid rgba(224,82,90,.08);
+}
+
+@keyframes ddHeroRotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* particles */
+
+.cv-dd-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.cv-dd-particles span {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  left: calc((var(--i) * 17) % 100 * 1%);
+  top: calc((var(--i) * 31) % 100 * 1%);
+  border-radius: 50%;
+  background: rgba(233,197,140,.55);
+  box-shadow: 0 0 9px rgba(233,197,140,.35);
+  animation: ddParticle 5s ease-in-out infinite alternate;
+  animation-delay: calc(var(--i) * -.3s);
+}
+
+@keyframes ddParticle {
+  from {
+    opacity: .15;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: .75;
+    transform: translateY(-18px);
+  }
+}
+
+.cv-dd-hero-copy {
+  position: relative;
+  z-index: 5;
+  width: min(800px, 90%);
+  margin-left: 7%;
+  padding: 120px 0;
+}
+
+.cv-dd-hero-copy h1 {
+  max-width: 850px;
+  margin: 22px 0 0;
+  font-size: clamp(56px, 7.2vw, 108px);
+  line-height: .87;
+  letter-spacing: -.065em;
+  font-weight: 500;
+}
+
+.cv-dd-hero-copy h1 span {
+  display: block;
+  color: var(--dd-red);
+  text-shadow: 0 0 45px rgba(224,82,90,.12);
+}
+
+.cv-dd-hero-copy > p {
+  max-width: 640px;
+  margin: 34px 0 0;
+  color: var(--dd-muted);
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+.cv-dd-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 38px;
+}
+
+.cv-dd-hero-actions a {
+  display: inline-flex;
+  align-items: center;
+  gap: 18px;
+  min-height: 48px;
+  padding: 0 18px;
+  border: 1px solid var(--dd-line);
+  color: var(--dd-text);
+  text-decoration: none;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: .14em;
+  background: rgba(255,255,255,.025);
+  transition: .35s ease;
+}
+
+.cv-dd-hero-actions a span {
+  color: var(--dd-red);
+  font-size: 15px;
+  transition: transform .3s ease;
+}
+
+.cv-dd-hero-actions a:hover {
+  transform: translateY(-4px);
+  border-color: rgba(233,197,140,.45);
+  background: rgba(233,197,140,.07);
+}
+
+.cv-dd-hero-actions a:hover span {
+  transform: translate(4px,-3px);
+}
+
+.cv-dd-hero-visual {
+  position: absolute;
+  width: 550px;
+  height: 550px;
+  right: 6%;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.cv-dd-orbit {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(238,233,225,.08);
+}
+
+.orbit-a {
+  animation: ddOrbitA 15s linear infinite;
+}
+
+.orbit-b {
+  inset: 65px;
+  border-style: dashed;
+  border-color: rgba(224,82,90,.16);
+  animation: ddOrbitB 11s linear infinite reverse;
+}
+
+.orbit-c {
+  inset: 135px;
+  border-color: rgba(233,197,140,.13);
+  animation: ddOrbitA 20s linear infinite;
+}
+
+@keyframes ddOrbitA {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes ddOrbitB {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.cv-dd-core {
+  position: absolute;
+  inset: 190px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid rgba(224,82,90,.32);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, rgba(224,82,90,.13), rgba(8,10,11,.9) 70%);
+  box-shadow:
+    0 0 70px rgba(224,82,90,.12),
+    inset 0 0 40px rgba(224,82,90,.06);
+  text-align: center;
+  z-index: 3;
+}
+
+.cv-dd-core small {
+  color: var(--dd-dim);
+  font-size: 7px;
+  letter-spacing: .18em;
+}
+
+.cv-dd-core strong {
+  margin-top: 7px;
+  color: var(--dd-text);
+  font-size: 12px;
+  letter-spacing: .08em;
+  font-weight: 500;
+}
+
+.cv-dd-core span {
+  max-width: 110px;
+  margin-top: 10px;
+  color: var(--dd-red);
+  font-size: 6px;
+  line-height: 1.5;
+  letter-spacing: .12em;
+}
+
+.cv-dd-node {
+  position: absolute;
+  z-index: 5;
+  padding: 7px 10px;
+  border: 1px solid var(--dd-line);
+  background: rgba(8,10,11,.88);
+  color: var(--dd-muted);
+  font-size: 7px;
+  letter-spacing: .15em;
+  box-shadow: 0 8px 25px rgba(0,0,0,.3);
+  animation: ddNodeFloat 4s ease-in-out infinite alternate;
+}
+
+.node-target {
+  left: 20px;
+  top: 105px;
+}
+
+.node-compound {
+  right: 15px;
+  top: 175px;
+  animation-delay: -.8s;
+}
+
+.node-activity {
+  left: 40px;
+  bottom: 115px;
+  animation-delay: -1.6s;
+}
+
+.node-evidence {
+  right: 35px;
+  bottom: 80px;
+  animation-delay: -2.3s;
+}
+
+@keyframes ddNodeFloat {
+  to {
+    transform: translateY(-8px);
+  }
+}
+
+/* =========================================================
+   INTRO
+   ========================================================= */
+
+.cv-dd-intro {
+  padding: 105px 7%;
+  border-bottom: 1px solid var(--dd-line);
+}
+
+.cv-dd-intro-grid {
+  display: grid;
+  grid-template-columns: .9fr 1.1fr;
+  gap: 110px;
+  align-items: start;
+}
+
+.cv-dd-intro h2,
+.cv-dd-heading h2,
+.cv-dd-evidence-layout h2,
+.cv-dd-example-layout h2 {
+  margin: 15px 0 0;
+  font-size: clamp(42px, 5vw, 72px);
+  line-height: .92;
+  letter-spacing: -.055em;
+  font-weight: 500;
+}
+
+.cv-dd-intro h2 span,
+.cv-dd-heading h2 span,
+.cv-dd-evidence-layout h2 span,
+.cv-dd-example-layout h2 span {
+  display: block;
+  color: var(--dd-red);
+}
+
+.cv-dd-intro-grid > div:last-child {
+  padding-top: 5px;
+}
+
+.cv-dd-intro-grid p {
+  max-width: 650px;
+  margin: 0 0 20px;
+  color: var(--dd-muted);
+  font-size: 15px;
+  line-height: 1.85;
+}
+
+.cv-dd-chain {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  margin-top: 70px;
+  border-top: 1px solid var(--dd-line);
+  border-bottom: 1px solid var(--dd-line);
+}
+
+.cv-dd-chain > div {
+  position: relative;
+  min-height: 140px;
+  padding: 22px 18px;
+  border-right: 1px solid var(--dd-line);
+  transition: .35s ease;
+}
+
+.cv-dd-chain > div:last-child {
+  border-right: 0;
+}
+
+.cv-dd-chain > div:hover {
+  background: rgba(224,82,90,.04);
+  transform: translateY(-4px);
+}
+
+.cv-dd-chain span {
+  color: var(--dd-dim);
+  font-size: 8px;
+  letter-spacing: .18em;
+}
+
+.cv-dd-chain strong {
+  display: block;
+  margin-top: 34px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: .05em;
+}
+
+.cv-dd-chain i {
+  position: absolute;
+  right: -7px;
+  top: 59px;
+  z-index: 4;
+  color: var(--dd-red);
+  font-size: 12px;
+  font-style: normal;
+}
+
+/* =========================================================
+   JOURNEY
+   ========================================================= */
+
+.cv-dd-journey {
+  padding: 110px 7%;
+  border-bottom: 1px solid var(--dd-line);
+}
+
+.cv-dd-heading {
+  display: grid;
+  grid-template-columns: 1fr .65fr;
+  gap: 80px;
+  align-items: end;
+  margin-bottom: 55px;
+}
+
+.cv-dd-heading > p {
+  margin: 0;
+  color: var(--dd-muted);
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.cv-dd-stage-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 9px;
+}
+
+.cv-dd-stage {
+  position: relative;
+  min-height: 235px;
+  padding: 25px;
+  overflow: hidden;
+  border: 1px solid var(--dd-line);
+  background:
+    linear-gradient(145deg, rgba(18,21,23,.95), rgba(9,11,12,.92));
+  transition: .4s cubic-bezier(.16,1,.3,1);
+}
+
+.cv-dd-stage::after {
+  content: "";
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  right: -90px;
+  bottom: -90px;
+  border-radius: 50%;
+  border: 1px solid rgba(224,82,90,.12);
+  transition: .5s ease;
+}
+
+.cv-dd-stage:hover {
+  transform: translateY(-8px);
+  border-color: rgba(224,82,90,.3);
+}
+
+.cv-dd-stage:hover::after {
+  transform: scale(1.5);
+}
+
+.cv-dd-stage > span {
+  color: var(--dd-red);
+  font-size: 9px;
+  letter-spacing: .18em;
+}
+
+.cv-dd-stage-line {
+  width: 30px;
+  height: 1px;
+  margin-top: 18px;
+  background: var(--dd-red);
+  transition: width .4s ease;
+}
+
+.cv-dd-stage:hover .cv-dd-stage-line {
+  width: 75px;
+}
+
+.cv-dd-stage h3 {
+  margin: 42px 0 10px;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.cv-dd-stage p {
+  max-width: 290px;
+  margin: 0;
+  color: var(--dd-muted);
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+/* =========================================================
+   WORKFLOWS
+   ========================================================= */
+
+.cv-dd-workflows {
+  padding: 110px 7%;
+  border-bottom: 1px solid var(--dd-line);
+}
+
+.cv-dd-workflow-stage {
+  border: 1px solid var(--dd-line);
+  background: rgba(13,16,18,.8);
+}
+
+.cv-dd-workflow-tabs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-bottom: 1px solid var(--dd-line);
+}
+
+.cv-dd-workflow-tabs button {
+  position: relative;
+  min-height: 100px;
+  padding: 18px 20px;
+  border: 0;
+  border-right: 1px solid var(--dd-line);
+  background: transparent;
+  color: var(--dd-dim);
+  text-align: left;
+  cursor: pointer;
+  transition: .3s ease;
+}
+
+.cv-dd-workflow-tabs button:last-child {
+  border-right: 0;
+}
+
+.cv-dd-workflow-tabs button::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 2px;
+  background: transparent;
+}
+
+.cv-dd-workflow-tabs button:hover,
+.cv-dd-workflow-tabs button.active {
+  color: var(--dd-text);
+  background: rgba(224,82,90,.045);
+}
+
+.cv-dd-workflow-tabs button.active::before {
+  background: var(--dd-red);
+  box-shadow: 0 0 15px rgba(224,82,90,.4);
+}
+
+.cv-dd-workflow-tabs button span {
+  display: block;
+  margin-bottom: 15px;
+  color: var(--dd-red);
+  font-size: 8px;
+  letter-spacing: .18em;
+}
+
+.cv-dd-workflow-tabs button strong {
+  display: block;
+  max-width: 170px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .04em;
+}
+
+.cv-dd-workflow-tabs button i {
+  position: absolute;
+  right: 18px;
+  top: 19px;
+  color: var(--dd-dim);
+  font-size: 13px;
+  font-style: normal;
+  transition: .3s ease;
+}
+
+.cv-dd-workflow-tabs button:hover i,
+.cv-dd-workflow-tabs button.active i {
+  color: var(--dd-gold);
+  transform: translate(3px,-3px);
+}
+
+.cv-dd-workflow-feature {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 430px;
+}
+
+.cv-dd-workflow-image {
+  position: relative;
+  min-height: 430px;
+  overflow: hidden;
+  background: #0b0d0f;
+}
+
+.cv-dd-workflow-image img {
+  object-fit: cover;
+  filter: saturate(.65) contrast(1.05);
+  transition: transform .8s cubic-bezier(.16,1,.3,1);
+}
+
+.cv-dd-workflow-feature:hover .cv-dd-workflow-image img {
+  transform: scale(1.035);
+}
+
+.cv-dd-workflow-image > div {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, transparent 50%, rgba(8,10,11,.85)),
+    linear-gradient(0deg, rgba(8,10,11,.7), transparent 50%);
+  pointer-events: none;
+}
+
+.cv-dd-workflow-copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 55px;
+  background:
+    radial-gradient(circle at 100% 100%, rgba(224,82,90,.08), transparent 40%);
+}
+
+.cv-dd-workflow-copy h3 {
+  max-width: 500px;
+  margin: 20px 0 0;
+  font-size: clamp(30px, 3.5vw, 52px);
+  line-height: .98;
+  letter-spacing: -.045em;
+  font-weight: 500;
+}
+
+.cv-dd-workflow-copy p {
+  max-width: 500px;
+  margin: 20px 0 30px;
+  color: var(--dd-muted);
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.cv-dd-workflow-copy a {
+  width: fit-content;
+  display: inline-flex;
+  align-items: center;
+  gap: 15px;
+  color: var(--dd-text);
+  text-decoration: none;
+  font-size: 9px;
+  letter-spacing: .14em;
+  border-bottom: 1px solid rgba(224,82,90,.35);
+  padding-bottom: 9px;
+  transition: .3s ease;
+}
+
+.cv-dd-workflow-copy a span {
+  color: var(--dd-red);
+}
+
+.cv-dd-workflow-copy a:hover {
+  color: var(--dd-gold);
+  border-color: var(--dd-gold);
+}
+
+/* =========================================================
+   EVIDENCE
+   ========================================================= */
+
+.cv-dd-evidence {
+  padding: 110px 7%;
+  border-bottom: 1px solid var(--dd-line);
+}
+
+.cv-dd-evidence-layout {
+  display: grid;
+  grid-template-columns: .9fr 1.1fr;
+  gap: 100px;
+  align-items: center;
+}
+
+.cv-dd-evidence-layout > div:first-child > p {
+  max-width: 570px;
+  margin: 25px 0 45px;
+  color: var(--dd-muted);
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.cv-dd-evidence-list {
+  border-top: 1px solid var(--dd-line);
+}
+
+.cv-dd-evidence-list > div {
+  display: grid;
+  grid-template-columns: 45px 1fr;
+  gap: 10px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--dd-soft-line);
+  transition: .3s ease;
+}
+
+.cv-dd-evidence-list > div:hover {
+  padding-left: 8px;
+  background: linear-gradient(90deg, rgba(224,82,90,.04), transparent);
+}
+
+.cv-dd-evidence-list > div > span {
+  color: var(--dd-red);
+  font-size: 8px;
+  letter-spacing: .16em;
+}
+
+.cv-dd-evidence-list strong {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .08em;
+}
+
+.cv-dd-evidence-list p {
+  margin: 5px 0 0;
+  color: var(--dd-dim);
+  font-size: 10px;
+  line-height: 1.55;
+}
+
+.cv-dd-evidence-visual {
+  position: relative;
+  width: min(500px, 100%);
+  aspect-ratio: 1;
+  margin: auto;
+}
+
+.cv-dd-evidence-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(238,233,225,.08);
+}
+
+.ring-one {
+  animation: ddRing 15s linear infinite;
+}
+
+.ring-two {
+  inset: 12%;
+  border-style: dashed;
+  border-color: rgba(224,82,90,.16);
+  animation: ddRing 11s linear infinite reverse;
+}
+
+.ring-three {
+  inset: 26%;
+  border-color: rgba(233,197,140,.15);
+  animation: ddRing 18s linear infinite;
+}
+
+@keyframes ddRing {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.cv-dd-evidence-core {
+  position: absolute;
+  inset: 37%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  border: 1px solid rgba(224,82,90,.35);
+  background: radial-gradient(circle, rgba(224,82,90,.15), #080a0b 72%);
+  box-shadow: 0 0 70px rgba(224,82,90,.12);
+  text-align: center;
+}
+
+.cv-dd-evidence-core small {
+  color: var(--dd-dim);
+  font-size: 7px;
+  letter-spacing: .18em;
+}
+
+.cv-dd-evidence-core strong {
+  margin-top: 7px;
+  font-size: 11px;
+  letter-spacing: .08em;
+}
+
+.cv-dd-evidence-label {
+  position: absolute;
+  padding: 7px 10px;
+  border: 1px solid var(--dd-line);
+  background: rgba(8,10,11,.9);
+  color: var(--dd-muted);
+  font-size: 7px;
+  letter-spacing: .14em;
+}
+
+.label-a { top: 10%; left: 5%; }
+.label-b { top: 18%; right: 2%; }
+.label-c { bottom: 15%; left: 3%; }
+.label-d { bottom: 8%; right: 8%; }
+
+/* =========================================================
+   PRINCIPLES
+   ========================================================= */
+
+.cv-dd-principles {
+  padding: 110px 7%;
+  border-bottom: 1px solid var(--dd-line);
+}
+
+.cv-dd-principle-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  margin-top: 55px;
+  border: 1px solid var(--dd-line);
+  background: var(--dd-line);
+}
+
+.cv-dd-principle-grid article {
+  position: relative;
+  min-height: 205px;
+  padding: 30px;
+  overflow: hidden;
+  background: var(--dd-bg);
+  transition: .35s ease;
+}
+
+.cv-dd-principle-grid article::after {
+  content: "";
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  right: -60px;
+  bottom: -60px;
+  border-radius: 50%;
+  background: rgba(224,82,90,.08);
+  filter: blur(20px);
+  transition: .4s ease;
+}
+
+.cv-dd-principle-grid article:hover {
+  background: #0d1012;
+}
+
+.cv-dd-principle-grid article:hover::after {
+  transform: scale(1.6);
+}
+
+.cv-dd-principle-grid article > span {
+  color: var(--dd-red);
+  font-size: 9px;
+  letter-spacing: .18em;
+}
+
+.cv-dd-principle-grid h3 {
+  margin: 38px 0 10px;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.cv-dd-principle-grid p {
+  max-width: 500px;
+  margin: 0;
+  color: var(--dd-muted);
+  font-size: 11px;
+  line-height: 1.75;
+}
+
+/* =========================================================
+   EXAMPLE
+   ========================================================= */
+
+.cv-dd-example {
+  padding: 110px 7%;
+  border-bottom: 1px solid var(--dd-line);
+  overflow: hidden;
+}
+
+.cv-dd-example::before {
+  content: "";
+  position: absolute;
+  inset: 45px 7%;
+  border: 1px solid rgba(224,82,90,.1);
+  background:
+    radial-gradient(
+      circle at 80% 50%,
+      rgba(224,82,90,.1),
+      transparent 35%
+    );
+  pointer-events: none;
+}
+
+.cv-dd-example-layout {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: .7fr 1.3fr;
+  gap: 100px;
+  align-items: center;
+}
+
+.cv-dd-example-layout > div:first-child > p {
+  max-width: 450px;
+  margin-top: 25px;
+  color: var(--dd-muted);
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.cv-dd-example-map {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  border: 1px solid var(--dd-line);
+  background: var(--dd-line);
+}
+
+.cv-dd-example-map > div {
+  position: relative;
+  min-height: 145px;
+  padding: 20px;
+  background: #0b0d0f;
+  transition: .35s ease;
+}
+
+.cv-dd-example-map > div:hover {
+  background: #111416;
+  transform: translateY(-4px);
+}
+
+.cv-dd-example-map span {
+  color: var(--dd-red);
+  font-size: 8px;
+  letter-spacing: .16em;
+}
+
+.cv-dd-example-map strong {
+  display: block;
+  margin-top: 40px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.cv-dd-example-map small {
+  display: block;
+  margin-top: 7px;
+  color: var(--dd-dim);
+  font-size: 7px;
+  letter-spacing: .15em;
+}
+
+/* =========================================================
+   FINAL
+   ========================================================= */
+
+.cv-dd-final {
+  padding: 110px 7% 125px;
+  overflow: hidden;
+}
+
+.cv-dd-final-glow {
+  position: absolute;
+  width: 650px;
+  height: 650px;
+  right: -220px;
+  top: -230px;
+  border-radius: 50%;
+  border: 1px solid rgba(224,82,90,.12);
+  box-shadow:
+    0 0 120px rgba(224,82,90,.08),
+    inset 0 0 100px rgba(224,82,90,.035);
+  animation: ddFinalSpin 20s linear infinite;
+}
+
+.cv-dd-final-glow::before {
+  content: "";
+  position: absolute;
+  inset: 85px;
+  border: 1px dashed rgba(233,197,140,.1);
+  border-radius: 50%;
+}
+
+@keyframes ddFinalSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.cv-dd-final-copy {
+  position: relative;
+  z-index: 3;
+  max-width: 900px;
+}
+
+.cv-dd-final-copy h2 {
+  margin: 18px 0 0;
+  font-size: clamp(50px, 6vw, 90px);
+  line-height: .89;
+  letter-spacing: -.06em;
+  font-weight: 500;
+}
+
+.cv-dd-final-copy h2 span {
+  display: block;
+  color: var(--dd-red);
+}
+
+.cv-dd-final-copy p {
+  max-width: 560px;
+  margin: 28px 0 34px;
+  color: var(--dd-muted);
+  font-size: 15px;
+  line-height: 1.8;
+}
+
+.cv-dd-final-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.cv-dd-final-actions a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 15px;
+  border: 1px solid var(--dd-line);
+  background: rgba(255,255,255,.025);
+  color: var(--dd-text);
+  text-decoration: none;
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: .13em;
+  transition: .35s ease;
+}
+
+.cv-dd-final-actions a:hover {
+  transform: translateY(-4px);
+  border-color: var(--dd-gold);
+  background: var(--dd-gold);
+  color: #080a0b;
+  box-shadow: 0 15px 35px rgba(233,197,140,.1);
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1100px) {
+
+  .cv-dd-hero-visual {
+    right: -90px;
+    opacity: .5;
+  }
+
+  .cv-dd-intro-grid,
+  .cv-dd-evidence-layout,
+  .cv-dd-example-layout {
+    grid-template-columns: 1fr;
+    gap: 50px;
+  }
+
+  .cv-dd-heading {
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+
+  .cv-dd-chain {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .cv-dd-chain > div:nth-child(3) {
+    border-right: 0;
+  }
+
+  .cv-dd-chain > div:nth-child(-n+3) {
+    border-bottom: 1px solid var(--dd-line);
+  }
+
+  .cv-dd-evidence-visual {
+    width: min(460px, 90%);
+  }
+}
+
+@media (max-width: 850px) {
+
+  .cv-dd-manual-hero {
+    min-height: 650px;
+  }
+
+  .cv-dd-hero-copy {
+    width: 90%;
+    margin-left: 5%;
+  }
+
+  .cv-dd-hero-visual {
+    right: -160px;
+    opacity: .3;
+  }
+
+  .cv-dd-stage-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .cv-dd-workflow-tabs {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .cv-dd-workflow-tabs button:nth-child(2) {
+    border-right: 0;
+  }
+
+  .cv-dd-workflow-tabs button:nth-child(-n+2) {
+    border-bottom: 1px solid var(--dd-line);
+  }
+
+  .cv-dd-workflow-feature {
+    grid-template-columns: 1fr;
+  }
+
+  .cv-dd-workflow-image {
+    min-height: 340px;
+  }
+
+  .cv-dd-example-map {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+
+  .cv-section-number {
+    left: 20px;
+    top: 25px;
+  }
+
+  .cv-dd-manual-hero {
+    min-height: 600px;
+  }
+
+  .cv-dd-hero-copy {
+    margin-left: 20px;
+    width: calc(100% - 40px);
+    padding: 80px 0;
+  }
+
+  .cv-dd-hero-copy h1 {
+    font-size: 49px;
+  }
+
+  .cv-dd-hero-copy > p {
+    font-size: 13px;
+    line-height: 1.7;
+  }
+
+  .cv-dd-hero-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .cv-dd-hero-actions a {
+    justify-content: space-between;
+  }
+
+  .cv-dd-hero-visual {
+    width: 420px;
+    height: 420px;
+    right: -170px;
+    top: 62%;
+    opacity: .22;
+  }
+
+  .cv-dd-core {
+    inset: 145px;
+  }
+
+  .cv-dd-intro,
+  .cv-dd-journey,
+  .cv-dd-workflows,
+  .cv-dd-evidence,
+  .cv-dd-principles,
+  .cv-dd-example,
+  .cv-dd-final {
+    padding: 75px 20px;
+  }
+
+  .cv-dd-intro h2,
+  .cv-dd-heading h2,
+  .cv-dd-evidence-layout h2,
+  .cv-dd-example-layout h2 {
+    font-size: 43px;
+  }
+
+  .cv-dd-chain {
+    grid-template-columns: repeat(2, 1fr);
+    margin-top: 45px;
+  }
+
+  .cv-dd-chain > div {
+    min-height: 120px;
+  }
+
+  .cv-dd-chain > div:nth-child(2n) {
+    border-right: 0;
+  }
+
+  .cv-dd-chain > div:nth-child(3) {
+    border-right: 1px solid var(--dd-line);
+  }
+
+  .cv-dd-chain > div:nth-child(-n+4) {
+    border-bottom: 1px solid var(--dd-line);
+  }
+
+  .cv-dd-chain i {
+    display: none;
+  }
+
+  .cv-dd-stage-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cv-dd-stage {
+    min-height: 200px;
+  }
+
+  .cv-dd-workflow-tabs {
+    grid-template-columns: 1fr;
+  }
+
+  .cv-dd-workflow-tabs button {
+    border-right: 0;
+    border-bottom: 1px solid var(--dd-line);
+  }
+
+  .cv-dd-workflow-tabs button:last-child {
+    border-bottom: 0;
+  }
+
+  .cv-dd-workflow-copy {
+    padding: 32px 24px;
+  }
+
+  .cv-dd-workflow-copy h3 {
+    font-size: 34px;
+  }
+
+  .cv-dd-evidence-layout {
+    gap: 40px;
+  }
+
+  .cv-dd-evidence-visual {
+    width: 320px;
+  }
+
+  .cv-dd-principle-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cv-dd-example::before {
+    inset: 30px 20px;
+  }
+
+  .cv-dd-example-map {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .cv-dd-example-map > div {
+    min-height: 125px;
+  }
+
+  .cv-dd-final-copy h2 {
+    font-size: 45px;
+  }
+
+  .cv-dd-final-actions {
+    flex-direction: column;
+  }
+
+  .cv-dd-final-actions a {
+    justify-content: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .cv-dd-manual *,
+  .cv-dd-manual *::before,
+  .cv-dd-manual *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* =========================================================
+   FINAL INTERACTION POLISH
+   TEXT × CURSOR × WORKFLOW
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   TEXT HOVER SYSTEM
+   --------------------------------------------------------- */
+
+.cv-dd-manual h1,
+.cv-dd-manual h2,
+.cv-dd-manual h3,
+.cv-dd-manual p,
+.cv-dd-manual strong,
+.cv-dd-manual span,
+.cv-dd-manual small {
+  transition:
+    color .3s ease,
+    text-shadow .3s ease,
+    transform .3s cubic-bezier(.16,1,.3,1),
+    letter-spacing .3s ease;
+}
+
+/* Main headings */
+
+.cv-dd-manual h1:hover,
+.cv-dd-manual h2:hover,
+.cv-dd-manual h3:hover {
+  text-shadow:
+    0 0 28px rgba(238,233,225,.08);
+}
+
+/* Red highlighted heading text */
+
+.cv-dd-manual h1 span,
+.cv-dd-manual h2 span {
+  transition:
+    color .3s ease,
+    text-shadow .3s ease,
+    letter-spacing .3s ease;
+}
+
+.cv-dd-manual h1:hover span,
+.cv-dd-manual h2:hover span {
+  color: #f0646c;
+  text-shadow:
+    0 0 28px rgba(224,82,90,.28);
+  letter-spacing: -.045em;
+}
+
+/* Paragraph interaction */
+
+.cv-dd-manual p:hover {
+  color: #c3bdb4;
+}
+
+/* Eyebrows */
+
+.cv-dd-manual .cv-eyebrow {
+  transition:
+    color .3s ease,
+    letter-spacing .3s ease;
+}
+
+.cv-dd-manual .cv-eyebrow:hover {
+  color: #f2d29e;
+  letter-spacing: .27em;
+}
+
+.cv-dd-manual .cv-eyebrow:hover::before {
+  width: 42px;
+}
+
+/* ---------------------------------------------------------
+   HERO TEXT
+   --------------------------------------------------------- */
+
+.cv-dd-hero-copy h1 {
+  cursor: default;
+}
+
+.cv-dd-hero-copy h1:hover {
+  transform: translateX(4px);
+}
+
+.cv-dd-hero-copy > p {
+  cursor: default;
+}
+
+.cv-dd-hero-copy > p:hover {
+  transform: translateX(3px);
+}
+
+/* ---------------------------------------------------------
+   SECTION HEADING HOVER
+   --------------------------------------------------------- */
+
+.cv-dd-heading h2:hover,
+.cv-dd-intro h2:hover,
+.cv-dd-evidence-layout h2:hover,
+.cv-dd-example-layout h2:hover {
+  transform: translateX(5px);
+}
+
+/* ---------------------------------------------------------
+   CHAIN TEXT
+   --------------------------------------------------------- */
+
+.cv-dd-chain > div {
+  cursor: pointer;
+}
+
+.cv-dd-chain > div:hover strong {
+  color: var(--dd-gold);
+  letter-spacing: .1em;
+  transform: translateX(3px);
+}
+
+.cv-dd-chain > div:hover span {
+  color: var(--dd-gold);
+}
+
+.cv-dd-chain > div:hover i {
+  color: var(--dd-gold);
+  transform: translateX(5px);
+}
+
+/* ---------------------------------------------------------
+   JOURNEY CARDS — TEXT
+   --------------------------------------------------------- */
+
+.cv-dd-stage {
+  cursor: default;
+}
+
+.cv-dd-stage:hover > span {
+  color: var(--dd-gold);
+  letter-spacing: .24em;
+}
+
+.cv-dd-stage:hover h3 {
+  color: #f5f0e8;
+  transform: translateX(4px);
+  letter-spacing: .01em;
+}
+
+.cv-dd-stage:hover p {
+  color: #bbb5ad;
+  transform: translateX(2px);
+}
+
+/* ---------------------------------------------------------
+   SECTION 03 — WORKFLOW
+   --------------------------------------------------------- */
+
+/* HARD CONTAINMENT */
+
+.cv-dd-workflow-stage {
+  position: relative;
+  overflow: hidden;
+}
+
+.cv-dd-workflow-feature {
+  position: relative;
+  overflow: hidden;
+}
+
+.cv-dd-workflow-image {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden !important;
+  clip-path: inset(0);
+}
+
+.cv-dd-workflow-image img {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  object-fit: cover !important;
+  transform: scale(1);
+  transform-origin: center center;
+  will-change: transform;
+  clip-path: inset(0);
+  transition:
+    transform .7s cubic-bezier(.16,1,.3,1),
+    filter .5s ease;
+}
+
+/* Don't let the boy/image escape the box */
+
+.cv-dd-workflow-feature:hover .cv-dd-workflow-image img {
+  transform: scale(1.018);
+}
+
+/* Image overlay remains inside */
+
+.cv-dd-workflow-image > div {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 3;
+  pointer-events: none;
+}
+
+/* Workflow tabs */
+
+.cv-dd-workflow-tabs button {
+  overflow: hidden;
+}
+
+.cv-dd-workflow-tabs button strong {
+  transition:
+    color .3s ease,
+    transform .3s cubic-bezier(.16,1,.3,1),
+    letter-spacing .3s ease;
+}
+
+.cv-dd-workflow-tabs button:hover strong,
+.cv-dd-workflow-tabs button.active strong {
+  color: #f2eee7;
+  transform: translateX(4px);
+  letter-spacing: .075em;
+}
+
+.cv-dd-workflow-tabs button:hover span,
+.cv-dd-workflow-tabs button.active span {
+  color: var(--dd-gold);
+}
+
+.cv-dd-workflow-tabs button:hover i {
+  transform: translate(5px,-4px);
+}
+
+/* Feature copy */
+
+.cv-dd-workflow-copy h3:hover {
+  color: #f5f0e8;
+  transform: translateX(5px);
+  text-shadow: 0 0 25px rgba(238,233,225,.08);
+}
+
+.cv-dd-workflow-copy p:hover {
+  color: #c3bdb4;
+  transform: translateX(3px);
+}
+
+/* ---------------------------------------------------------
+   EVIDENCE LIST
+   --------------------------------------------------------- */
+
+.cv-dd-evidence-list > div {
+  cursor: default;
+}
+
+.cv-dd-evidence-list > div:hover > span {
+  color: var(--dd-gold);
+  transform: translateX(3px);
+}
+
+.cv-dd-evidence-list > div:hover strong {
+  color: #f3eee6;
+  letter-spacing: .12em;
+  transform: translateX(3px);
+}
+
+.cv-dd-evidence-list > div:hover p {
+  color: #bbb5ad;
+  transform: translateX(3px);
+}
+
+/* ---------------------------------------------------------
+   EVIDENCE VISUAL
+   --------------------------------------------------------- */
+
+.cv-dd-evidence-label {
+  transition:
+    transform .35s cubic-bezier(.16,1,.3,1),
+    color .3s ease,
+    border-color .3s ease;
+}
+
+.cv-dd-evidence-label:hover {
+  color: var(--dd-gold);
+  border-color: rgba(233,197,140,.4);
+  transform: translateY(-4px);
+}
+
+.cv-dd-evidence-core:hover {
+  box-shadow:
+    0 0 85px rgba(224,82,90,.2),
+    inset 0 0 45px rgba(224,82,90,.08);
+}
+
+/* ---------------------------------------------------------
+   PRINCIPLES
+   --------------------------------------------------------- */
+
+.cv-dd-principle-grid article {
+  cursor: default;
+}
+
+.cv-dd-principle-grid article:hover > span {
+  color: var(--dd-gold);
+}
+
+.cv-dd-principle-grid article:hover h3 {
+  color: #f5f0e8;
+  transform: translateX(4px);
+}
+
+.cv-dd-principle-grid article:hover p {
+  color: #c0bab2;
+  transform: translateX(2px);
+}
+
+/* ---------------------------------------------------------
+   EXAMPLE MAP
+   --------------------------------------------------------- */
+
+.cv-dd-example-map > div {
+  cursor: default;
+}
+
+.cv-dd-example-map > div:hover strong {
+  color: var(--dd-gold);
+  transform: translateX(4px);
+  letter-spacing: .04em;
+}
+
+.cv-dd-example-map > div:hover span {
+  color: var(--dd-gold);
+}
+
+.cv-dd-example-map > div:hover small {
+  color: #a8a19a;
+  letter-spacing: .2em;
+}
+
+/* ---------------------------------------------------------
+   FINAL CTA
+   --------------------------------------------------------- */
+
+.cv-dd-final-copy h2:hover {
+  transform: translateX(5px);
+}
+
+.cv-dd-final-copy p:hover {
+  color: #c4beb6;
+}
+
+.cv-dd-final-actions a {
+  position: relative;
+  overflow: hidden;
+}
+
+.cv-dd-final-actions a::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 1px;
+  background: var(--dd-red);
+  transition: width .35s ease;
+}
+
+.cv-dd-final-actions a:hover::before {
+  width: 100%;
+}
+
+/* ---------------------------------------------------------
+   GLOBAL LINK TEXT EFFECT
+   --------------------------------------------------------- */
+
+.cv-dd-manual a {
+  transition:
+    color .3s ease,
+    transform .3s cubic-bezier(.16,1,.3,1),
+    letter-spacing .3s ease,
+    border-color .3s ease;
+}
+
+/* ---------------------------------------------------------
+   SECTION NUMBER
+   --------------------------------------------------------- */
+
+.cv-dd-manual .cv-section-number {
+  transition:
+    color .3s ease,
+    letter-spacing .3s ease,
+    transform .3s ease;
+}
+
+.cv-dd-manual section:hover > .cv-section-number {
+  color: rgba(224,82,90,.65);
+  letter-spacing: .28em;
+  transform: translateX(4px);
+}
+
+/* ---------------------------------------------------------
+   MOBILE IMAGE CONTAINMENT
+   --------------------------------------------------------- */
+
+@media (max-width: 850px) {
+  .cv-dd-workflow-image {
+    overflow: hidden !important;
+    clip-path: inset(0);
+  }
+
+  .cv-dd-workflow-image img {
+    transform: scale(1) !important;
+  }
+}
+
+/* ---------------------------------------------------------
+   REDUCE MOTION
+   --------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .cv-dd-manual *,
+  .cv-dd-manual *::before,
+  .cv-dd-manual *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+
+/* =========================================================
+   SECTION 03 — FINAL VISUAL FIX
+   ========================================================= */
+
+.cv-dd-workflow-image {
+  position: relative !important;
+  overflow: hidden !important;
+  isolation: isolate;
+  background:
+    radial-gradient(
+      circle at 50% 45%,
+      rgba(224,82,90,.08),
+      transparent 45%
+    ),
+    #080a0b;
+}
+
+/* Character stays COMPLETELY inside the panel */
+
+.cv-dd-workflow-image img {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  object-position: center bottom !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  padding: 8px 20px 0 !important;
+  transform: scale(1) !important;
+  filter: saturate(.82) contrast(1.04);
+  transition:
+    transform .65s cubic-bezier(.16,1,.3,1),
+    filter .4s ease;
+}
+
+.cv-dd-workflow-feature:hover .cv-dd-workflow-image img {
+  transform: scale(1.025) !important;
+  filter: saturate(1) contrast(1.07);
+}
+
+/* Keep overlay inside image */
+
+.cv-dd-workflow-image > div {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 3 !important;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(8,10,11,.12),
+      transparent 35%,
+      rgba(8,10,11,.42)
+    ),
+    linear-gradient(
+      0deg,
+      rgba(8,10,11,.58),
+      transparent 35%
+    );
+}
+
+/* =========================================================
+   STRONGER TEXT HOVER
+   ========================================================= */
+
+.cv-dd-manual h2,
+.cv-dd-manual h3,
+.cv-dd-manual p,
+.cv-dd-manual strong {
+  cursor: default;
+}
+
+/* Main section headings */
+
+.cv-dd-intro h2,
+.cv-dd-heading h2,
+.cv-dd-evidence-layout h2,
+.cv-dd-example-layout h2,
+.cv-dd-final-copy h2 {
+  transition:
+    transform .35s cubic-bezier(.16,1,.3,1),
+    text-shadow .35s ease;
+}
+
+.cv-dd-intro h2:hover,
+.cv-dd-heading h2:hover,
+.cv-dd-evidence-layout h2:hover,
+.cv-dd-example-layout h2:hover,
+.cv-dd-final-copy h2:hover {
+  transform: translateX(7px);
+  text-shadow:
+    0 0 30px rgba(238,233,225,.12);
+}
+
+/* Red headline text */
+
+.cv-dd-intro h2 span,
+.cv-dd-heading h2 span,
+.cv-dd-evidence-layout h2 span,
+.cv-dd-example-layout h2 span,
+.cv-dd-final-copy h2 span {
+  transition:
+    color .35s ease,
+    text-shadow .35s ease,
+    letter-spacing .35s ease;
+}
+
+.cv-dd-intro h2:hover span,
+.cv-dd-heading h2:hover span,
+.cv-dd-evidence-layout h2:hover span,
+.cv-dd-example-layout h2:hover span,
+.cv-dd-final-copy h2:hover span {
+  color: #f06a72;
+  text-shadow:
+    0 0 28px rgba(224,82,90,.35);
+}
+
+/* Paragraphs */
+
+.cv-dd-manual p {
+  transition:
+    color .3s ease,
+    transform .3s cubic-bezier(.16,1,.3,1);
+}
+
+.cv-dd-manual p:hover {
+  color: #d0c9c0;
+  transform: translateX(3px);
+}
+
+/* Journey cards */
+
+.cv-dd-stage h3 {
+  transition:
+    color .3s ease,
+    transform .3s ease,
+    letter-spacing .3s ease;
+}
+
+.cv-dd-stage:hover h3 {
+  color: var(--dd-gold);
+  transform: translateX(6px);
+  letter-spacing: .025em;
+}
+
+.cv-dd-stage p {
+  transition: color .3s ease, transform .3s ease;
+}
+
+.cv-dd-stage:hover p {
+  color: #c5beb5;
+  transform: translateX(3px);
+}
+
+/* Workflow active text */
+
+.cv-dd-workflow-tabs button strong {
+  transition:
+    color .3s ease,
+    transform .3s ease,
+    letter-spacing .3s ease;
+}
+
+.cv-dd-workflow-tabs button:hover strong,
+.cv-dd-workflow-tabs button.active strong {
+  color: #ffffff;
+  transform: translateX(6px);
+  letter-spacing: .075em;
+}
+
+/* Workflow feature title */
+
+.cv-dd-workflow-copy h3 {
+  transition:
+    color .3s ease,
+    transform .35s ease,
+    text-shadow .35s ease;
+}
+
+.cv-dd-workflow-copy h3:hover {
+  color: #ffffff;
+  transform: translateX(7px);
+  text-shadow:
+    0 0 25px rgba(238,233,225,.12);
+}
+
+/* Evidence */
+
+.cv-dd-evidence-list strong {
+  transition:
+    color .3s ease,
+    transform .3s ease,
+    letter-spacing .3s ease;
+}
+
+.cv-dd-evidence-list > div:hover strong {
+  color: var(--dd-gold);
+  transform: translateX(6px);
+  letter-spacing: .1em;
+}
+
+/* Principles */
+
+.cv-dd-principle-grid h3 {
+  transition:
+    color .3s ease,
+    transform .3s ease;
+}
+
+.cv-dd-principle-grid article:hover h3 {
+  color: var(--dd-gold);
+  transform: translateX(6px);
+}
+
+/* EGFR */
+
+.cv-dd-example-map strong {
+  transition:
+    color .3s ease,
+    transform .3s ease,
+    letter-spacing .3s ease;
+}
+
+.cv-dd-example-map > div:hover strong {
+  color: var(--dd-gold);
+  transform: translateX(6px);
+  letter-spacing: .06em;
+}
+
+/* Section labels */
+
+.cv-dd-manual .cv-eyebrow {
+  transition:
+    color .3s ease,
+    letter-spacing .3s ease;
+}
+
+.cv-dd-manual .cv-eyebrow:hover {
+  color: #f5d49e;
+  letter-spacing: .27em;
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 850px) {
+  .cv-dd-workflow-image img {
+    padding: 5px 12px 0 !important;
+    object-fit: contain !important;
+  }
+}
+

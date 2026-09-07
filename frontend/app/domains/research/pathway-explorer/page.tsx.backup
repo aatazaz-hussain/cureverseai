@@ -1,0 +1,533 @@
+"use client";
+
+import { FormEvent, useMemo, useState } from "react";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import "./pathway-explorer.css";
+
+const API_BASE =
+  process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000/api/v1";
+
+function cleanText(value: any): string {
+  if (value === null || value === undefined) return "";
+  if (typeof value === "string") return value.replace(/<[^>]*>/g, "").trim();
+  if (typeof value === "number") return String(value);
+
+  if (typeof value === "object") {
+    return cleanText(
+      value.name ||
+        value.display_name ||
+        value.label ||
+        value.identifier ||
+        value.id ||
+        ""
+    );
+  }
+
+  return String(value);
+}
+
+function uniqueById(entries: any[]) {
+  const seen = new Set<string>();
+
+  return entries.filter((entry) => {
+    const id = String(entry.id || entry.name || "");
+    if (seen.has(id)) return false;
+    seen.add(id);
+    return true;
+  });
+}
+
+export default function PathwayExplorerPage() {
+  const [pathway, setPathway] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [searched, setSearched] = useState(false);
+  const [error, setError] = useState("");
+  const [result, setResult] = useState<any>(null);
+
+  async function investigate(event: FormEvent) {
+    event.preventDefault();
+
+    const clean = pathway.trim();
+
+    if (!clean) {
+      setError("Enter a pathway or biological term to investigate.");
+      return;
+    }
+
+    setLoading(true);
+    setSearched(true);
+    setError("");
+    setResult(null);
+
+    try {
+      const response = await fetch(`${API_BASE}/analyze`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          domain: "research",
+          task: "pathway_exploration",
+          input: {
+            pathway: clean,
+          },
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          data?.detail?.message ||
+            data?.detail ||
+            data?.message ||
+            "Pathway analysis failed."
+        );
+      }
+
+      setResult(data);
+    } catch (err: any) {
+      setError(
+        err?.message ||
+          "Unable to connect to the CureVerseAI analysis engine."
+      );
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const analysis = result?.data || result?.analysis || result || {};
+
+  const searchResults =
+    analysis?.result?.search_results ||
+    analysis?.search_results ||
+    {};
+
+  const groups = Array.isArray(searchResults?.results)
+    ? searchResults.results
+    : [];
+
+  const pathwayEntries = useMemo(() => {
+    const entries = groups.flatMap((group: any) =>
+      Array.isArray(group?.entries)
+        ? group.entries.map((entry: any) => ({
+            ...entry,
+            _groupType: group?.typeName || "",
+          }))
+        : []
+    );
+
+    const pathways = entries
+      .filter((entry: any) => entry?.type === "Pathway")
+      .map((entry: any) => ({
+        id: entry.stId || entry.id || entry.dbId || "Unknown",
+        name: cleanText(entry.name) || "Biological pathway",
+        species: Array.isArray(entry.species)
+          ? entry.species.join(", ")
+          : cleanText(entry.species),
+        description: cleanText(entry.summation),
+        human:
+          Array.isArray(entry.species) &&
+          entry.species.includes("Homo sapiens"),
+        disease: Boolean(entry.isDisease || entry.disease),
+        type: cleanText(entry.exactType || entry.type),
+        compartment: Array.isArray(entry.compartmentNames)
+          ? entry.compartmentNames.join(", ")
+          : cleanText(entry.compartmentNames),
+        raw: entry,
+      }));
+
+    return uniqueById(
+      pathways.sort((a: any, b: any) => {
+        if (a.human !== b.human) return a.human ? -1 : 1;
+        if (a.disease !== b.disease) return a.disease ? -1 : 1;
+        return a.name.localeCompare(b.name);
+      })
+    );
+  }, [groups]);
+
+  const humanPathways = pathwayEntries.filter((entry: any) => entry.human);
+  const otherSpeciesPathways = pathwayEntries.filter((entry: any) => !entry.human);
+  const diseasePathways = pathwayEntries.filter((entry: any) => entry.disease);
+
+  const groupCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+
+    for (const group of groups) {
+      const name = cleanText(group?.typeName || group?.type || "Other");
+      const count = Number(group?.entriesCount || 0);
+
+      if (name) {
+        counts[name] = count;
+      }
+    }
+
+    return counts;
+  }, [groups]);
+
+  const evidenceReasoning =
+    analysis?.evidence_reasoning ||
+    result?.evidence_reasoning ||
+    {};
+
+  const rawSources = Array.isArray(evidenceReasoning?.sources)
+    ? evidenceReasoning.sources
+    : [];
+
+  const sources = rawSources.length ? rawSources : ["Reactome"];
+
+  const reasoning =
+    evidenceReasoning?.evidence_summary ||
+    evidenceReasoning?.summary ||
+    "Reactome pathway search returned biological pathway records matching the investigation query.";
+
+  const topPathway = humanPathways[0] || pathwayEntries[0];
+
+  return (
+    <main className="cv-pathway-page">
+      <Navbar />
+
+      <section className="cv-pathway-hero">
+        <div className="cv-pathway-hero-glow" />
+
+        <div className="cv-pathway-network">
+          <span />
+          <span />
+          <span />
+          <span />
+          <span />
+          <span />
+          <div className="cv-pathway-core" />
+        </div>
+
+        <div className="cv-pathway-hero-copy">
+          <div className="cv-eyebrow">04 / RESEARCH INTELLIGENCE</div>
+
+          <h1>Trace Biology Through Connected Pathways.</h1>
+
+          <p>
+            Explore biological pathways, connected entities, molecular
+            relationships, and supporting evidence through the CureVerseAI
+            research intelligence layer.
+          </p>
+
+          <div className="cv-pathway-metrics">
+            <div>
+              <strong>REACTOME</strong>
+              <span>PATHWAY KNOWLEDGE</span>
+            </div>
+
+            <div>
+              <strong>MULTI-SOURCE</strong>
+              <span>BIOLOGICAL EVIDENCE</span>
+            </div>
+
+            <div>
+              <strong>AI</strong>
+              <span>REASONED CONTEXT</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="cv-pathway-investigate">
+        <div className="cv-section-heading">
+          <div className="cv-section-number">01</div>
+
+          <div>
+            <div className="cv-eyebrow">PATHWAY INVESTIGATION</div>
+
+            <h2>Follow the biological network.</h2>
+
+            <p>
+              Enter a pathway, process, or biological term and let CureVerseAI
+              resolve connected research context from Reactome.
+            </p>
+          </div>
+        </div>
+
+        <form className="cv-pathway-form" onSubmit={investigate}>
+          <input
+            value={pathway}
+            onChange={(e) => setPathway(e.target.value)}
+            placeholder="e.g. DNA Repair, p53 signaling, Cell Cycle"
+            aria-label="Pathway"
+          />
+
+          <button type="submit" disabled={loading}>
+            {loading ? "ANALYZING..." : "EXPLORE PATHWAY"}
+            <span>↗</span>
+          </button>
+        </form>
+
+        {error && <div className="cv-pathway-error">{error}</div>}
+      </section>
+
+      <section className="cv-pathway-results">
+        {!searched && (
+          <div className="cv-pathway-ready">
+            <div className="cv-ready-orbit">
+              <div />
+            </div>
+
+            <div>
+              <div className="cv-eyebrow">READY FOR INVESTIGATION</div>
+              <h3>Enter a biological pathway to begin.</h3>
+              <p>
+                Pathway records, species context, connected biological
+                entities, evidence, and reasoning will appear here.
+              </p>
+            </div>
+
+            <div className="cv-ready-status">SYSTEM READY</div>
+          </div>
+        )}
+
+        {loading && (
+          <div className="cv-pathway-loading">
+            <div className="cv-loading-spinner" />
+
+            <div>
+              <div className="cv-eyebrow">ANALYSIS RUNNING</div>
+              <h3>Mapping biological connections...</h3>
+              <p>
+                Resolving pathway context and evidence across the research
+                intelligence layer.
+              </p>
+            </div>
+          </div>
+        )}
+
+        {!loading && result && (
+          <>
+            <div className="cv-pathway-result-banner">
+              <div>
+                <div className="cv-eyebrow">PATHWAY RESOLUTION</div>
+
+                <h2>{pathway}</h2>
+
+                {topPathway ? (
+                  <p>
+                    Primary result:{" "}
+                    <strong>{topPathway.name}</strong>
+                    {" · "}
+                    <span>{topPathway.id}</span>
+                    {" · "}
+                    {topPathway.species || "Species not specified"}
+                  </p>
+                ) : (
+                  <p>
+                    Biological context assembled from the connected evidence
+                    layer.
+                  </p>
+                )}
+              </div>
+
+              <div className="cv-result-status">ANALYSIS COMPLETE</div>
+            </div>
+
+            <div className="cv-pathway-stats">
+              <div>
+                <strong>{pathwayEntries.length}</strong>
+                <span>PATHWAY RECORDS</span>
+              </div>
+
+              <div>
+                <strong>{humanPathways.length}</strong>
+                <span>HUMAN PATHWAYS</span>
+              </div>
+
+              <div>
+                <strong>{diseasePathways.length}</strong>
+                <span>DISEASE PATHWAYS</span>
+              </div>
+
+              <div>
+                <strong>{sources.length}</strong>
+                <span>EVIDENCE SOURCES</span>
+              </div>
+            </div>
+
+            <div className="cv-pathway-intelligence">
+              <div className="cv-intelligence-heading">
+                <div className="cv-card-label">CONNECTED BIOLOGY</div>
+                <h2>What surrounds the pathway.</h2>
+                <p>
+                  Reactome returns multiple biological entity classes around
+                  the investigated process.
+                </p>
+              </div>
+
+              <div className="cv-connected-counts">
+                {Object.entries(groupCounts)
+                  .filter(([name]) =>
+                    ["Pathway", "Protein", "Complex", "Set", "Reaction"].some(
+                      (type) => name.toLowerCase().includes(type.toLowerCase())
+                    )
+                  )
+                  .slice(0, 5)
+                  .map(([name, count]) => (
+                    <div key={name}>
+                      <strong>{Number(count).toLocaleString()}</strong>
+                      <span>{name.toUpperCase()}</span>
+                    </div>
+                  ))}
+              </div>
+            </div>
+
+            <div className="cv-pathway-grid">
+              <article className="cv-pathway-card cv-main-pathways">
+                <div className="cv-card-label">
+                  {humanPathways.length
+                    ? "HUMAN PATHWAY RECORDS"
+                    : "PATHWAY RECORDS"}
+                </div>
+
+                <h3>Biological pathways</h3>
+
+                {pathwayEntries.length ? (
+                  <div className="cv-entity-list">
+                    {humanPathways.map((entry: any, index) => (
+                      <div className="cv-pathway-entry" key={entry.id}>
+                        <span>{String(index + 1).padStart(2, "0")}</span>
+
+                        <div>
+                          <strong>{entry.name}</strong>
+
+                          <small>
+                            {entry.id}
+                            {entry.species ? ` · ${entry.species}` : ""}
+                          </small>
+
+                          {entry.description && (
+                            <p>
+                              {entry.description.length > 280
+                                ? `${entry.description.slice(0, 280)}…`
+                                : entry.description}
+                            </p>
+                          )}
+                        </div>
+
+                        <em>
+                          {entry.disease ? "DISEASE" : entry.type || "PATHWAY"}
+                        </em>
+                      </div>
+                    ))}
+
+                    {otherSpeciesPathways.length > 0 && (
+                      <div className="cv-species-summary">
+                        <span>CONNECTED SPECIES</span>
+                        <strong>
+                          {otherSpeciesPathways.length} additional
+                          cross-species pathway records
+                        </strong>
+                        <small>
+                          Reactome orthology/inference records remain available
+                          in the analysis record below.
+                        </small>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="cv-empty-result">
+                    No pathway records were returned for this investigation.
+                  </div>
+                )}
+              </article>
+
+              <div className="cv-pathway-side">
+                <article className="cv-pathway-card">
+                  <div className="cv-card-label">EVIDENCE</div>
+
+                  <h3>Research support</h3>
+
+                  <div className="cv-evidence-list">
+                    {sources.map((source: any, index: number) => (
+                      <div key={index}>
+                        <span>{String(index + 1).padStart(2, "0")}</span>
+                        <strong>{cleanText(source) || "Evidence source"}</strong>
+                      </div>
+                    ))}
+                  </div>
+                </article>
+
+                <article className="cv-pathway-card cv-reasoning-card">
+                  <div className="cv-card-label">EVIDENCE REASONING</div>
+
+                  <h3>What the evidence supports</h3>
+
+                  <p>{reasoning}</p>
+
+                  <div className="cv-reasoning-source">
+                    <span>PRIMARY SOURCE</span>
+                    <strong>Reactome</strong>
+                  </div>
+                </article>
+              </div>
+            </div>
+
+            <article className="cv-pathway-card cv-featured-pathway">
+              <div>
+                <div className="cv-card-label">PRIMARY BIOLOGICAL RECORD</div>
+
+                <h3>{topPathway?.name || pathway}</h3>
+
+                <p>
+                  {topPathway?.description ||
+                    "No pathway description was returned by the source."}
+                </p>
+              </div>
+
+              <div className="cv-featured-meta">
+                <div>
+                  <span>REACTOME ID</span>
+                  <strong>{topPathway?.id || "—"}</strong>
+                </div>
+
+                <div>
+                  <span>SPECIES</span>
+                  <strong>{topPathway?.species || "—"}</strong>
+                </div>
+
+                <div>
+                  <span>TYPE</span>
+                  <strong>{topPathway?.type || "PATHWAY"}</strong>
+                </div>
+
+                <div>
+                  <span>DISEASE</span>
+                  <strong>{topPathway?.disease ? "YES" : "NO"}</strong>
+                </div>
+              </div>
+
+              {topPathway?.id && (
+                <a
+                  className="cv-reactome-link"
+                  href={`https://reactome.org/content/detail/${encodeURIComponent(
+                    topPathway.id
+                  )}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  READ FULL REACTOME RECORD
+                  <span>↗</span>
+                </a>
+              )}
+            </article>
+
+            <article className="cv-pathway-card cv-raw-card">
+              <div className="cv-card-label">ANALYSIS RECORD</div>
+
+              <h3>Research intelligence output</h3>
+
+              <pre>{JSON.stringify(result, null, 2)}</pre>
+            </article>
+          </>
+        )}
+      </section>
+
+      <Footer />
+    </main>
+  );
+}
