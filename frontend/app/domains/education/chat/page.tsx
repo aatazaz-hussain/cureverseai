@@ -1,0 +1,535 @@
+"use client";
+
+import { FormEvent, useEffect, useRef, useState } from "react";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import "./chat.css";
+
+type Message = {
+  id: number;
+  role: "user" | "model";
+  content: string;
+};
+
+const quickQuestions = [
+  "What is a virtual cell?",
+  "Explain how DNA becomes a protein.",
+  "What is a biological pathway?",
+  "How does AlphaFold help biology?",
+  "What is CRISPR?",
+  "How can AI help drug discovery?",
+];
+
+function renderMarkdown(text: string) {
+  const lines = text.split("\n");
+  const elements: React.ReactNode[] = [];
+
+  let bullets: string[] = [];
+  let numbered: string[] = [];
+
+  function flushLists() {
+    if (bullets.length) {
+      elements.push(
+        <ul key={`ul-${elements.length}`} className="cv-md-list">
+          {bullets.map((item, index) => (
+            <li key={index}>{formatInline(item)}</li>
+          ))}
+        </ul>
+      );
+      bullets = [];
+    }
+
+    if (numbered.length) {
+      elements.push(
+        <ol key={`ol-${elements.length}`} className="cv-md-list">
+          {numbered.map((item, index) => (
+            <li key={index}>{formatInline(item)}</li>
+          ))}
+        </ol>
+      );
+      numbered = [];
+    }
+  }
+
+  lines.forEach((line, index) => {
+    const trimmed = line.trim();
+
+    if (!trimmed) {
+      flushLists();
+      return;
+    }
+
+    if (/^---+$/.test(trimmed)) {
+      flushLists();
+      elements.push(<hr key={`hr-${index}`} className="cv-md-divider" />);
+      return;
+    }
+
+    const heading = trimmed.match(/^#{1,3}\s+(.+)$/);
+
+    if (heading) {
+      flushLists();
+      const level = trimmed.match(/^#+/)?.[0].length || 2;
+
+      if (level === 1) {
+        elements.push(
+          <h3 key={index} className="cv-md-heading">
+            {formatInline(heading[1])}
+          </h3>
+        );
+      } else {
+        elements.push(
+          <h4 key={index} className="cv-md-heading cv-md-heading-small">
+            {formatInline(heading[1])}
+          </h4>
+        );
+      }
+
+      return;
+    }
+
+    const bullet = trimmed.match(/^[-*•]\s+(.+)$/);
+
+    if (bullet) {
+      numbered.length && flushLists();
+      bullets.push(bullet[1]);
+      return;
+    }
+
+    const number = trimmed.match(/^\d+\.\s+(.+)$/);
+
+    if (number) {
+      bullets.length && flushLists();
+      numbered.push(number[1]);
+      return;
+    }
+
+    flushLists();
+
+    elements.push(
+      <p key={index} className="cv-md-paragraph">
+        {formatInline(trimmed)}
+      </p>
+    );
+  });
+
+  flushLists();
+
+  return elements;
+}
+
+function formatInline(text: string): React.ReactNode[] {
+  const parts = text.split(
+    /(\*\*[^*]+\*\*|`[^`]+`|\[[^\]]+\]\([^)]+\))/
+  );
+
+  return parts.map((part, index) => {
+    if (part.startsWith("**") && part.endsWith("**")) {
+      return (
+        <strong key={index}>
+          {part.slice(2, -2)}
+        </strong>
+      );
+    }
+
+    if (part.startsWith("`") && part.endsWith("`")) {
+      return (
+        <code key={index} className="cv-md-code">
+          {part.slice(1, -1)}
+        </code>
+      );
+    }
+
+    const link = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
+
+    if (link) {
+      return (
+        <a
+          key={index}
+          href={link[2]}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {link[1]}
+        </a>
+      );
+    }
+
+    return <span key={index}>{part}</span>;
+  });
+}
+
+const tracks = [
+  ["01", "GENES", "DNA, genes and variants"],
+  ["02", "PROTEINS", "Structure and function"],
+  ["03", "CELLS", "Cellular systems"],
+  ["04", "PATHWAYS", "Connected biology"],
+  ["05", "AI × BIOLOGY", "Models and discovery"],
+];
+
+export default function EducationChatPage() {
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
+  const [messages, setMessages] = useState<Message[]>([
+    {
+      id: 1,
+      role: "model",
+      content:
+        "Welcome to CureVerseAI Education Intelligence.\n\nI can help you understand genes, proteins, cells, pathways, biotechnology, drug development and AI for biology.\n\nAsk me anything or choose a question below.",
+    },
+  ]);
+
+  const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "end",
+    });
+  }, [messages, loading]);
+
+  async function sendMessage(text?: string) {
+    const content = (text ?? input).trim();
+
+    if (!content || loading) return;
+
+    const userMessage: Message = {
+      id: Date.now(),
+      role: "user",
+      content,
+    };
+
+    const conversation = [...messages, userMessage];
+
+    setMessages(conversation);
+    setInput("");
+    setLoading(true);
+
+    try {
+      const response = await fetch("/api/education/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          messages: conversation.map((message) => ({
+            role: message.role,
+            content: message.content,
+          })),
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(
+          data?.error || "The education engine could not respond."
+        );
+      }
+
+      setMessages((current) => [
+        ...current,
+        {
+          id: Date.now() + 1,
+          role: "model",
+          content: data.message,
+        },
+      ]);
+    } catch (error: any) {
+      setMessages((current) => [
+        ...current,
+        {
+          id: Date.now() + 1,
+          role: "model",
+          content:
+            "The education engine encountered an error.\n\n" +
+            (error?.message || "Please try again."),
+        },
+      ]);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  function submit(event: FormEvent) {
+    event.preventDefault();
+    void sendMessage();
+  }
+
+  function clearChat() {
+    setMessages([
+      {
+        id: Date.now(),
+        role: "model",
+        content:
+          "Conversation cleared.\n\nWhat would you like to learn about?",
+      },
+    ]);
+    setInput("");
+  }
+
+  return (
+    <main className="cv-chat-page">
+      <Navbar />
+
+      {/* HERO */}
+      <section className="cv-chat-hero">
+        <div className="cv-chat-grid" />
+        <div className="cv-chat-glow" />
+
+        <div className="cv-chat-copy">
+          <div className="cv-eyebrow">04 / EDUCATION INTELLIGENCE</div>
+
+          <h1>
+            Ask biology.
+            <br />
+            <span>Understand the answer.</span>
+          </h1>
+
+          <p>
+            A conversational scientific tutor curated around the biological
+            concepts and research language that drive CureVerseAI.
+          </p>
+
+          <div className="cv-chat-tags">
+            <span>GENES</span>
+            <span>PROTEINS</span>
+            <span>CELLS</span>
+            <span>PATHWAYS</span>
+            <span>AI × BIOLOGY</span>
+          </div>
+        </div>
+
+        {/* SCIENTIFIC AI VISUAL */}
+        <div className="cv-chat-visual">
+          <div className="cv-aura" />
+
+          <div className="cv-orbit orbit-one" />
+          <div className="cv-orbit orbit-two" />
+          <div className="cv-orbit orbit-three" />
+
+          <div className="cv-ai-core">
+            <div className="cv-core-ring" />
+
+            <div className="cv-core-inner">
+              <strong>CV</strong>
+              <small>AI</small>
+            </div>
+          </div>
+
+          <div className="cv-node node-one">
+            <strong>DNA</strong>
+            <span>GENE</span>
+          </div>
+
+          <div className="cv-node node-two">
+            <strong>ESM-2</strong>
+            <span>PROTEIN</span>
+          </div>
+
+          <div className="cv-node node-three">
+            <strong>REACTOME</strong>
+            <span>PATHWAY</span>
+          </div>
+
+          <div className="cv-node node-four">
+            <strong>AI</strong>
+            <span>REASONING</span>
+          </div>
+
+          <i className="cv-particle particle-one" />
+          <i className="cv-particle particle-two" />
+          <i className="cv-particle particle-three" />
+          <i className="cv-particle particle-four" />
+
+          <div className="cv-scan" />
+
+          <div className="cv-engine-status">
+            <span>EDUCATION ENGINE</span>
+            <strong>READY</strong>
+          </div>
+        </div>
+      </section>
+
+      {/* WORKSPACE */}
+      <section className="cv-chat-workspace">
+        <div className="cv-chat-heading">
+          <div>
+            <div className="cv-eyebrow">CUREVERSEAI TUTOR</div>
+            <h2>Start a scientific conversation.</h2>
+            <p>
+              Ask a question, request an explanation, or select a learning
+              track.
+            </p>
+          </div>
+
+          <div className="cv-session">
+            <span>MESSAGES</span>
+            <strong>
+              {String(messages.filter((m) => m.role === "user").length).padStart(
+                2,
+                "0"
+              )}
+            </strong>
+          </div>
+        </div>
+
+        <div className="cv-chat-layout">
+          {/* SIDEBAR */}
+          <aside className="cv-chat-sidebar">
+            <div className="cv-sidebar-label">LEARNING TRACKS</div>
+
+            <div className="cv-tracks">
+              {tracks.map(([number, title, description]) => (
+                <button
+                  key={number}
+                  type="button"
+                  onClick={() =>
+                    void sendMessage(
+                      `Teach me the fundamentals of ${title.toLowerCase()}. Start at beginner level and connect it to modern biological research.`
+                    )
+                  }
+                >
+                  <span>{number}</span>
+
+                  <div>
+                    <strong>{title}</strong>
+                    <small>{description}</small>
+                  </div>
+
+                  <b>↗</b>
+                </button>
+              ))}
+            </div>
+
+            <div className="cv-side-note">
+              <span>CURATED INTELLIGENCE</span>
+              <p>
+                The tutor is instructed to distinguish established evidence
+                from inference and hypothesis.
+              </p>
+            </div>
+          </aside>
+
+          {/* CHAT */}
+          <div className="cv-chat-panel">
+            <div className="cv-panel-header">
+              <div className="cv-agent">
+                <div className="cv-agent-orb">CV</div>
+
+                <div>
+                  <strong>CureVerseAI Tutor</strong>
+                  <span>Biological Intelligence</span>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                className="cv-clear"
+                onClick={clearChat}
+              >
+                CLEAR
+              </button>
+            </div>
+
+            <div className="cv-messages">
+              {messages.map((message) => (
+                <div
+                  key={message.id}
+                  className={`cv-message ${
+                    message.role === "user" ? "is-user" : "is-ai"
+                  }`}
+                >
+                  <div className="cv-message-meta">
+                    {message.role === "user" ? "YOU" : "CUREVERSEAI AI"}
+                  </div>
+
+                  <div className="cv-message-body">
+                    {renderMarkdown(message.content)}
+                  </div>
+                </div>
+              ))}
+
+              {loading && (
+                <div className="cv-message is-ai">
+                  <div className="cv-message-meta">CUREVERSEAI AI</div>
+
+                  <div className="cv-thinking">
+                    <i />
+                    <i />
+                    <i />
+                    <span>ANALYZING BIOLOGY</span>
+                  </div>
+                </div>
+              )}
+
+              <div ref={messagesEndRef} />
+            </div>
+
+            {messages.length === 1 && (
+              <div className="cv-quick">
+                <div className="cv-quick-label">TRY A QUESTION</div>
+
+                <div className="cv-quick-grid">
+                  {quickQuestions.map((question) => (
+                    <button
+                      key={question}
+                      type="button"
+                      onClick={() => void sendMessage(question)}
+                    >
+                      <span>{question}</span>
+                      <b>↗</b>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <form className="cv-input" onSubmit={submit}>
+              <input
+                value={input}
+                onChange={(event) => setInput(event.target.value)}
+                placeholder="Ask a biology question..."
+                disabled={loading}
+              />
+
+              <button
+                type="submit"
+                disabled={!input.trim() || loading}
+              >
+                {loading ? "..." : "SEND"}
+                <b>↗</b>
+              </button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      {/* CLOSING */}
+      <section className="cv-chat-closing">
+        <div className="cv-closing-grid" />
+
+        <div className="cv-eyebrow">LEARN / CONNECT / INVESTIGATE</div>
+
+        <h2>
+          From a question
+          <br />
+          <span>to biological intelligence.</span>
+        </h2>
+
+        <p>
+          When your question becomes a research problem, continue into the
+          CureVerseAI Research environment.
+        </p>
+
+        <a href="/domains/research">
+          EXPLORE RESEARCH
+          <span>↗</span>
+        </a>
+      </section>
+
+      <Footer />
+    </main>
+  );
+}
