@@ -1,0 +1,423 @@
+/* =========================================================
+   CUREVERSEAI — REVERSE DISEASE ENGINEERING
+   GRAPH STYLES
+   =========================================================
+   The SVG mechanism graph.
+
+   Namespace: cv-revdis-graph-*
+
+   The graph is the visual centerpiece of W02. Its styling
+   prioritizes:
+     - legibility at a glance (node labels readable)
+     - clear selection feedback
+     - differentiated support-class colors on edges
+     - calm motion (mount fade-in, hover lift)
+   ========================================================= */
+
+/* =========================================================
+   WRAPPER
+   ========================================================= */
+
+.cv-revdis-graph-wrap {
+  position: relative;
+  width: 100%;
+  border: 1px solid rgba(238, 233, 225, 0.1);
+  background:
+    radial-gradient(
+      circle at 40% 40%,
+      rgba(224, 82, 90, 0.045),
+      transparent 55%
+    ),
+    rgba(8, 10, 11, 0.72);
+  overflow: hidden;
+  animation: cvRevdisGraphIn 620ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes cvRevdisGraphIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.cv-revdis-graph-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.cv-revdis-graph-empty {
+  padding: 60px 30px;
+  text-align: center;
+  border: 1px dashed rgba(238, 233, 225, 0.16);
+  color: rgba(238, 233, 225, 0.45);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* =========================================================
+   COLUMN HEADERS
+   ========================================================= */
+
+.cv-revdis-graph-headers {
+  pointer-events: none;
+}
+
+.cv-revdis-graph-headers text {
+  font-variant-numeric: tabular-nums;
+}
+
+/* =========================================================
+   NODES
+   ========================================================= */
+
+.cv-revdis-graph-node {
+  cursor: pointer;
+  outline: none;
+}
+
+/* Focus ring for keyboard nav — visible only when
+   tabbed to (focus-visible), so clicking does not produce
+   a distracting ring. */
+.cv-revdis-graph-node:focus-visible .cv-revdis-graph-node-body {
+  stroke: #e9c58c;
+  stroke-width: 1.5;
+  filter: drop-shadow(0 0 10px rgba(233, 197, 140, 0.4));
+}
+
+/* ----- Node body ----- */
+
+.cv-revdis-graph-node-body {
+  transition:
+    fill 240ms cubic-bezier(0.22, 1, 0.36, 1),
+    stroke 240ms cubic-bezier(0.22, 1, 0.36, 1),
+    filter 240ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ----- Selection ring ----- */
+
+.cv-revdis-graph-node-ring {
+  transition:
+    opacity 260ms cubic-bezier(0.22, 1, 0.36, 1),
+    stroke 260ms cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+
+/* ----- Accent bar ----- */
+
+.cv-revdis-graph-node-accent {
+  transition:
+    opacity 240ms cubic-bezier(0.22, 1, 0.36, 1),
+    filter 240ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ----- Glyph ----- */
+
+.cv-revdis-graph-node-glyph-bg {
+  transition:
+    fill 240ms cubic-bezier(0.22, 1, 0.36, 1),
+    stroke 240ms cubic-bezier(0.22, 1, 0.36, 1),
+    filter 240ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cv-revdis-graph-node-glyph {
+  transition:
+    fill 240ms cubic-bezier(0.22, 1, 0.36, 1),
+    filter 240ms cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+  font-weight: 700;
+}
+
+/* ----- Label ----- */
+
+.cv-revdis-graph-node-label {
+  transition:
+    fill 240ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 240ms cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+  font-weight: 500;
+  letter-spacing: 0.005em;
+}
+
+/* ----- Whole-node state changes ----- */
+
+/* Hover */
+.cv-revdis-graph-node.is-hovered .cv-revdis-graph-node-body {
+  fill: rgba(22, 26, 26, 0.96);
+  stroke: rgba(238, 233, 225, 0.32);
+  filter: drop-shadow(0 6px 20px rgba(0, 0, 0, 0.5));
+}
+
+.cv-revdis-graph-node.is-hovered .cv-revdis-graph-node-glyph-bg {
+  fill: rgba(238, 233, 225, 0.08);
+}
+
+.cv-revdis-graph-node.is-hovered .cv-revdis-graph-node-glyph {
+  filter: drop-shadow(0 0 8px currentColor);
+}
+
+/* Selected */
+.cv-revdis-graph-node.is-selected .cv-revdis-graph-node-body {
+  fill: rgba(24, 18, 20, 0.98);
+  stroke: #e0525a;
+  filter:
+    drop-shadow(0 0 14px rgba(224, 82, 90, 0.4))
+    drop-shadow(0 8px 22px rgba(0, 0, 0, 0.55));
+}
+
+.cv-revdis-graph-node.is-selected .cv-revdis-graph-node-label {
+  fill: #ffffff;
+  font-weight: 600;
+}
+
+.cv-revdis-graph-node.is-selected .cv-revdis-graph-node-accent {
+  filter: drop-shadow(0 0 6px currentColor);
+}
+
+/* Dimmed */
+.cv-revdis-graph-node.is-dimmed {
+  opacity: 0.32;
+}
+
+.cv-revdis-graph-node.is-dimmed .cv-revdis-graph-node-label {
+  fill: rgba(238, 233, 225, 0.55);
+}
+
+/* Connected (a neighbor of the selection) */
+.cv-revdis-graph-node.is-connected:not(.is-selected) .cv-revdis-graph-node-body {
+  stroke: rgba(233, 197, 140, 0.42);
+}
+
+.cv-revdis-graph-node.is-connected:not(.is-selected) .cv-revdis-graph-node-glyph {
+  filter: drop-shadow(0 0 5px currentColor);
+}
+
+/* =========================================================
+   EDGES
+   ========================================================= */
+
+.cv-revdis-graph-edge {
+  cursor: pointer;
+  outline: none;
+}
+
+/* ----- Halo (glow) ----- */
+
+.cv-revdis-graph-edge-halo {
+  transition: opacity 260ms cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+  filter: blur(2px);
+}
+
+/* ----- Visible curve ----- */
+
+.cv-revdis-graph-edge-curve {
+  transition:
+    opacity 260ms cubic-bezier(0.22, 1, 0.36, 1),
+    stroke-width 260ms cubic-bezier(0.22, 1, 0.36, 1),
+    filter 260ms cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+
+/* ----- Target dot ----- */
+
+.cv-revdis-graph-edge-target {
+  transition:
+    opacity 260ms cubic-bezier(0.22, 1, 0.36, 1),
+    r 260ms cubic-bezier(0.22, 1, 0.36, 1),
+    filter 260ms cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+
+/* ----- Whole-edge state changes ----- */
+
+/* Hover */
+.cv-revdis-graph-edge:hover .cv-revdis-graph-edge-curve {
+  opacity: 1;
+  stroke-width: 3;
+  filter: drop-shadow(0 0 6px currentColor);
+}
+
+.cv-revdis-graph-edge:hover .cv-revdis-graph-edge-target {
+  opacity: 1;
+  filter: drop-shadow(0 0 6px currentColor);
+}
+
+.cv-revdis-graph-edge:hover .cv-revdis-graph-edge-halo {
+  opacity: 0.2;
+}
+
+/* Selected */
+.cv-revdis-graph-edge.is-selected .cv-revdis-graph-edge-curve {
+  opacity: 1;
+  stroke-width: 3.5;
+  filter: drop-shadow(0 0 10px currentColor);
+}
+
+.cv-revdis-graph-edge.is-selected .cv-revdis-graph-edge-target {
+  opacity: 1;
+  filter: drop-shadow(0 0 8px currentColor);
+}
+
+/* Dimmed */
+.cv-revdis-graph-edge.is-dimmed .cv-revdis-graph-edge-curve,
+.cv-revdis-graph-edge.is-dimmed .cv-revdis-graph-edge-target {
+  opacity: 0.1;
+}
+
+/* Connected (a neighbor of the selection) */
+.cv-revdis-graph-edge.is-connected:not(.is-selected) .cv-revdis-graph-edge-curve {
+  opacity: 0.9;
+}
+
+/* =========================================================
+   SELECTION HALO — pulses on the selected edge's target
+   ========================================================= */
+
+.cv-revdis-graph-edge.is-selected .cv-revdis-graph-edge-target {
+  animation: cvRevdisEdgePulse 2s ease-in-out infinite;
+}
+
+@keyframes cvRevdisEdgePulse {
+  0%, 100% {
+    r: 4;
+    opacity: 1;
+  }
+  50% {
+    r: 5.5;
+    opacity: 0.85;
+  }
+}
+
+/* =========================================================
+   NODE SELECTION — subtle pulse on the accent bar
+   ========================================================= */
+
+.cv-revdis-graph-node.is-selected .cv-revdis-graph-node-accent {
+  animation: cvRevdisNodeAccentPulse 2.4s ease-in-out infinite;
+}
+
+@keyframes cvRevdisNodeAccentPulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.72;
+  }
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 900px) {
+  .cv-revdis-graph-svg {
+    max-height: 640px;
+  }
+}
+
+@media (max-width: 620px) {
+  .cv-revdis-graph-svg {
+    max-height: 500px;
+  }
+
+  .cv-revdis-graph-node-label {
+    font-size: 10px;
+  }
+}
+
+/* =========================================================
+   ACCESSIBILITY — prefers-reduced-motion
+   ========================================================= */
+
+
+/* =========================================================
+   MICRO-MOTION EXTRAS
+   ========================================================= */
+
+/* Node accent bar grows slightly on hover */
+.cv-revdis-graph-node.is-hovered .cv-revdis-graph-node-accent {
+  transform: scaleX(1.4);
+  transform-origin: left center;
+}
+
+.cv-revdis-graph-node-accent {
+  transition:
+    opacity 260ms cubic-bezier(0.22, 1, 0.36, 1),
+    filter 260ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 260ms cubic-bezier(0.22, 1, 0.36, 1);
+  transform-origin: left center;
+}
+
+/* Edge target dot scales up on edge hover */
+.cv-revdis-graph-edge:hover .cv-revdis-graph-edge-target {
+  r: 3.5;
+}
+
+/* Nodes fade in with a stagger, keyed by column position
+   (achieved via a small delay on the wrapper — the SVG
+   cannot index elements, so we let the fade be a whole-
+   graph effect and give individual nodes a subtle
+   entrance via the body fill transition on mount). */
+
+.cv-revdis-graph-node .cv-revdis-graph-node-body {
+  transition:
+    fill 260ms cubic-bezier(0.22, 1, 0.36, 1),
+    stroke 260ms cubic-bezier(0.22, 1, 0.36, 1),
+    filter 260ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cv-revdis-graph-node.is-hovered .cv-revdis-graph-node-accent {
+    transform: none;
+  }
+
+  .cv-revdis-graph-edge:hover .cv-revdis-graph-edge-target {
+    r: 2.5;
+  }
+}
+
+
+/* =========================================================
+   READABILITY — larger text on nodes
+   ========================================================= */
+
+.cv-revdis-graph-node-label {
+  font-size: 15px;
+  letter-spacing: 0.005em;
+}
+
+.cv-revdis-graph-node-glyph {
+  font-size: 16px;
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+  .cv-revdis-graph-wrap {
+    animation: none;
+  }
+
+  .cv-revdis-graph-node-body,
+  .cv-revdis-graph-node-accent,
+  .cv-revdis-graph-node-glyph-bg,
+  .cv-revdis-graph-node-glyph,
+  .cv-revdis-graph-node-label,
+  .cv-revdis-graph-node-ring,
+  .cv-revdis-graph-edge-halo,
+  .cv-revdis-graph-edge-curve,
+  .cv-revdis-graph-edge-target {
+    transition: none;
+  }
+
+  .cv-revdis-graph-edge.is-selected .cv-revdis-graph-edge-target,
+  .cv-revdis-graph-node.is-selected .cv-revdis-graph-node-accent {
+    animation: none;
+  }
+}

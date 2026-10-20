@@ -1,0 +1,721 @@
+.plant-edibility-page {
+  --edibility-bg: #080b12;
+  --edibility-panel: #10151e;
+  --edibility-line: rgba(222, 230, 241, 0.12);
+  --edibility-muted: #a0aaba;
+  --edibility-text: #f4f6fa;
+  --edibility-red: #f05a63;
+  --edibility-gold: #e6bd78;
+  min-height: 100vh;
+  overflow: hidden;
+  background: var(--edibility-bg);
+  color: var(--edibility-text);
+}
+
+.edibility-hero {
+  position: relative;
+  isolation: isolate;
+  min-height: 390px;
+  display: flex;
+  align-items: center;
+  padding: 70px max(7%, calc((100% - 1250px) / 2));
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 85% 40%, rgba(240, 90, 99, 0.13), transparent 38%),
+    linear-gradient(120deg, #0b1019 0%, #111521 55%, #1a1119 100%);
+  border-bottom: 1px solid var(--edibility-line);
+}
+
+.edibility-hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 800px;
+}
+
+.edibility-back-link,
+.edibility-footer a {
+  color: var(--edibility-gold);
+  text-decoration: none;
+  transition: color 180ms ease;
+}
+
+.edibility-back-link {
+  display: inline-block;
+  margin-bottom: 30px;
+  font-size: 13px;
+}
+
+.edibility-back-link:hover,
+.edibility-footer a:hover {
+  color: #fff;
+}
+
+.edibility-eyebrow,
+.edibility-section-kicker {
+  display: block;
+  color: var(--edibility-gold);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.edibility-hero h1 {
+  margin: 18px 0;
+  max-width: 750px;
+  font-size: clamp(36px, 5.2vw, 65px);
+  line-height: 1.08;
+  letter-spacing: -2px;
+  transition: text-shadow 200ms ease;
+}
+
+.edibility-hero h1:hover {
+  text-shadow: 0 0 28px rgba(240, 90, 99, 0.2);
+}
+
+.edibility-hero h1 span {
+  color: var(--edibility-red);
+}
+
+.edibility-hero-description {
+  max-width: 650px;
+  color: #b7bfcd;
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+.edibility-hero-points {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 27px;
+}
+
+.edibility-hero-points span {
+  padding: 9px 13px;
+  border: 1px solid var(--edibility-line);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.025);
+  color: #dce1e9;
+  font-size: 12px;
+}
+
+.edibility-orbit {
+  position: absolute;
+  z-index: -1;
+  right: 7%;
+  top: 50%;
+  width: 290px;
+  height: 290px;
+  border: 1px solid rgba(240, 90, 99, 0.16);
+  border-radius: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.edibility-orbit-one::before,
+.edibility-orbit-two::before {
+  content: "";
+  position: absolute;
+  inset: 24px;
+  border: 1px dashed rgba(230, 189, 120, 0.22);
+  border-radius: 50%;
+}
+
+.edibility-orbit-two {
+  width: 220px;
+  height: 220px;
+  right: calc(7% + 35px);
+  border-color: rgba(230, 189, 120, 0.17);
+  animation: edibility-orbit-spin 45s linear infinite;
+}
+
+@keyframes edibility-orbit-spin {
+  to { transform: translateY(-50%) rotate(360deg); }
+}
+
+.edibility-workspace,
+.edibility-evidence-section {
+  width: min(1120px, 86%);
+  margin: 0 auto;
+  padding: 75px 0;
+}
+
+.edibility-section-heading {
+  margin-bottom: 30px;
+}
+
+.edibility-section-heading h2 {
+  margin: 12px 0;
+  font-size: clamp(27px, 3vw, 38px);
+  letter-spacing: -0.8px;
+}
+
+.edibility-section-heading > p {
+  margin: 0;
+  color: var(--edibility-muted);
+  line-height: 1.7;
+}
+
+.edibility-input-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+}
+
+.edibility-panel {
+  min-width: 0;
+  padding: 26px;
+  border: 1px solid var(--edibility-line);
+  border-radius: 9px;
+  background: linear-gradient(145deg, #121823, #0d1119);
+  transition: border-color 200ms ease, transform 200ms ease;
+}
+
+.edibility-panel:hover {
+  border-color: rgba(230, 189, 120, 0.38);
+  transform: translateY(-2px);
+}
+
+.edibility-panel-heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.edibility-step {
+  display: grid;
+  place-items: center;
+  flex: 0 0 38px;
+  height: 38px;
+  border: 1px solid rgba(240, 90, 99, 0.4);
+  border-radius: 5px;
+  color: var(--edibility-red);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.edibility-panel-heading h3 {
+  margin: 1px 0 7px;
+  font-size: 17px;
+}
+
+.edibility-panel-heading p {
+  margin: 0;
+  color: var(--edibility-muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.edibility-dropzone {
+  width: 100%;
+  min-height: 260px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  border: 1px dashed rgba(230, 189, 120, 0.38);
+  border-radius: 7px;
+  background: rgba(230, 189, 120, 0.025);
+  color: var(--edibility-text);
+  cursor: pointer;
+  transition: background 180ms ease, border-color 180ms ease;
+}
+
+.edibility-dropzone:hover {
+  border-color: var(--edibility-red);
+  background: rgba(240, 90, 99, 0.045);
+}
+
+.edibility-upload-icon {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 3px;
+  border: 1px solid rgba(240, 90, 99, 0.4);
+  border-radius: 50%;
+  color: var(--edibility-red);
+  font-size: 25px;
+}
+
+.edibility-dropzone > span:not(.edibility-upload-icon) {
+  color: var(--edibility-muted);
+  font-size: 12px;
+}
+
+.edibility-dropzone small {
+  color: #7f8999;
+  font-size: 11px;
+}
+
+.edibility-dropzone.has-image {
+  min-height: 260px;
+  gap: 10px;
+}
+
+.edibility-dropzone img {
+  max-width: 100%;
+  max-height: 230px;
+  object-fit: contain;
+  border-radius: 5px;
+}
+
+.edibility-file-name {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.edibility-change-image {
+  color: var(--edibility-gold) !important;
+}
+
+.edibility-name-panel label {
+  display: block;
+  margin: 7px 0 10px;
+  color: #d6dce6;
+  font-size: 12px;
+}
+
+.edibility-name-input {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 14px;
+  outline: none;
+  border: 1px solid var(--edibility-line);
+  border-radius: 5px;
+  background: #090d14;
+  color: var(--edibility-text);
+  font: inherit;
+  font-size: 13px;
+  transition: border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.edibility-name-input:focus {
+  border-color: var(--edibility-gold);
+  box-shadow: 0 0 0 3px rgba(230, 189, 120, 0.08);
+}
+
+.edibility-name-input::placeholder {
+  color: #697384;
+}
+
+.edibility-info-box {
+  display: flex;
+  gap: 11px;
+  margin-top: 18px;
+  padding: 15px;
+  border: 1px solid rgba(230, 189, 120, 0.16);
+  border-radius: 5px;
+  background: rgba(230, 189, 120, 0.035);
+}
+
+.edibility-info-box > span {
+  display: grid;
+  place-items: center;
+  flex: 0 0 20px;
+  height: 20px;
+  border: 1px solid var(--edibility-gold);
+  border-radius: 50%;
+  color: var(--edibility-gold);
+  font-size: 12px;
+}
+
+.edibility-info-box p {
+  margin: 0;
+  color: var(--edibility-muted);
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.edibility-analyze-button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  width: 100%;
+  min-height: 49px;
+  margin-top: 24px;
+  padding: 13px 17px;
+  border: 1px solid var(--edibility-red);
+  border-radius: 5px;
+  background: var(--edibility-red);
+  color: #180d11;
+  font-size: 12px;
+  font-weight: 750;
+  cursor: pointer;
+  transition: background 180ms ease, transform 180ms ease;
+}
+
+.edibility-analyze-button:hover {
+  transform: translateY(-2px);
+  background: #ff737b;
+}
+
+.edibility-analyze-button span {
+  font-size: 18px;
+}
+
+.edibility-error {
+  margin: 13px 0 0;
+  color: #ff8c94;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.edibility-result-panel {
+  margin-top: 24px;
+  padding: 26px;
+  border: 1px solid rgba(230, 189, 120, 0.35);
+  border-radius: 8px;
+  background: linear-gradient(120deg, #171721, #11151d);
+  animation: edibility-result-appear 250ms ease both;
+}
+
+@keyframes edibility-result-appear {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.edibility-result-topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  color: var(--edibility-gold);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+}
+
+.edibility-status-badge {
+  padding: 7px 11px;
+  border: 1px solid rgba(230, 189, 120, 0.4);
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+}
+
+.edibility-result-panel h3 {
+  margin: 22px 0 10px;
+  font-size: 21px;
+}
+
+.edibility-result-panel > p,
+.edibility-result-next span {
+  color: var(--edibility-muted);
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.edibility-result-next {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px solid var(--edibility-line);
+}
+
+.edibility-result-next strong {
+  color: var(--edibility-gold);
+  font-size: 12px;
+}
+
+.edibility-evidence-section {
+  padding-top: 10px;
+  padding-bottom: 70px;
+}
+
+.edibility-evidence-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.edibility-evidence-card {
+  padding: 25px;
+  border: 1px solid var(--edibility-line);
+  border-radius: 7px;
+  background: var(--edibility-panel);
+  transition: transform 200ms ease, border-color 200ms ease, background 200ms ease;
+}
+
+.edibility-evidence-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(240, 90, 99, 0.45);
+  background: #151a25;
+}
+
+.edibility-evidence-card > span {
+  color: var(--edibility-gold);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+}
+
+.edibility-evidence-card h3 {
+  margin: 16px 0 10px;
+  font-size: 17px;
+}
+
+.edibility-evidence-card p {
+  margin: 0;
+  color: var(--edibility-muted);
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.edibility-safety-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 17px;
+  width: min(1070px, 82%);
+  margin: 0 auto 65px;
+  padding: 25px;
+  border: 1px solid rgba(240, 90, 99, 0.34);
+  border-radius: 7px;
+  background: rgba(240, 90, 99, 0.055);
+  transition: border-color 180ms ease;
+}
+
+.edibility-safety-banner:hover {
+  border-color: rgba(240, 90, 99, 0.7);
+}
+
+.edibility-safety-symbol {
+  display: grid;
+  place-items: center;
+  flex: 0 0 32px;
+  height: 32px;
+  border: 1px solid var(--edibility-red);
+  border-radius: 50%;
+  color: var(--edibility-red);
+  font-weight: 800;
+}
+
+.edibility-safety-banner h3 {
+  margin: 2px 0 9px;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.edibility-safety-banner p {
+  margin: 0;
+  color: var(--edibility-muted);
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+.edibility-footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 25px 7%;
+  border-top: 1px solid var(--edibility-line);
+  color: #808b9d;
+  font-size: 12px;
+}
+
+@media (max-width: 800px) {
+  .edibility-hero {
+    min-height: 350px;
+    padding: 55px 7%;
+  }
+
+  .edibility-orbit {
+    right: -150px;
+    opacity: 0.5;
+  }
+
+  .edibility-input-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .edibility-workspace,
+  .edibility-evidence-section {
+    width: 88%;
+    padding-top: 55px;
+    padding-bottom: 55px;
+  }
+
+  .edibility-evidence-section {
+    padding-top: 0;
+  }
+}
+
+@media (max-width: 520px) {
+  .edibility-hero h1 {
+    letter-spacing: -1px;
+  }
+
+  .edibility-hero-description {
+    font-size: 14px;
+  }
+
+  .edibility-hero-points {
+    gap: 7px;
+  }
+
+  .edibility-hero-points span {
+    font-size: 10px;
+  }
+
+  .edibility-panel {
+    padding: 18px;
+  }
+
+  .edibility-evidence-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .edibility-safety-banner {
+    width: 84%;
+    padding: 18px;
+  }
+
+  .edibility-footer {
+    flex-direction: column;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .edibility-orbit-two,
+  .edibility-result-panel {
+    animation: none;
+  }
+
+  .edibility-panel,
+  .edibility-dropzone,
+  .edibility-evidence-card,
+  .edibility-analyze-button {
+    transition: none;
+  }
+}
+
+/* CureVerseAI — match Medicinal Plant Intelligence design */
+.plant-edibility-page {
+  --edibility-bg: #080a0b;
+  --edibility-panel: #101111;
+  --edibility-line: rgba(255,255,255,.09);
+  --edibility-muted: rgba(238,233,225,.56);
+  --edibility-text: #eee9e1;
+  --edibility-red: #e0525a;
+  --edibility-gold: #e9c58c;
+  background: #080a0b;
+  color: #eee9e1;
+}
+
+.edibility-hero {
+  min-height: 690px;
+  padding: 120px 5.5vw 95px;
+  background:
+    radial-gradient(circle at 78% 42%,rgba(224,82,90,.12),transparent 30%),
+    #080a0b;
+}
+
+.edibility-hero h1 {
+  font-size: clamp(58px,7vw,100px);
+  line-height: .91;
+  letter-spacing: -.07em;
+  font-weight: 600;
+  transition: transform .4s ease, text-shadow .4s ease;
+}
+
+.edibility-hero h1:hover {
+  transform: translateX(5px);
+  text-shadow: 0 12px 40px rgba(0,0,0,.3);
+}
+
+.edibility-hero h1 span {
+  color: #e0525a;
+  transition: color .3s ease, text-shadow .3s ease;
+}
+
+.edibility-hero h1:hover span {
+  color: #f06a70;
+  text-shadow: 0 0 26px rgba(224,82,90,.2);
+}
+
+.edibility-hero-description {
+  color: rgba(238,233,225,.56);
+  transition: color .3s ease, transform .3s ease;
+}
+
+.edibility-hero-description:hover {
+  color: rgba(238,233,225,.82);
+  transform: translateX(3px);
+}
+
+.edibility-hero-points span {
+  border-color: rgba(233,197,140,.22);
+  background: rgba(233,197,140,.025);
+  color: #e9c58c;
+  transition: border-color .3s, transform .3s, background .3s;
+}
+
+.edibility-hero-points span:hover {
+  transform: translateY(-3px);
+  border-color: rgba(224,82,90,.55);
+  background: rgba(224,82,90,.08);
+}
+
+.edibility-orbit {
+  border-color: rgba(233,197,140,.16);
+  transition: border-color .5s, scale .5s;
+}
+
+.edibility-hero:hover .edibility-orbit {
+  border-color: rgba(224,82,90,.45);
+  scale: 1.04;
+}
+
+.edibility-workspace,
+.edibility-evidence-section {
+  background: #080a0b;
+}
+
+.edibility-panel {
+  background: linear-gradient(
+    145deg,
+    rgba(255,255,255,.025),
+    rgba(255,255,255,.008)
+  );
+}
+
+.edibility-evidence-card {
+  background: rgba(255,255,255,.015);
+}
+
+.edibility-evidence-card:hover {
+  background: rgba(224,82,90,.035);
+}
+
+.edibility-name-input {
+  background: rgba(0,0,0,.2);
+}
+
+.edibility-analyze-button {
+  background: rgba(224,82,90,.08);
+  border-color: rgba(224,82,90,.62);
+  color: #eee9e1;
+}
+
+.edibility-analyze-button:hover {
+  background: rgba(224,82,90,.15);
+  border-color: #f06a70;
+}
+
+@media (max-width: 650px) {
+  .edibility-hero {
+    min-height: 600px;
+    padding: 100px 6vw 80px;
+  }
+
+  .edibility-hero h1 {
+    font-size: clamp(52px,13vw,76px);
+  }
+}

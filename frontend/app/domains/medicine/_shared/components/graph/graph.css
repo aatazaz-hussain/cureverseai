@@ -1,0 +1,183 @@
+/* ==========================================================================
+   CUREVERSEAI — MEDICINE
+   Graph styles.
+
+   Namespace: cv-medicine-wf-g*
+   Language: framed 2px radius, red-glow hover, monospace labels.
+   ========================================================================== */
+
+.cv-medicine-wf-graph {
+  position: relative;
+  width: 100%;
+  overflow: auto;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--cv-medicine-wf-r);
+  background: var(--cv-medicine-wf-base);
+  padding: 12px;
+  transition:
+    border-color 0.35s var(--cv-medicine-wf-ease),
+    box-shadow 0.4s var(--cv-medicine-wf-ease);
+}
+
+.cv-medicine-wf-graph:hover {
+  border-color: rgba(224, 82, 90, 0.28);
+  box-shadow:
+    0 0 0 1px rgba(224, 82, 90, 0.08),
+    0 30px 80px -40px rgba(224, 82, 90, 0.35);
+}
+
+.cv-medicine-wf-graph-inner { position: relative; }
+.cv-medicine-wf-graph-edges { position: absolute; inset: 0; pointer-events: none; }
+
+.cv-medicine-wf-gnode {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3px;
+  padding: 10px 14px;
+  text-align: left;
+  color: var(--cv-medicine-wf-cream);
+  background: rgba(8, 10, 11, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--cv-medicine-wf-r);
+  cursor: pointer;
+  font-family: var(--cv-medicine-wf-sans);
+  transition:
+    border-color 0.25s var(--cv-medicine-wf-ease),
+    background 0.25s var(--cv-medicine-wf-ease),
+    transform 0.25s var(--cv-medicine-wf-ease),
+    box-shadow 0.3s var(--cv-medicine-wf-ease);
+  animation: cv-medicine-wf-fade-up 0.5s var(--cv-medicine-wf-ease) both;
+}
+
+.cv-medicine-wf-gnode:hover {
+  border-color: rgba(224, 82, 90, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px -14px rgba(224, 82, 90, 0.5);
+}
+
+.cv-medicine-wf-gnode--selected {
+  border-color: rgba(224, 82, 90, 0.6);
+  box-shadow: 0 0 0 1px rgba(224, 82, 90, 0.3);
+}
+
+.cv-medicine-wf-gnode-kind {
+  font-family: var(--cv-medicine-wf-mono);
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--cv-medicine-wf-cream-45);
+}
+
+.cv-medicine-wf-gnode-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--cv-medicine-wf-cream);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cv-medicine-wf-gnode-sub {
+  font-family: var(--cv-medicine-wf-mono);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  color: var(--cv-medicine-wf-cream-35);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cv-medicine-wf-gnode--intervention { border-left: 2px solid var(--cv-medicine-wf-gold); }
+.cv-medicine-wf-gnode--target       { border-left: 2px solid var(--cv-medicine-wf-cyan); }
+.cv-medicine-wf-gnode--pathway      { border-left: 2px solid var(--cv-medicine-wf-red); }
+.cv-medicine-wf-gnode--indicator    { border-left: 2px solid var(--cv-medicine-wf-cream); }
+
+.cv-medicine-wf-gedge {
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  transition: stroke-width 0.25s var(--cv-medicine-wf-ease);
+}
+
+.cv-medicine-wf-gedge--observed     { stroke: var(--cv-medicine-wf-cyan); stroke-dasharray: none; }
+.cv-medicine-wf-gedge--inferred     { stroke: var(--cv-medicine-wf-gold); stroke-dasharray: 4 4; }
+.cv-medicine-wf-gedge--insufficient { stroke: rgba(238, 233, 225, 0.25); stroke-dasharray: 2 6; }
+
+.cv-medicine-wf-mechgraph-wrap {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--cv-medicine-wf-r);
+  background: var(--cv-medicine-wf-base);
+  overflow: hidden;
+  transition: border-color 0.35s var(--cv-medicine-wf-ease);
+}
+
+.cv-medicine-wf-mechgraph-wrap:hover {
+  border-color: rgba(224, 82, 90, 0.28);
+}
+
+.cv-medicine-wf-mechgraph-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.cv-medicine-wf-mechgraph-edge {
+  fill: none;
+  stroke-width: 1.4;
+}
+
+.cv-medicine-wf-mechgraph-edge--observed     { stroke: var(--cv-medicine-wf-cyan); }
+.cv-medicine-wf-mechgraph-edge--inferred     { stroke: var(--cv-medicine-wf-gold); stroke-dasharray: 4 4; }
+.cv-medicine-wf-mechgraph-edge--insufficient { stroke: rgba(238, 233, 225, 0.25); stroke-dasharray: 2 6; }
+.cv-medicine-wf-mechgraph-edge--target       { stroke: rgba(255, 255, 255, 0.12); }
+
+.cv-medicine-wf-mechgraph-node circle {
+  fill: rgba(8, 10, 11, 0.85);
+  stroke: rgba(255, 255, 255, 0.16);
+  transition: all 0.3s var(--cv-medicine-wf-ease);
+}
+
+.cv-medicine-wf-mechgraph-node:hover circle {
+  stroke: var(--cv-medicine-wf-red);
+  filter: drop-shadow(0 0 12px rgba(224, 82, 90, 0.5));
+}
+
+.cv-medicine-wf-mechgraph-node--intervention circle { stroke: var(--cv-medicine-wf-gold); }
+.cv-medicine-wf-mechgraph-node--target       circle { stroke: var(--cv-medicine-wf-cyan); }
+.cv-medicine-wf-mechgraph-node--pathway      circle { stroke: var(--cv-medicine-wf-red); }
+.cv-medicine-wf-mechgraph-node--indicator    circle { stroke: var(--cv-medicine-wf-cream); }
+
+.cv-medicine-wf-mechgraph-label {
+  fill: var(--cv-medicine-wf-cream-75);
+  font-family: var(--cv-medicine-wf-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+}
+
+.cv-medicine-wf-mechgraph-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 14px;
+  font-family: var(--cv-medicine-wf-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--cv-medicine-wf-cream-55);
+}
+
+.cv-medicine-wf-mechgraph-legend-item::before {
+  content: "";
+  display: inline-block;
+  width: 18px;
+  height: 2px;
+  margin-right: 8px;
+  vertical-align: middle;
+  background: currentColor;
+}
+
+.cv-medicine-wf-mechgraph-legend-item.cv-medicine-wf-mechgraph-edge--observed { color: var(--cv-medicine-wf-cyan); }
+.cv-medicine-wf-mechgraph-legend-item.cv-medicine-wf-mechgraph-edge--inferred { color: var(--cv-medicine-wf-gold); }
+.cv-medicine-wf-mechgraph-legend-item.cv-medicine-wf-mechgraph-edge--insufficient { color: rgba(238, 233, 225, 0.35); }

@@ -1,0 +1,270 @@
+/* =========================================================
+   CUREVERSEAI — DISEASE → BIOLOGICAL IMPACT
+   BUBBLE JOURNEY
+   Premium bubble styling, bloom, burst transitions.
+   ========================================================= */
+
+.cv-dia-scene {
+  --cv-bubble-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --cv-bubble-accent: #e0525a;
+  --cv-bubble-warm: #e9c58c;
+}
+
+/* ---------------------------------------------------------
+   Bubble labels (drei <Html> overlays)
+   --------------------------------------------------------- */
+
+.cv-dia-bubble-label {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background: #0a0c0d;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 2px;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(238, 233, 225, 0.95);
+  white-space: nowrap;
+  box-shadow:
+    0 6px 22px -8px rgba(0, 0, 0, 0.98),
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset,
+    0 0 18px 2px rgba(8, 10, 11, 0.9);
+  z-index: 5;
+  transition:
+    transform 0.35s var(--cv-bubble-ease),
+    border-color 0.35s var(--cv-bubble-ease),
+    background 0.35s var(--cv-bubble-ease),
+    box-shadow 0.4s var(--cv-bubble-ease),
+    color 0.3s var(--cv-bubble-ease);
+  transform-origin: center bottom;
+  animation: cv-bubble-label-in 0.5s var(--cv-bubble-ease) both;
+}
+
+@keyframes cv-bubble-label-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px) scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.cv-dia-bubble-label-hovered {
+  border-color: rgba(224, 82, 90, 0.7);
+  background: #16090b;
+  color: #eee9e1;
+  transform: translateY(-2px) scale(1.04);
+  box-shadow:
+    0 8px 24px -8px rgba(224, 82, 90, 0.6),
+    0 0 32px -10px rgba(224, 82, 90, 0.35),
+    0 0 0 1px rgba(224, 82, 90, 0.2) inset;
+}
+
+.cv-dia-bubble-label-text {
+  color: inherit;
+}
+
+.cv-dia-bubble-label-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  background: rgba(224, 82, 90, 0.15);
+  border: 1px solid rgba(224, 82, 90, 0.35);
+  border-radius: 2px;
+  font-size: 10px;
+  font-weight: 600;
+  color: rgba(224, 82, 90, 0.9);
+  transition:
+    background 0.3s var(--cv-bubble-ease),
+    border-color 0.3s var(--cv-bubble-ease),
+    color 0.3s var(--cv-bubble-ease),
+    transform 0.3s var(--cv-bubble-ease);
+}
+
+.cv-dia-bubble-label-hovered .cv-dia-bubble-label-count {
+  background: rgba(224, 82, 90, 0.28);
+  border-color: rgba(224, 82, 90, 0.7);
+  color: #fff;
+  transform: scale(1.1);
+}
+
+/* ---------------------------------------------------------
+   Breadcrumb
+   --------------------------------------------------------- */
+
+.cv-dia-bubble-crumb {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  background: rgba(8, 10, 11, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 2px;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  backdrop-filter: blur(10px);
+  box-shadow:
+    0 4px 20px -10px rgba(0, 0, 0, 0.9),
+    0 0 0 1px rgba(255, 255, 255, 0.02) inset;
+  animation: cv-crumb-in 0.6s var(--cv-bubble-ease) 0.15s both;
+  pointer-events: auto;
+}
+
+@keyframes cv-crumb-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.cv-dia-bubble-crumb-btn {
+  padding: 2px 6px;
+  background: transparent;
+  border: none;
+  color: rgba(238, 233, 225, 0.55);
+  font-family: inherit;
+  font-size: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  cursor: pointer;
+  border-radius: 2px;
+  position: relative;
+  transition:
+    color 0.25s var(--cv-bubble-ease),
+    background 0.25s var(--cv-bubble-ease);
+}
+
+.cv-dia-bubble-crumb-btn::after {
+  content: "";
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  bottom: 2px;
+  height: 1px;
+  background: var(--cv-bubble-accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s var(--cv-bubble-ease);
+}
+
+.cv-dia-bubble-crumb-btn:hover {
+  color: #eee9e1;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.cv-dia-bubble-crumb-btn:hover::after {
+  transform: scaleX(1);
+}
+
+.cv-dia-bubble-crumb-current {
+  padding: 2px 6px;
+  color: var(--cv-bubble-accent);
+  font-weight: 600;
+  text-shadow: 0 0 12px rgba(224, 82, 90, 0.4);
+}
+
+.cv-dia-bubble-crumb-sep {
+  color: rgba(238, 233, 225, 0.28);
+  font-style: normal;
+  padding: 0 2px;
+  transition: color 0.25s var(--cv-bubble-ease);
+}
+
+.cv-dia-bubble-crumb:hover .cv-dia-bubble-crumb-sep {
+  color: rgba(238, 233, 225, 0.5);
+}
+
+/* ---------------------------------------------------------
+   Back-to-journey button (graph mode)
+   --------------------------------------------------------- */
+
+.cv-dia-scene-back {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  padding: 10px 18px;
+  background: rgba(8, 10, 11, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 2px;
+  backdrop-filter: blur(10px);
+  color: rgba(238, 233, 225, 0.82);
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  cursor: pointer;
+  pointer-events: auto;
+  transition:
+    border-color 0.3s var(--cv-bubble-ease),
+    color 0.3s var(--cv-bubble-ease),
+    background 0.3s var(--cv-bubble-ease),
+    transform 0.25s var(--cv-bubble-ease),
+    box-shadow 0.3s var(--cv-bubble-ease);
+}
+
+.cv-dia-scene-back:hover {
+  border-color: rgba(233, 197, 140, 0.6);
+  color: var(--cv-bubble-warm);
+  background: rgba(233, 197, 140, 0.06);
+  transform: translateX(-3px);
+  box-shadow:
+    0 12px 28px -14px rgba(233, 197, 140, 0.6),
+    0 0 24px -8px rgba(233, 197, 140, 0.3);
+}
+
+.cv-dia-scene-back:active {
+  transform: translateX(0);
+}
+
+/* ---------------------------------------------------------
+   Bloom overlay (post-processing substitute — soft radial)
+   --------------------------------------------------------- */
+
+.cv-dia-scene::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background: radial-gradient(
+    circle at 50% 55%,
+    rgba(224, 82, 90, 0.06),
+    transparent 45%
+  );
+  mix-blend-mode: screen;
+  animation: cv-bubble-bloom-pulse 8s ease-in-out infinite;
+}
+
+@keyframes cv-bubble-bloom-pulse {
+  0%, 100% { opacity: 0.6; }
+  50%      { opacity: 0.9; }
+}
+
+/* ---------------------------------------------------------
+   Reduced motion
+   --------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .cv-dia-scene *,
+  .cv-dia-scene *::before,
+  .cv-dia-scene *::after {
+    animation-duration: 0.001s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001s !important;
+  }
+}

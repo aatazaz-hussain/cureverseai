@@ -1,0 +1,369 @@
+/* =========================================================
+   CUREVERSEAI — DISEASE → BIOLOGICAL IMPACT
+   3D SCENE
+   ========================================================= */
+
+/* ---------- Scene wrapper ---------- */
+
+.cv-dia-scene {
+  position: relative;
+  width: 100%;
+  height: 720px;
+  margin: 32px 0 48px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 2px;
+  background: #080a0b;
+  overflow: hidden;
+  isolation: isolate;
+  transition:
+    border-color 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cv-dia-scene:hover {
+  border-color: rgba(224, 82, 90, 0.28);
+  box-shadow:
+    0 0 0 1px rgba(224, 82, 90, 0.08),
+    0 30px 80px -40px rgba(224, 82, 90, 0.35),
+    0 0 60px -20px rgba(224, 82, 90, 0.15);
+}
+
+@media (max-width: 900px) {
+  .cv-dia-scene {
+    height: 500px;
+    margin: 24px 0 32px;
+  }
+}
+
+@media (max-width: 600px) {
+  .cv-dia-scene {
+    height: 400px;
+  }
+}
+
+/* Corner ticks like the drug-development visual frames */
+.cv-dia-scene::before,
+.cv-dia-scene::after {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  pointer-events: none;
+  z-index: 5;
+  transition:
+    width 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    height 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cv-dia-scene::before {
+  top: 10px;
+  left: 10px;
+  border-top: 1px solid rgba(224, 82, 90, 0.5);
+  border-left: 1px solid rgba(224, 82, 90, 0.5);
+}
+
+.cv-dia-scene::after {
+  bottom: 10px;
+  right: 10px;
+  border-bottom: 1px solid rgba(224, 82, 90, 0.5);
+  border-right: 1px solid rgba(224, 82, 90, 0.5);
+}
+
+.cv-dia-scene:hover::before,
+.cv-dia-scene:hover::after {
+  width: 22px;
+  height: 22px;
+}
+
+/* Ensure canvas fills its wrapper */
+.cv-dia-scene canvas {
+  display: block;
+  outline: none;
+}
+
+/* ---------- Controls overlay ---------- */
+
+.cv-dia-scene-controls {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+  animation: cv-dia-scene-fade 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both;
+}
+
+@keyframes cv-dia-scene-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ---------- Legend ---------- */
+
+.cv-dia-scene-legend {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  min-width: 190px;
+  padding: 14px 16px;
+  background: rgba(8, 10, 11, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 2px;
+  backdrop-filter: blur(10px);
+  pointer-events: auto;
+  transition:
+    border-color 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    background 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cv-dia-scene-legend:hover {
+  border-color: rgba(224, 82, 90, 0.35);
+  background: rgba(8, 10, 11, 0.85);
+  transform: translateY(-2px);
+}
+
+.cv-dia-scene-legend-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(238, 233, 225, 0.55);
+}
+
+.cv-dia-scene-legend-head i {
+  flex: 1;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.cv-dia-scene-legend-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cv-dia-scene-legend-item {
+  display: grid;
+  grid-template-columns: 12px 1fr auto;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 6px;
+  border-radius: 2px;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: rgba(238, 233, 225, 0.75);
+  transition:
+    background 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    color 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  cursor: default;
+}
+
+.cv-dia-scene-legend-item:hover {
+  background: rgba(255, 255, 255, 0.04);
+  color: #eee9e1;
+  transform: translateX(2px);
+}
+
+.cv-dia-scene-legend-swatch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  box-shadow: 0 0 6px currentColor;
+  transition:
+    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cv-dia-scene-legend-item:hover .cv-dia-scene-legend-swatch {
+  transform: scale(1.35);
+  box-shadow: 0 0 14px currentColor;
+}
+
+.cv-dia-scene-legend-label {
+  text-transform: uppercase;
+}
+
+.cv-dia-scene-legend-count {
+  color: rgba(238, 233, 225, 0.45);
+  font-size: 10px;
+  transition: color 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cv-dia-scene-legend-item:hover .cv-dia-scene-legend-count {
+  color: #e0525a;
+}
+
+/* ---------- Hover readout ---------- */
+
+.cv-dia-scene-hover {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  min-width: 180px;
+  max-width: 280px;
+  padding: 12px 16px;
+  background: rgba(8, 10, 11, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 2px;
+  backdrop-filter: blur(10px);
+  pointer-events: auto;
+  transition:
+    border-color 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    background 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cv-dia-scene-hover:hover {
+  border-color: rgba(224, 82, 90, 0.35);
+  box-shadow: 0 0 24px -8px rgba(224, 82, 90, 0.35);
+}
+
+.cv-dia-scene-hover-type {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #e0525a;
+  margin-bottom: 6px;
+  animation: cv-dia-hover-slide 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes cv-dia-hover-slide {
+  from {
+    opacity: 0;
+    transform: translateX(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.cv-dia-scene-hover-label {
+  font-size: 13px;
+  line-height: 1.4;
+  color: #eee9e1;
+  word-break: break-word;
+  animation: cv-dia-hover-slide 0.35s cubic-bezier(0.22, 1, 0.36, 1) 0.04s both;
+}
+
+.cv-dia-scene-hover-idle {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(238, 233, 225, 0.35);
+}
+
+/* ---------- Reset button ---------- */
+
+.cv-dia-scene-reset {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  padding: 10px 18px;
+  background: rgba(8, 10, 11, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  backdrop-filter: blur(10px);
+  color: rgba(238, 233, 225, 0.75);
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  cursor: pointer;
+  pointer-events: auto;
+  transition:
+    border-color 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    color 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    background 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cv-dia-scene-reset:hover {
+  border-color: rgba(224, 82, 90, 0.6);
+  color: #e0525a;
+  background: rgba(224, 82, 90, 0.06);
+  transform: translateY(-2px);
+  box-shadow:
+    0 12px 28px -14px rgba(224, 82, 90, 0.6),
+    0 0 24px -8px rgba(224, 82, 90, 0.3);
+}
+
+.cv-dia-scene-reset:active {
+  transform: translateY(0);
+}
+
+/* ---------- Graph node labels (solid background) ---------- */
+
+.cv-dia-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: #0a0c0d !important;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 2px;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(238, 233, 225, 0.95);
+  white-space: nowrap;
+  box-shadow:
+    0 6px 22px -8px rgba(0, 0, 0, 0.98),
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset,
+    0 0 18px 2px rgba(8, 10, 11, 0.9);
+  z-index: 5;
+  transition:
+    border-color 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    background 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cv-dia-label-hovered {
+  background: #16090b !important;
+  border-color: rgba(224, 82, 90, 0.75);
+  color: #eee9e1;
+  transform: translateY(-1px);
+  box-shadow:
+    0 8px 24px -8px rgba(0, 0, 0, 0.98),
+    0 0 0 1px rgba(255, 255, 255, 0.06) inset,
+    0 0 24px 0 rgba(224, 82, 90, 0.35);
+}
+
+.cv-dia-label-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  box-shadow: 0 0 6px currentColor;
+}
+
+.cv-dia-label-text {
+  color: inherit;
+}
+
+/* ---------- Reduced motion ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .cv-dia-scene *,
+  .cv-dia-scene *::before,
+  .cv-dia-scene *::after {
+    animation-duration: 0.001s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001s !important;
+  }
+}

@@ -1,0 +1,416 @@
+/* =========================================================
+   CUREVERSEAI — THERAPEUTIC DISCOVERY
+   GRAPH STYLES
+   =========================================================
+   The SVG graph. Same visual language as W02:
+   instrument panel, calm motion, natural-size
+   rendering with horizontal scroll.
+   ========================================================= */
+
+/* =========================================================
+   WRAPPER
+   ========================================================= */
+
+.cv-thedisc-graph-wrap {
+  position: relative;
+  width: 100%;
+  border: 1px solid rgba(238, 233, 225, 0.1);
+  background:
+    radial-gradient(
+      circle at 40% 40%,
+      rgba(224, 82, 90, 0.05),
+      transparent 55%
+    ),
+    rgba(8, 10, 11, 0.72);
+  overflow: hidden;
+  animation: cvThediscGraphIn 720ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes cvThediscGraphIn {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.995);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+.cv-thedisc-graph-scroll {
+  position: relative;
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(224, 82, 90, 0.35) transparent;
+}
+
+.cv-thedisc-graph-scroll::-webkit-scrollbar {
+  height: 8px;
+}
+
+.cv-thedisc-graph-scroll::-webkit-scrollbar-thumb {
+  background: rgba(224, 82, 90, 0.28);
+  border-radius: 4px;
+  transition: background 240ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cv-thedisc-graph-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(224, 82, 90, 0.5);
+}
+
+.cv-thedisc-graph-svg {
+  display: block;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.cv-thedisc-graph-scroll-hint {
+  position: absolute;
+  right: 14px;
+  bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 10px;
+  background: rgba(8, 10, 11, 0.85);
+  border: 1px solid rgba(238, 233, 225, 0.1);
+  color: rgba(238, 233, 225, 0.42);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  pointer-events: none;
+  animation: cvThediscScrollHintPulse 3.2s ease-in-out infinite;
+}
+
+.cv-thedisc-graph-scroll-hint i {
+  display: block;
+  width: 14px;
+  height: 1px;
+  background: rgba(224, 82, 90, 0.5);
+}
+
+@keyframes cvThediscScrollHintPulse {
+  0%, 100% { opacity: 0.55; transform: translateX(0); }
+  50%      { opacity: 1;    transform: translateX(3px); }
+}
+
+.cv-thedisc-graph-empty {
+  padding: 60px 30px;
+  text-align: center;
+  border: 1px dashed rgba(238, 233, 225, 0.16);
+  color: rgba(238, 233, 225, 0.45);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* =========================================================
+   COLUMN HEADERS
+   ========================================================= */
+
+.cv-thedisc-graph-headers {
+  pointer-events: none;
+  animation: cvThediscHeaderFade 800ms cubic-bezier(0.16, 1, 0.3, 1) 100ms both;
+}
+
+@keyframes cvThediscHeaderFade {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.cv-thedisc-graph-headers text {
+  font-variant-numeric: tabular-nums;
+  transition:
+    fill 220ms cubic-bezier(0.22, 1, 0.36, 1),
+    letter-spacing 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cv-thedisc-graph-headers g:hover text {
+  fill: #e9c58c;
+  letter-spacing: 0.24em;
+}
+
+/* =========================================================
+   NODES
+   ========================================================= */
+
+.cv-thedisc-graph-nodes {
+  animation: cvThediscNodesFade 900ms cubic-bezier(0.16, 1, 0.3, 1) 200ms both;
+}
+
+@keyframes cvThediscNodesFade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.cv-thedisc-graph-node {
+  cursor: pointer;
+  outline: none;
+  transition: transform 260ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cv-thedisc-graph-node:focus-visible .cv-thedisc-graph-node-body {
+  stroke: #e9c58c;
+  stroke-width: 1.5;
+  filter: drop-shadow(0 0 12px rgba(233, 197, 140, 0.5));
+}
+
+.cv-thedisc-graph-node-body {
+  transition:
+    fill 260ms cubic-bezier(0.22, 1, 0.36, 1),
+    stroke 260ms cubic-bezier(0.22, 1, 0.36, 1),
+    filter 260ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cv-thedisc-graph-node-ring {
+  transition:
+    opacity 300ms cubic-bezier(0.22, 1, 0.36, 1),
+    stroke 300ms cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+
+.cv-thedisc-graph-node-accent {
+  transition:
+    opacity 260ms cubic-bezier(0.22, 1, 0.36, 1),
+    filter 260ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 260ms cubic-bezier(0.22, 1, 0.36, 1);
+  transform-origin: left center;
+}
+
+.cv-thedisc-graph-node-glyph-bg {
+  transition:
+    fill 260ms cubic-bezier(0.22, 1, 0.36, 1),
+    stroke 260ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 260ms cubic-bezier(0.22, 1, 0.36, 1);
+  transform-origin: center;
+}
+
+.cv-thedisc-graph-node-glyph {
+  transition:
+    fill 260ms cubic-bezier(0.22, 1, 0.36, 1),
+    filter 260ms cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+  font-weight: 700;
+}
+
+.cv-thedisc-graph-node-label {
+  transition:
+    fill 260ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 260ms cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+  font-weight: 500;
+}
+
+/* ---- HOVER ---- */
+.cv-thedisc-graph-node.is-hovered {
+  transform: translateY(-2px);
+}
+
+.cv-thedisc-graph-node.is-hovered .cv-thedisc-graph-node-body {
+  fill: rgba(24, 28, 28, 0.96);
+  stroke: rgba(238, 233, 225, 0.42);
+  filter:
+    drop-shadow(0 8px 22px rgba(0, 0, 0, 0.5))
+    drop-shadow(0 0 10px rgba(224, 82, 90, 0.08));
+}
+
+.cv-thedisc-graph-node.is-hovered .cv-thedisc-graph-node-glyph-bg {
+  fill: rgba(238, 233, 225, 0.1);
+  transform: scale(1.1);
+}
+
+.cv-thedisc-graph-node.is-hovered .cv-thedisc-graph-node-glyph {
+  filter: drop-shadow(0 0 8px currentColor);
+}
+
+.cv-thedisc-graph-node.is-hovered .cv-thedisc-graph-node-label {
+  fill: #ffffff;
+}
+
+.cv-thedisc-graph-node.is-hovered .cv-thedisc-graph-node-accent {
+  transform: scaleX(1.4);
+}
+
+/* ---- SELECTED ---- */
+.cv-thedisc-graph-node.is-selected .cv-thedisc-graph-node-body {
+  fill: rgba(26, 18, 20, 0.98);
+  stroke: #e0525a;
+  stroke-width: 1.5;
+  filter:
+    drop-shadow(0 0 18px rgba(224, 82, 90, 0.45))
+    drop-shadow(0 10px 26px rgba(0, 0, 0, 0.6));
+}
+
+.cv-thedisc-graph-node.is-selected .cv-thedisc-graph-node-label {
+  fill: #ffffff;
+  font-weight: 600;
+}
+
+.cv-thedisc-graph-node.is-selected .cv-thedisc-graph-node-accent {
+  filter: drop-shadow(0 0 8px currentColor);
+  animation: cvThediscNodeAccentPulse 2.4s ease-in-out infinite;
+}
+
+@keyframes cvThediscNodeAccentPulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.7; }
+}
+
+/* ---- DIMMED ---- */
+.cv-thedisc-graph-node.is-dimmed {
+  opacity: 0.28;
+}
+
+.cv-thedisc-graph-node.is-dimmed .cv-thedisc-graph-node-label {
+  fill: rgba(238, 233, 225, 0.5);
+}
+
+/* ---- CONNECTED ---- */
+.cv-thedisc-graph-node.is-connected:not(.is-selected) .cv-thedisc-graph-node-body {
+  stroke: rgba(233, 197, 140, 0.45);
+}
+
+.cv-thedisc-graph-node.is-connected:not(.is-selected) .cv-thedisc-graph-node-glyph {
+  filter: drop-shadow(0 0 6px currentColor);
+}
+
+/* =========================================================
+   EDGES
+   ========================================================= */
+
+.cv-thedisc-graph-edges {
+  animation: cvThediscEdgesFade 1000ms cubic-bezier(0.16, 1, 0.3, 1) 120ms both;
+}
+
+@keyframes cvThediscEdgesFade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.cv-thedisc-graph-edge {
+  cursor: pointer;
+  outline: none;
+}
+
+.cv-thedisc-graph-edge-halo {
+  transition: opacity 260ms cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+  filter: blur(3px);
+}
+
+.cv-thedisc-graph-edge-curve {
+  transition:
+    opacity 260ms cubic-bezier(0.22, 1, 0.36, 1),
+    stroke-width 260ms cubic-bezier(0.22, 1, 0.36, 1),
+    filter 260ms cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+
+.cv-thedisc-graph-edge-target {
+  transition:
+    opacity 260ms cubic-bezier(0.22, 1, 0.36, 1),
+    r 260ms cubic-bezier(0.22, 1, 0.36, 1),
+    filter 260ms cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+
+/* ---- HOVER ---- */
+.cv-thedisc-graph-edge:hover .cv-thedisc-graph-edge-curve {
+  opacity: 1;
+  stroke-width: 3.2;
+  filter: drop-shadow(0 0 8px currentColor);
+}
+
+.cv-thedisc-graph-edge:hover .cv-thedisc-graph-edge-target {
+  opacity: 1;
+  filter: drop-shadow(0 0 8px currentColor);
+}
+
+.cv-thedisc-graph-edge:hover .cv-thedisc-graph-edge-halo {
+  opacity: 0.22;
+}
+
+/* ---- SELECTED ---- */
+.cv-thedisc-graph-edge.is-selected .cv-thedisc-graph-edge-curve {
+  opacity: 1;
+  stroke-width: 3.8;
+  filter: drop-shadow(0 0 14px currentColor);
+}
+
+.cv-thedisc-graph-edge.is-selected .cv-thedisc-graph-edge-target {
+  opacity: 1;
+  filter: drop-shadow(0 0 10px currentColor);
+  animation: cvThediscEdgePulse 2s ease-in-out infinite;
+}
+
+@keyframes cvThediscEdgePulse {
+  0%, 100% { r: 4;   opacity: 1; }
+  50%      { r: 5.5; opacity: 0.85; }
+}
+
+/* ---- DIMMED ---- */
+.cv-thedisc-graph-edge.is-dimmed .cv-thedisc-graph-edge-curve,
+.cv-thedisc-graph-edge.is-dimmed .cv-thedisc-graph-edge-target {
+  opacity: 0.08;
+}
+
+/* ---- CONNECTED ---- */
+.cv-thedisc-graph-edge.is-connected:not(.is-selected) .cv-thedisc-graph-edge-curve {
+  opacity: 0.92;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 620px) {
+  .cv-thedisc-graph-scroll-hint {
+    font-size: 7px;
+    padding: 4px 8px;
+  }
+}
+
+/* =========================================================
+   ACCESSIBILITY
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .cv-thedisc-graph-wrap,
+  .cv-thedisc-graph-nodes,
+  .cv-thedisc-graph-edges,
+  .cv-thedisc-graph-headers,
+  .cv-thedisc-graph-scroll-hint {
+    animation: none;
+  }
+
+  .cv-thedisc-graph-node,
+  .cv-thedisc-graph-node-body,
+  .cv-thedisc-graph-node-accent,
+  .cv-thedisc-graph-node-glyph-bg,
+  .cv-thedisc-graph-node-glyph,
+  .cv-thedisc-graph-node-label,
+  .cv-thedisc-graph-node-ring,
+  .cv-thedisc-graph-edge-halo,
+  .cv-thedisc-graph-edge-curve,
+  .cv-thedisc-graph-edge-target,
+  .cv-thedisc-graph-headers text {
+    transition: none;
+  }
+
+  .cv-thedisc-graph-edge.is-selected .cv-thedisc-graph-edge-target,
+  .cv-thedisc-graph-node.is-selected .cv-thedisc-graph-node-accent {
+    animation: none;
+  }
+
+  .cv-thedisc-graph-node.is-hovered {
+    transform: none;
+  }
+
+  .cv-thedisc-graph-node.is-hovered .cv-thedisc-graph-node-accent {
+    transform: none;
+  }
+}

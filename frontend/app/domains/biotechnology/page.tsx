@@ -1,301 +1,463 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import "./biotechnology.css";
 
-type Pose = "left" | "center" | "right";
+type CharacterPose = "left" | "center" | "right";
 
-const areas = [
-  {
-    no: "01",
-    title: "Genomics",
-    text: "Explore genes, variants and genomic relationships to understand biological systems at molecular resolution.",
-    href: "/domains/biotechnology/genomics",
-  },
-  {
-    no: "02",
-    title: "Proteomics",
-    text: "Connect proteins with their functions, interactions and biological context across complex molecular systems.",
-    href: "/domains/biotechnology/proteomics",
-  },
-  {
-    no: "03",
-    title: "Cellular Biology",
-    text: "Study biological activity at the cellular level and connect molecular signals with cellular behaviour.",
-    href: "/domains/biotechnology/cellular-biology",
-  },
-  {
-    no: "04",
-    title: "Molecular Systems",
-    text: "Move beyond isolated entities by connecting genes, proteins, pathways, diseases and therapeutic context.",
-    href: "/domains/biotechnology/molecular-systems",
-  },
-];
-
-const workflow = [
-  ["01", "BIOLOGICAL QUERY", "Define the biological entity or question."],
-  ["02", "MOLECULAR ANALYSIS", "Resolve genes, proteins and molecular relationships."],
-  ["03", "SYSTEM CONTEXT", "Connect individual signals to wider biological systems."],
-  ["04", "RESEARCH INTELLIGENCE", "Bring the evidence together into an interpretable view."],
-];
+const characterMap: Record<CharacterPose, string> = {
+  left: "/biotechnology/biotech-character-left.png",
+  center: "/biotechnology/biotech-character-center.png",
+  right: "/biotechnology/biotech-character-right.png",
+};
 
 export default function BiotechnologyPage() {
-  const [pose, setPose] = useState<Pose>("center");
+  const [pose, setPose] = useState<CharacterPose>("center");
 
   useEffect(() => {
-    const move = (event: MouseEvent) => {
+    const handleMouseMove = (event: MouseEvent) => {
       const x = event.clientX / window.innerWidth;
 
-      if (x < 0.34) setPose("left");
-      else if (x > 0.66) setPose("right");
-      else setPose("center");
+      if (x < 0.34) {
+        setPose("left");
+      } else if (x > 0.66) {
+        setPose("right");
+      } else {
+        setPose("center");
+      }
     };
 
-    window.addEventListener("mousemove", move);
+    window.addEventListener("mousemove", handleMouseMove);
 
-    return () => window.removeEventListener("mousemove", move);
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+    };
   }, []);
 
-  const character =
-    pose === "left"
-      ? "/research/research-character-left.png"
-      : pose === "right"
-        ? "/research/research-character-right.png"
-        : "/research/research-character-center.png";
+  const characterSrc = characterMap[pose];
 
   return (
-    <div className="cv-bio-page">
+    <main className="cv-biotechnology-page">
       <Navbar />
 
-      <main>
-        <section className="cv-bio-hero">
-          <div className="cv-bio-grid" />
+      {/* =========================================================
+          SECTION 01 — HERO
+      ========================================================= */}
+      <section className="cv-biotechnology-hero">
+        <div className="cv-biotechnology-grid" />
 
-          <div className="cv-bio-hero-inner">
-            <div className="cv-bio-copy">
-              <span className="cv-bio-index">04 / DOMAIN</span>
+        <div className="cv-biotechnology-glow cv-biotechnology-glow-one" />
+        <div className="cv-biotechnology-glow cv-biotechnology-glow-two" />
 
-              <span className="cv-bio-eyebrow">
-                BIOTECHNOLOGY INTELLIGENCE
-              </span>
+        <div className="cv-biotechnology-hero-copy">
+          <div className="cv-biotechnology-kicker">
+            <span>01</span>
+            <i />
+            <strong>BIOTECHNOLOGY INTELLIGENCE FLOW</strong>
+          </div>
 
-              <h1>
-                Biology,
-                <br />
-                <em>decoded.</em>
-              </h1>
+          <h1>
+            Decode
+            <br />
+            <em>living matter.</em>
+          </h1>
+
+          <p>
+            Explore biological materials from visible structure to anatomy,
+            compounds, mechanisms, and potential biological relevance through
+            connected scientific intelligence.
+          </p>
+
+          <div className="cv-biotechnology-hero-meta">
+            <div>
+              <strong>03</strong>
+              <span>PLANT WORKFLOWS</span>
+            </div>
+
+            <div>
+              <strong>AI</strong>
+              <span>BIOLOGICAL INTELLIGENCE</span>
+            </div>
+
+            <div>
+              <strong>∞</strong>
+              <span>MATERIALS TO EXPLORE</span>
+            </div>
+          </div>
+
+          <div className="cv-biotechnology-flow">
+            <div className="cv-biotechnology-flow-heading">
+              <span>BIOLOGICAL MATERIAL</span>
+              <i />
+              <strong>FROM MATTER TO MECHANISM</strong>
+            </div>
+
+            <div className="cv-biotechnology-flow-track">
+              <div className="cv-biotechnology-flow-step">
+                <span className="cv-biotechnology-flow-dot" />
+                <strong>MATERIAL</strong>
+                <p>Identify biology</p>
+              </div>
+
+              <i className="cv-biotechnology-flow-line" />
+
+              <div className="cv-biotechnology-flow-step">
+                <span className="cv-biotechnology-flow-dot" />
+                <strong>ANATOMY</strong>
+                <p>Explore structure</p>
+              </div>
+
+              <i className="cv-biotechnology-flow-line" />
+
+              <div className="cv-biotechnology-flow-step">
+                <span className="cv-biotechnology-flow-dot" />
+                <strong>COMPOUNDS</strong>
+                <p>Discover properties</p>
+              </div>
+
+              <i className="cv-biotechnology-flow-line" />
+
+              <div className="cv-biotechnology-flow-step">
+                <span className="cv-biotechnology-flow-dot" />
+                <strong>MECHANISM</strong>
+                <p>Connect biology</p>
+              </div>
+            </div>
+          </div>
+
+          <a
+            href="#biotechnology-guide"
+            className="cv-biotechnology-scroll"
+          >
+            EXPLORE BIOTECHNOLOGY
+            <i>↓</i>
+          </a>
+        </div>
+
+        <div className="cv-biotechnology-character">
+          <div className="cv-biotechnology-character-aura" />
+
+          <img
+            src={characterSrc}
+            alt="CureVerseAI biotechnology scientific guide"
+            draggable={false}
+          />
+
+          <div className="cv-biotechnology-character-label">
+            <i />
+            BIOTECHNOLOGY / BIOLOGICAL INTELLIGENCE
+          </div>
+        </div>
+
+        <div className="cv-biotechnology-side-data">
+          <span>BIOLOGICAL MATERIAL</span>
+          <i />
+          <span>ANATOMY</span>
+          <i />
+          <span>COMPOUNDS</span>
+        </div>
+
+        <div className="cv-biotechnology-bottom-line">
+          <span>CUREVERSEAI / BIOTECHNOLOGY</span>
+          <span>OBSERVE — DECODE — DISCOVER</span>
+        </div>
+      </section>
+
+      {/* =========================================================
+          SECTION 02 — GUIDE
+      ========================================================= */}
+      <section
+        className="biotechnology-guide-section"
+        id="biotechnology-guide"
+      >
+        <div className="biotechnology-guide-inner">
+
+          <div className="biotechnology-guide-copy">
+
+            <div className="biotechnology-guide-eyebrow">
+              <span>02</span>
+              <i />
+              <strong>UNDERSTANDING BIOLOGICAL MATTER</strong>
+            </div>
+
+            <h2>
+              From material
+              <br />
+              <em>to biological insight.</em>
+            </h2>
+
+            <p className="biotechnology-guide-description">
+              Biotechnology intelligence begins with the material itself.
+              Instead of stopping at visual identification, CureVerseAI
+              connects observable characteristics with biological structure,
+              anatomical parts, compounds, properties, mechanisms, and
+              potential applications.
+            </p>
+
+            <p className="biotechnology-guide-description secondary">
+              Every investigation follows a connected biological chain —
+              helping move from <strong>what we see</strong> to
+              <strong> what it may contain</strong>, how those components may
+              behave, and where the evidence leads next.
+            </p>
+
+            <a
+              href="#biotechnology-workflows"
+              className="biotechnology-guide-cta"
+            >
+              <span>EXPLORE BIOTECHNOLOGY WORKFLOWS</span>
+              <b>↗</b>
+            </a>
+
+            <div className="biotechnology-guide-topics">
+
+        <div className="biotechnology-guide-topic">
+          <span className="biotechnology-guide-topic-icon">
+            <b>AN</b>
+          </span>
+          <div>
+            <strong>ANATOMY</strong>
+            <p>Explore the biological structures and anatomical parts that make up living material.</p>
+          </div>
+        </div>
+
+        <div className="biotechnology-guide-topic">
+          <span className="biotechnology-guide-topic-icon">
+            <b>CO</b>
+          </span>
+          <div>
+            <strong>COMPOUNDS</strong>
+            <p>Trace biological compounds and connect them with their properties and functions.</p>
+          </div>
+        </div>
+
+        <div className="biotechnology-guide-topic">
+          <span className="biotechnology-guide-topic-icon">
+            <b>PR</b>
+          </span>
+          <div>
+            <strong>PROPERTIES</strong>
+            <p>Understand observable and biological properties through connected scientific evidence.</p>
+          </div>
+        </div>
+
+        <div className="biotechnology-guide-topic">
+          <span className="biotechnology-guide-topic-icon">
+            <b>ME</b>
+          </span>
+          <div>
+            <strong>MECHANISMS</strong>
+            <p>Follow compounds and properties toward biological mechanisms and potential applications.</p>
+          </div>
+        </div>
+
+      </div>
+
+            <div className="biotechnology-guide-bottom-line">
+              <span>MATERIAL</span>
+              <i />
+              <span>STRUCTURE</span>
+              <i />
+              <span>COMPOUND</span>
+              <i />
+              <span>MECHANISM</span>
+              <i />
+              <span>INSIGHT</span>
+            </div>
+
+          </div>
+
+          <div className="biotechnology-guide-visual">
+            <div className="biotechnology-guide-visual-frame">
+
+              <div className="biotechnology-guide-image-wrap">
+                <img
+                  src="/biotechnology/biotechnology-guide.png"
+                  alt="Biotechnology biological material intelligence"
+                />
+              </div>
+
+              <div className="biotechnology-guide-scanline" />
+              <div className="biotechnology-guide-grid-overlay" />
+
+              <span className="biotechnology-guide-corner top-left" />
+              <span className="biotechnology-guide-corner top-right" />
+              <span className="biotechnology-guide-corner bottom-left" />
+              <span className="biotechnology-guide-corner bottom-right" />
+
+              <div className="biotechnology-guide-data data-one">
+                MATERIAL IDENTIFIED
+              </div>
+
+              <div className="biotechnology-guide-data data-two">
+                ANATOMY / COMPOUND
+              </div>
+
+              <div className="biotechnology-guide-data data-three">
+                BIOLOGICAL INSIGHT
+              </div>
+
+              <div className="biotechnology-guide-visual-label">
+                <i />
+                BIOLOGICAL INTELLIGENCE / 02
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* =========================================================
+          SECTION 03 — WORKFLOWS
+      ========================================================= */}
+      <section
+        className="biotechnology-workflows-section"
+        id="biotechnology-workflows"
+      >
+        <div className="biotechnology-workflows-atmosphere" />
+
+        <div className="biotechnology-workflows-inner">
+          <div className="biotechnology-workflows-header">
+            <div className="biotechnology-workflows-eyebrow">
+              <span>03</span>
+              <i />
+              <strong>BIOTECHNOLOGY WORKFLOWS</strong>
+            </div>
+
+            <div className="biotechnology-workflows-heading-row">
+              <div>
+                <h2>
+                  Start with matter.
+                  <br />
+                  <em>Discover its biology.</em>
+                </h2>
+              </div>
 
               <p>
-                Connect genes, proteins, cells and biological systems through
-                one intelligent research environment built for modern
-                biological discovery.
+                Choose how you want to investigate a biological material.
+                Each workflow follows a different scientific path — from
+                understanding anatomical structure, to examining biological
+                potential, to tracing compounds toward targets and pathways.
               </p>
-
-              <div className="cv-bio-actions">
-                <Link href="/domains/biotechnology/manual">
-                  Explore Biotechnology
-                </Link>
-
-                <a href="#systems">
-                  Discover the system ↓
-                </a>
-              </div>
-            </div>
-
-            <div className={`cv-bio-character cv-bio-character-${pose}`}>
-              <div className="cv-bio-character-aura" />
-
-              <img
-                src={character}
-                alt="CureVerseAI biotechnology researcher"
-                draggable={false}
-              />
-
-              <div className="cv-bio-character-label">
-                <span>BIOTECHNOLOGY INTELLIGENCE</span>
-                <i />
-              </div>
             </div>
           </div>
 
-          <div className="cv-bio-scroll">
-            <span>SCROLL TO EXPLORE</span>
+          <div className="biotechnology-workflow-grid">
+            {/* CARD 01 */}
+            <a
+              href="/domains/biotechnology/medicinal-plant-intelligence"
+              className="biotechnology-workflow-card"
+            >
+              <div className="biotechnology-workflow-card-top">
+                <span className="biotechnology-workflow-number">M→P</span>
+                <div className="biotechnology-workflow-arrow">↗</div>
+              </div>
+              <div className="biotechnology-workflow-symbol">
+                <div className="biotechnology-workflow-symbol-orbit" />
+                <span>M→P</span>
+              </div>
+              <div className="biotechnology-workflow-content">
+                <span className="biotechnology-workflow-kicker">
+                  MEDICINAL PLANT INTELLIGENCE
+                </span>
+                <h3>
+                  Discover
+                  <br />
+                  <em>medicinal plants.</em>
+                </h3>
+                <p>
+                  Upload a plant image to explore candidate identification,
+                  documented medicinal uses, known compounds, biological
+                  activities, and supporting scientific evidence.
+                </p>
+              </div>
+              <div className="biotechnology-workflow-path">
+                IDENTIFY <i>→</i> COMPOUNDS <i>→</i> EVIDENCE
+              </div>
+            </a>
+
+            {/* CARD 02 */}
+            <a
+              href="/domains/biotechnology/plant-edibility-analysis"
+              className="biotechnology-workflow-card"
+            >
+              <div className="biotechnology-workflow-card-top">
+                <span className="biotechnology-workflow-number">P→E</span>
+                <div className="biotechnology-workflow-arrow">↗</div>
+              </div>
+              <div className="biotechnology-workflow-symbol">
+                <div className="biotechnology-workflow-symbol-orbit" />
+                <span>P→E</span>
+              </div>
+              <div className="biotechnology-workflow-content">
+                <span className="biotechnology-workflow-kicker">
+                  PLANT EDIBILITY ANALYSIS
+                </span>
+                <h3>
+                  Explore
+                  <br />
+                  <em>plant edibility.</em>
+                </h3>
+                <p>
+                  Investigate candidate plant identity and documented
+                  edibility information. Uncertain or potentially toxic
+                  plants are flagged instead of being declared safe to eat.
+                </p>
+              </div>
+              <div className="biotechnology-workflow-path">
+                IDENTIFY <i>→</i> CHECK <i>→</i> VERIFY
+              </div>
+            </a>
+
+            {/* CARD 03 */}
+            <a
+              href="/domains/biotechnology/plant-lifebook"
+              className="biotechnology-workflow-card"
+            >
+              <div className="biotechnology-workflow-card-top">
+                <span className="biotechnology-workflow-number">P→B</span>
+                <div className="biotechnology-workflow-arrow">↗</div>
+              </div>
+              <div className="biotechnology-workflow-symbol">
+                <div className="biotechnology-workflow-symbol-orbit" />
+                <span>P→B</span>
+              </div>
+              <div className="biotechnology-workflow-content">
+                <span className="biotechnology-workflow-kicker">
+                  PLANT LIFEBOOK
+                </span>
+                <h3>
+                  Explore a plant's
+                  <br />
+                  <em>complete profile.</em>
+                </h3>
+                <p>
+                  Build a structured botanical profile covering taxonomy,
+                  morphology, habitat, distribution, ecological role,
+                  known compounds, and available research.
+                </p>
+              </div>
+              <div className="biotechnology-workflow-path">
+                TAXONOMY <i>→</i> BIOLOGY <i>→</i> RESEARCH
+              </div>
+            </a>
+          </div>
+
+          <div className="biotechnology-workflows-bottom">
+            <span>BIOLOGICAL MATERIAL</span>
             <i />
+            <strong>COMPOUND</strong>
+            <i />
+            <strong>TARGET</strong>
+            <i />
+            <strong>PATHWAY</strong>
+            <i />
+            <span>MEDICINE / VIRTUAL CELL</span>
           </div>
-        </section>
-
-        <section className="cv-bio-intro" id="systems">
-          <div className="cv-bio-section-number">01</div>
-
-          <div className="cv-bio-intro-content">
-            <span className="cv-bio-kicker">THE BIOLOGICAL SYSTEM</span>
-
-            <h2>
-              From individual signals
-              <br />
-              <em>to connected biology.</em>
-            </h2>
-
-            <p>
-              Biology does not operate as isolated pieces. Genes influence
-              proteins, proteins participate in pathways, pathways shape
-              cellular behaviour, and those systems form the biological
-              context behind disease and therapeutic research.
-            </p>
-
-            <div className="cv-bio-flow">
-              <div>
-                <b>GENES</b>
-                <span>Genomic information</span>
-              </div>
-
-              <i>→</i>
-
-              <div>
-                <b>PROTEINS</b>
-                <span>Molecular function</span>
-              </div>
-
-              <i>→</i>
-
-              <div>
-                <b>CELLS</b>
-                <span>Cellular state</span>
-              </div>
-
-              <i>→</i>
-
-              <div>
-                <b>SYSTEMS</b>
-                <span>Biological context</span>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="cv-bio-areas">
-          <div className="cv-bio-section-head">
-            <div>
-              <span className="cv-bio-kicker">WHAT CURVERSEAI EXPLORES</span>
-              <h2>Four layers of biological intelligence.</h2>
-            </div>
-
-            <p>
-              A connected research perspective across molecular and cellular
-              biology.
-            </p>
-          </div>
-
-          <div className="cv-bio-area-grid">
-            {areas.map((area) => (
-              <Link
-                key={area.no}
-                href={area.href}
-                className="cv-bio-area-card"
-              >
-                <span>{area.no}</span>
-                <h3>{area.title}</h3>
-                <p>{area.text}</p>
-                <i>↗</i>
-              </Link>
-            ))}
-          </div>
-        </section>
-
-        <section className="cv-bio-workflow">
-          <div className="cv-bio-workflow-left">
-            <span className="cv-bio-kicker">FROM SIGNAL TO SYSTEM</span>
-
-            <h2>
-              A research workflow
-              <br />
-              built around biology.
-            </h2>
-
-            <p>
-              CureVerseAI transforms a biological question into a structured
-              research journey — moving from entity resolution to molecular
-              context and connected biological intelligence.
-            </p>
-          </div>
-
-          <div className="cv-bio-workflow-right">
-            {workflow.map(([no, title, text]) => (
-              <div className="cv-bio-step" key={no}>
-                <span>{no}</span>
-
-                <div>
-                  <h3>{title}</h3>
-                  <p>{text}</p>
-                </div>
-
-                <b>+</b>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section className="cv-bio-intelligence">
-          <div className="cv-bio-intelligence-inner">
-            <div>
-              <span className="cv-bio-kicker">SCIENTIFIC INTELLIGENCE</span>
-
-              <h2>
-                See the biology
-                <br />
-                <em>behind the signal.</em>
-              </h2>
-            </div>
-
-            <div className="cv-bio-intelligence-grid">
-              <div>
-                <span>01</span>
-                <strong>GENOMIC CONTEXT</strong>
-                <p>Genes, variants and molecular identity.</p>
-              </div>
-
-              <div>
-                <span>02</span>
-                <strong>PROTEIN FUNCTION</strong>
-                <p>Protein identity and biological function.</p>
-              </div>
-
-              <div>
-                <span>03</span>
-                <strong>CELLULAR STATE</strong>
-                <p>Biological activity at the cellular level.</p>
-              </div>
-
-              <div>
-                <span>04</span>
-                <strong>RELATIONSHIPS</strong>
-                <p>Connections between biological entities.</p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="cv-bio-cta">
-          <span className="cv-bio-kicker">
-            CURVERSEAI / BIOTECHNOLOGY
-          </span>
-
-          <h2>
-            Explore biology
-            <br />
-            as a connected system.
-          </h2>
-
-          <Link href="/domains/biotechnology/manual">
-            Enter Biotechnology →
-          </Link>
-        </section>
-      </main>
-
-      <Footer />
-    </div>
+        </div>
+      </section>
+    </main>
   );
 }

@@ -1,0 +1,135 @@
+/* ==========================================================================
+   CUREVERSEAI — MEDICINE
+   Design system.
+
+   Namespace: cv-medicine-wf-*
+
+   Visual language is inherited from:
+     - frontend/app/domains/drug_development/disease-impact/disease-impact.css
+     - frontend/app/domains/drug_development/disease-impact/scene/scene.css
+
+   The rules that define this language:
+
+     1. Monospace label layer. Every label, kicker, breadcrumb,
+        button, chip, metric caption, and section divider uses
+        ui-monospace / SF Mono / Menlo, uppercase, tracked.
+        Sans-serif is reserved for headings, subtitles, prose.
+
+     2. Radius 2px. Everything is sharp. No pills. No cards
+        with rounded corners.
+
+     3. Fixed 56px horizontal page padding.
+
+     4. The accent is one red. Secondary accents (gold, cyan)
+        appear only as soft glows or in labelled states.
+
+     5. Hover states glow red. Not neutral shadow — red glow:
+        0 16px 36px -22px rgba(224, 82, 90, 0.5), and either
+        a lift (translateY(-4px)) or a slide-in accent bar.
+
+     6. Corner ticks, ambient scan animations, and a numbered
+        disc kicker are the identity signals.
+
+   Every rule respects prefers-reduced-motion at the end.
+   ========================================================================== */
+
+/* -------------------------------------------------------------------------
+   Tokens
+   ------------------------------------------------------------------------- */
+
+:root {
+  /* Surfaces */
+  --cv-medicine-wf-base: #080a0b;
+  --cv-medicine-wf-cream: #eee9e1;
+  --cv-medicine-wf-cream-90: rgba(238, 233, 225, 0.9);
+  --cv-medicine-wf-cream-82: rgba(238, 233, 225, 0.82);
+  --cv-medicine-wf-cream-75: rgba(238, 233, 225, 0.75);
+  --cv-medicine-wf-cream-70: rgba(238, 233, 225, 0.7);
+  --cv-medicine-wf-cream-55: rgba(238, 233, 225, 0.55);
+  --cv-medicine-wf-cream-45: rgba(238, 233, 225, 0.45);
+  --cv-medicine-wf-cream-35: rgba(238, 233, 225, 0.35);
+
+  /* Accent */
+  --cv-medicine-wf-red: #e0525a;
+  --cv-medicine-wf-red-hi: #f0666e;
+  --cv-medicine-wf-gold: #e9c58c;
+  --cv-medicine-wf-cyan: #6ee7f2;
+
+  /* Workflow accents — each workflow sets its own via body class */
+  --cv-medicine-wf-accent: var(--cv-medicine-wf-red);
+  --cv-medicine-wf-accent-warm: var(--cv-medicine-wf-gold);
+
+  /* Border */
+  --cv-medicine-wf-border: rgba(255, 255, 255, 0.08);
+  --cv-medicine-wf-border-hi: rgba(255, 255, 255, 0.14);
+  --cv-medicine-wf-border-red: rgba(224, 82, 90, 0.5);
+
+  /* Surface */
+  --cv-medicine-wf-surface: rgba(255, 255, 255, 0.02);
+  --cv-medicine-wf-surface-2: rgba(255, 255, 255, 0.03);
+  --cv-medicine-wf-surface-red: rgba(224, 82, 90, 0.06);
+
+  /* Radius — always 2px */
+  --cv-medicine-wf-r: 2px;
+
+  /* Motion */
+  --cv-medicine-wf-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Layout */
+  --cv-medicine-wf-pad: 56px;
+
+  /* Fonts */
+  --cv-medicine-wf-sans:
+    "Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Helvetica, Arial, sans-serif;
+  --cv-medicine-wf-mono:
+    ui-monospace, "SF Mono", Menlo, "Cascadia Mono", Consolas, monospace;
+}
+
+/* -------------------------------------------------------------------------
+   Keyframes
+   ------------------------------------------------------------------------- */
+
+@keyframes cv-medicine-wf-fade-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes cv-medicine-wf-fade-right {
+  from { opacity: 0; transform: translateX(-8px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes cv-medicine-wf-spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes cv-medicine-wf-scan {
+  0%   { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+@keyframes cv-medicine-wf-ambient {
+  0%, 100% { filter: brightness(1) saturate(1); }
+  50%      { filter: brightness(1.08) saturate(1.08); }
+}
+
+@keyframes cv-medicine-wf-pulse {
+  0%, 100% { opacity: 0.55; transform: scale(0.94); }
+  50%      { opacity: 1;    transform: scale(1.08); }
+}
+
+/* -------------------------------------------------------------------------
+   Reduced motion
+   ------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

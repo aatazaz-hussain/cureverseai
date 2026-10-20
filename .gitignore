@@ -25,3 +25,49 @@ Thumbs.db
 # Logs
 *.log
 npm-debug.log*
+brag-output/
+
+# Generated video output
+brag-output/
+
+# Runtime API cache
+ai-engine/data/cache/
+
+# Temporary source backups
+*.before-*
+*.broken-v1
+
+# Windows download metadata
+*:Zone.Identifier
+
+# Generated video output
+brag-output/
+
+# Generated API response cache
+ai-engine/data/cache/
+
+# Temporary backup files
+*.before-*
+*.broken-v1
+*.backup
+*.pre-hydration-fix
+*.pre-static-status
+
+# Windows download metadata
+*:Zone.Identifier
+
+# Generated video output
+brag-output/
+
+# Generated API response cache
+ai-engine/data/cache/
+
+# Temporary backup files
+*.before-*
+*.broken-v1
+*.backup
+*.pre-hydration-fix
+*.pre-static-status
+
+# Windows download metadata
+*:Zone.Identifier

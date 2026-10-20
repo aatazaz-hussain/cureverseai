@@ -140,3 +140,91 @@ class OpenTargetsClient:
                 [],
             ),
         }
+
+    def search_disease(
+        self,
+        query: str,
+        size: int = 10,
+    ) -> Dict[str, Any]:
+        """
+        Search Open Targets for diseases matching a free-text
+        query.
+
+        Returns a normalized dictionary:
+
+            {
+                "query": <original query>,
+                "count": <total matches on the server>,
+                "rows": [
+                    {
+                        "id": <Open Targets disease ID>,
+                        "name": <disease name>,
+                        "description": <description or None>,
+                    },
+                    ...
+                ],
+            }
+
+        The method does NOT decide which match is canonical.
+        It returns raw candidates in the order the server
+        returned them. Ranking is a resolver concern.
+        """
+
+        query = query.strip()
+
+        if not query:
+            raise ValueError(
+                "Disease search query cannot be empty."
+            )
+
+        graphql_query = """
+        query SearchDisease($query: String!, $size: Int!) {
+          search(
+            queryString: $query,
+            entityNames: ["disease"],
+            page: { index: 0, size: $size }
+          ) {
+            total
+            hits {
+              id
+              name
+              description
+              entity
+            }
+          }
+        }
+        """
+
+        data = self.query(
+            graphql_query,
+            {
+                "query": query,
+                "size": size,
+            },
+        )
+
+        search = data.get("search") or {}
+        hits = search.get("hits") or []
+
+        rows = []
+
+        for hit in hits:
+            if not isinstance(hit, dict):
+                continue
+
+            if hit.get("entity") != "disease":
+                continue
+
+            rows.append(
+                {
+                    "id": hit.get("id"),
+                    "name": hit.get("name"),
+                    "description": hit.get("description"),
+                }
+            )
+
+        return {
+            "query": query,
+            "count": search.get("total", 0),
+            "rows": rows,
+        }

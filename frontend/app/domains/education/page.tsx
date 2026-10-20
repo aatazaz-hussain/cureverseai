@@ -9,9 +9,9 @@ import "./education.css";
 type HeroState = "left" | "center" | "right";
 
 const heroCharacters = {
-  left: "/research/research-character-left.png",
-  center: "/research/research-character-center.png",
-  right: "/research/research-character-right.png",
+  left: "/education/education-character-left.png",
+  center: "/education/education-character-center.png",
+  right: "/education/education-character-right.png",
 };
 
 const learningCards = [

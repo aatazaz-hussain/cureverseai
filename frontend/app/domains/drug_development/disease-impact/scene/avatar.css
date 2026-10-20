@@ -1,0 +1,244 @@
+/* =========================================================
+   CUREVERSEAI — DISEASE → BIOLOGICAL IMPACT
+   SCIENTIFIC AVATAR
+   ========================================================= */
+
+.cv-dia-avatar {
+  position: absolute;
+  left: 24px;
+  bottom: 24px;
+  z-index: 6;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  pointer-events: none;
+  animation: cv-avatar-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.3s both;
+}
+
+@keyframes cv-avatar-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (max-width: 900px) {
+  .cv-dia-avatar {
+    left: 16px;
+    bottom: 16px;
+  }
+}
+
+/* ---------- Figure ---------- */
+
+.cv-dia-avatar-figure {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  pointer-events: auto;
+  animation: cv-avatar-breathe 3.2s ease-in-out infinite;
+  transform-origin: center bottom;
+  transition:
+    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (max-width: 900px) {
+  .cv-dia-avatar-figure {
+    width: 90px;
+    height: 90px;
+  }
+}
+
+@keyframes cv-avatar-breathe {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50%      { transform: translateY(-2px) scale(1.015); }
+}
+
+.cv-dia-avatar-figure img {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  pointer-events: none;
+  filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.55));
+  transition: filter 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ---------- Glow ---------- */
+
+.cv-dia-avatar-glow {
+  position: absolute;
+  inset: -12%;
+  z-index: 1;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 50% 60%,
+    rgba(224, 82, 90, 0.22),
+    rgba(224, 82, 90, 0.06) 45%,
+    transparent 70%
+  );
+  filter: blur(18px);
+  opacity: 0.55;
+  transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+
+.cv-dia-avatar-figure:hover .cv-dia-avatar-glow {
+  opacity: 0.9;
+}
+
+.cv-dia-avatar-figure:hover img {
+  filter:
+    drop-shadow(0 8px 22px rgba(0, 0, 0, 0.6))
+    drop-shadow(0 0 18px rgba(224, 82, 90, 0.35));
+}
+
+/* ---------- Speaking state ---------- */
+
+.cv-dia-avatar-speaking {
+  animation: cv-avatar-speak 0.9s ease-in-out infinite;
+}
+
+@keyframes cv-avatar-speak {
+  0%, 100% {
+    transform: translateY(0) scale(1) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-2px) scale(1.02) rotate(-0.6deg);
+  }
+  50% {
+    transform: translateY(-3px) scale(1.03) rotate(0deg);
+  }
+  75% {
+    transform: translateY(-2px) scale(1.02) rotate(0.6deg);
+  }
+}
+
+.cv-dia-avatar-speaking .cv-dia-avatar-glow {
+  opacity: 1;
+  background: radial-gradient(
+    circle at 50% 60%,
+    rgba(224, 82, 90, 0.38),
+    rgba(233, 197, 140, 0.12) 45%,
+    transparent 72%
+  );
+  animation: cv-avatar-glow-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes cv-avatar-glow-pulse {
+  0%, 100% { opacity: 0.9; transform: scale(1); }
+  50%      { opacity: 1; transform: scale(1.06); }
+}
+
+/* ---------- Waveform ---------- */
+
+.cv-dia-avatar-wave {
+  position: absolute;
+  bottom: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 14px;
+  opacity: 0;
+  transition: opacity 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+
+.cv-dia-avatar-speaking .cv-dia-avatar-wave {
+  opacity: 1;
+}
+
+.cv-dia-avatar-wave span {
+  display: block;
+  width: 3px;
+  height: 4px;
+  border-radius: 2px;
+  background: #e0525a;
+  box-shadow: 0 0 6px rgba(224, 82, 90, 0.7);
+  transform-origin: center bottom;
+}
+
+.cv-dia-avatar-speaking .cv-dia-avatar-wave span {
+  animation: cv-avatar-bar 0.7s ease-in-out infinite;
+}
+
+.cv-dia-avatar-speaking .cv-dia-avatar-wave span:nth-child(1) {
+  animation-delay: 0s;
+}
+.cv-dia-avatar-speaking .cv-dia-avatar-wave span:nth-child(2) {
+  animation-delay: 0.09s;
+}
+.cv-dia-avatar-speaking .cv-dia-avatar-wave span:nth-child(3) {
+  animation-delay: 0.18s;
+}
+.cv-dia-avatar-speaking .cv-dia-avatar-wave span:nth-child(4) {
+  animation-delay: 0.27s;
+}
+.cv-dia-avatar-speaking .cv-dia-avatar-wave span:nth-child(5) {
+  animation-delay: 0.36s;
+}
+
+@keyframes cv-avatar-bar {
+  0%, 100% { height: 4px; opacity: 0.5; }
+  50%      { height: 14px; opacity: 1; }
+}
+
+/* ---------- Mute button ---------- */
+
+.cv-dia-avatar-mute {
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  background: rgba(8, 10, 11, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 2px;
+  font-size: 13px;
+  line-height: 1;
+  cursor: pointer;
+  color: rgba(238, 233, 225, 0.8);
+  transition:
+    border-color 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    background 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cv-dia-avatar-mute:hover {
+  border-color: rgba(224, 82, 90, 0.55);
+  background: rgba(224, 82, 90, 0.08);
+  transform: translateY(-2px);
+  box-shadow:
+    0 8px 20px -10px rgba(224, 82, 90, 0.6),
+    0 0 18px -6px rgba(224, 82, 90, 0.35);
+}
+
+.cv-dia-avatar-mute:active {
+  transform: translateY(0);
+}
+
+/* ---------- Reduced motion ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .cv-dia-avatar *,
+  .cv-dia-avatar *::before,
+  .cv-dia-avatar *::after {
+    animation-duration: 0.001s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001s !important;
+  }
+}

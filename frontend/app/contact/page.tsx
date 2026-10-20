@@ -202,11 +202,34 @@ export default function ContactPage() {
                   const result = await response.json();
 
                   if (!response.ok) {
-                    throw new Error(
-                      result?.detail?.message ||
-                      result?.detail ||
-                      "Unable to send your message."
-                    );
+                    const detail = result?.detail;
+                    let message = "Unable to send your message.";
+
+                    if (typeof detail === "string") {
+                      message = detail;
+                    } else if (Array.isArray(detail)) {
+                      message =
+                        detail
+                          .map((item: any) =>
+                            typeof item === "string"
+                              ? item
+                              : item?.msg ||
+                                item?.message ||
+                                ""
+                          )
+                          .filter(Boolean)
+                          .join(", ") || message;
+                    } else if (detail && typeof detail === "object") {
+                      message =
+                        detail?.message ||
+                        detail?.error ||
+                        result?.message ||
+                        message;
+                    } else if (typeof result?.message === "string") {
+                      message = result.message;
+                    }
+
+                    throw new Error(message);
                   }
 
                   form.reset();

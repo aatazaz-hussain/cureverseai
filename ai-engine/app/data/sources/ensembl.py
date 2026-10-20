@@ -1,9 +1,24 @@
 import time
+from pathlib import Path as _Path
 
 import httpx
 
+from app.data.cache import DiskCache
+
 
 ENSEMBL_BASE_URL = "https://rest.ensembl.org"
+
+#: Default cache location for Ensembl lookups. Overridable
+#: via the EnsemblClient constructor for tests.
+_DEFAULT_CACHE_DIR = (
+    _Path(__file__).resolve().parents[3]
+    / "data" / "cache" / "ensembl"
+)
+
+#: Default TTL for cached Ensembl responses: 30 days.
+#: Gene and protein annotations change on the scale of
+#: months, not hours, so a long TTL is correct here.
+_DEFAULT_CACHE_TTL = 30 * 24 * 3600
 
 
 class EnsemblClient:
@@ -11,9 +26,16 @@ class EnsemblClient:
         self,
         timeout: float = 30.0,
         max_retries: int = 3,
+        cache_dir: str | None = None,
+        cache_ttl: int = _DEFAULT_CACHE_TTL,
     ):
         self.timeout = timeout
         self.max_retries = max_retries
+
+        self.cache = DiskCache(
+            cache_dir or _DEFAULT_CACHE_DIR,
+            ttl_seconds=cache_ttl,
+        )
 
     def lookup_gene(self, symbol: str):
         symbol = symbol.strip().upper()
@@ -21,6 +43,22 @@ class EnsemblClient:
         if not symbol:
             raise ValueError("Gene symbol cannot be empty.")
 
+        # --- cache check ------------------------------------
+        cache_key = DiskCache.make_key("ensembl:lookup_gene", symbol)
+        cached = self.cache.get(cache_key)
+        if cached is not None:
+            return cached.get("data")
+
+        # --- network path -----------------------------------
+        result = self._lookup_gene_uncached(symbol)
+
+        self.cache.set(
+            cache_key,
+            {"data": result},
+        )
+        return result
+
+    def _lookup_gene_uncached(self, symbol: str):
         headers = {
             "Accept": "application/json",
             "Content-Type": "application/json",
@@ -499,6 +537,32 @@ class EnsemblClient:
 
         No accession is hard-coded.
         """
+
+        # --- cache check ------------------------------------
+        cache_key = DiskCache.make_key(
+            "ensembl:resolve_uniprot",
+            f"{ensembl_id}|{organism}",
+        )
+        cached = self.cache.get(cache_key)
+        if cached is not None:
+            return cached.get("data")
+
+        # --- network path -----------------------------------
+        result = self._resolve_reviewed_uniprot_accession_uncached(
+            ensembl_id, organism
+        )
+
+        self.cache.set(
+            cache_key,
+            {"data": result},
+        )
+        return result
+
+    def _resolve_reviewed_uniprot_accession_uncached(
+        self,
+        ensembl_id: str,
+        organism: str = "Homo sapiens",
+    ) -> dict | None:
 
         mappings = self.get_uniprot_mappings(
             ensembl_id

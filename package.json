@@ -1,0 +1,11 @@
+{
+  "name": "cureverseai",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "bash ./dev.sh",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "dev:backend": "bash -c 'source backend/.venv/bin/activate && cd backend && uvicorn app.main:app --reload --host 0.0.0.0 --port 8000'",
+    "dev:ai": "bash -c 'source ai-engine/.venv/bin/activate && cd ai-engine && uvicorn app.main:app --reload --host 0.0.0.0 --port 8001'"
+  }
+}

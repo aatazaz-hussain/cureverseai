@@ -109,6 +109,163 @@ class ChEMBLClient:
             f"target/{target_id}.json",
         )
 
+    def search_molecules_by_name(
+        self,
+        query: str,
+        limit: int = 5,
+    ) -> Dict[str, Any]:
+        """
+        Search ChEMBL molecules (compounds / drugs) by free-text
+        name or synonym.
+
+        Returns a curated shape rather than the raw ChEMBL
+        response so callers do not depend on ChEMBL's pagination
+        wrapper:
+
+            {
+                "query":         <original query>,
+                "count":         <int>,
+                "found":         <bool>,
+                "molecules": [
+                    {
+                        "chembl_id":        "CHEMBL1200681",
+                        "pref_name":        "MONTELUKAST SODIUM",
+                        "molecule_type":    "Small molecule",
+                        "max_phase":        4,
+                        "therapeutic_flag": True,
+                        "synonyms":         ["..."],
+                    },
+                    ...
+                ],
+            }
+
+        An empty result is a valid answer, not an error: the
+        returned ``found`` is False and the list is empty. The
+        caller decides how to surface that.
+        """
+        cleaned = (query or "").strip()
+
+        if not cleaned:
+            return {
+                "query": cleaned,
+                "count": 0,
+                "found": False,
+                "molecules": [],
+            }
+
+        data = self._get(
+            "molecule/search.json",
+            params={
+                "q": cleaned,
+                "limit": int(limit),
+            },
+        )
+
+        raw = data.get("molecules") or []
+
+        molecules: List[Dict[str, Any]] = []
+
+        for entry in raw:
+            if not isinstance(entry, dict):
+                continue
+
+            chembl_id = entry.get("molecule_chembl_id")
+            if not chembl_id:
+                continue
+
+            synonyms: List[str] = []
+            for syn in entry.get("molecule_synonyms") or []:
+                if isinstance(syn, dict):
+                    val = syn.get("molecule_synonym")
+                    if val:
+                        synonyms.append(str(val))
+
+            molecules.append(
+                {
+                    "chembl_id": str(chembl_id).strip().upper(),
+                    "pref_name": entry.get("pref_name"),
+                    "molecule_type": entry.get("molecule_type"),
+                    "max_phase": entry.get("max_phase"),
+                    "therapeutic_flag": bool(
+                        entry.get("therapeutic_flag")
+                    ),
+                    "synonyms": synonyms[:5],
+                }
+            )
+
+        return {
+            "query": cleaned,
+            "count": len(molecules),
+            "found": len(molecules) > 0,
+            "molecules": molecules,
+        }
+
+    def get_molecule(
+        self,
+        chembl_id: str,
+    ) -> Dict[str, Any]:
+        """
+        Retrieve one ChEMBL molecule by its ChEMBL molecule id.
+
+        Returns a curated shape:
+
+            {
+                "chembl_id":            "CHEMBL1200681",
+                "pref_name":            "MONTELUKAST SODIUM",
+                "molecule_type":        "Small molecule",
+                "max_phase":            4,
+                "therapeutic_flag":     True,
+                "synonyms":             ["..."],
+                "molecule_structures":  { ... } | None,
+                "source":               "ChEMBL",
+                "found":                True,
+            }
+
+        A 404 from ChEMBL raises LookupError, matching the
+        convention used by find_human_protein_target for a
+        requested resource that does not exist. Transport
+        failures propagate through the existing retry path.
+        """
+        cleaned = (chembl_id or "").strip().upper()
+
+        if not cleaned:
+            raise ValueError("ChEMBL molecule id cannot be empty.")
+
+        try:
+            data = self._get(f"molecule/{cleaned}.json")
+        except httpx.HTTPStatusError as exc:
+            if exc.response is not None and exc.response.status_code == 404:
+                raise LookupError(
+                    f"ChEMBL molecule {cleaned} does not exist."
+                ) from exc
+            raise
+
+        if not isinstance(data, dict):
+            raise LookupError(
+                f"ChEMBL molecule {cleaned} returned an unexpected payload."
+            )
+
+        synonyms: List[str] = []
+        for syn in data.get("molecule_synonyms") or []:
+            if isinstance(syn, dict):
+                val = syn.get("molecule_synonym")
+                if val:
+                    synonyms.append(str(val))
+
+        return {
+            "chembl_id": str(
+                data.get("molecule_chembl_id") or cleaned
+            ).strip().upper(),
+            "pref_name": data.get("pref_name"),
+            "molecule_type": data.get("molecule_type"),
+            "max_phase": data.get("max_phase"),
+            "therapeutic_flag": bool(data.get("therapeutic_flag")),
+            "synonyms": synonyms[:10],
+            "molecule_structures": data.get("molecule_structures"),
+            "source": "ChEMBL",
+            "found": True,
+        }
+
     def find_human_protein_target(
         self,
         gene_symbol: str,
@@ -214,6 +371,124 @@ class ChEMBLClient:
             params=params,
         )
 
+    def get_activities_for_molecule(
+        self,
+        molecule_chembl_id: str,
+        limit: int = 100,
+        offset: int = 0,
+    ) -> List[Dict[str, Any]]:
+        """
+        Retrieve ChEMBL activity records for a molecule across
+        all its targets.
+
+        The existing get_activities method requires a target id
+        because its primary purpose is target-centric evidence.
+        This method takes the molecule as the primary key so
+        callers can discover the targets a molecule acts on.
+
+        Each raw activity is normalized via normalize_activity
+        so the return shape is identical to what
+        get_validated_activities produces. No potency is
+        averaged, no effectiveness score is fabricated.
+
+        Returns [] if the molecule has no recorded activities.
+        Raises through the existing _get retry path on
+        transport failure.
+        """
+        cleaned = (molecule_chembl_id or "").strip().upper()
+
+        if not cleaned:
+            raise ValueError("ChEMBL molecule id cannot be empty.")
+
+        data = self._get(
+            "activity.json",
+            params={
+                "molecule_chembl_id": cleaned,
+                "limit": limit,
+                "offset": offset,
+            },
+        )
+
+        activities = data.get("activities") or []
+
+        validated: List[Dict[str, Any]] = []
+
+        for activity in activities:
+            if not isinstance(activity, dict):
+                continue
+            validated.append(
+                self.normalize_activity(activity)
+            )
+
+        return validated
+
+    def get_mechanism(
+        self,
+        molecule_chembl_id: str,
+    ) -> List[Dict[str, Any]]:
+        """
+        Retrieve ChEMBL mechanism-of-action records for a
+        molecule.
+
+        Endpoint:
+            GET /mechanism.json?molecule_chembl_id=X
+
+        ChEMBL attaches mechanism records to a specific ChEMBL
+        molecule id — sometimes the parent, sometimes the salt.
+        The caller is responsible for trying both. This method
+        just returns whatever ChEMBL has for the given id.
+
+        Return shape (one dict per mechanism):
+
+            {
+                "molecule_chembl_id": "CHEMBL1200681",
+                "target_chembl_id":   "CHEMBL1798",
+                "mechanism_of_action":"Cysteinyl leukotriene receptor 1 antagonist",
+                "action_type":        "ANTAGONIST",
+                "direct_interaction": <bool|None>,
+            }
+
+        Returns [] when the molecule has no recorded mechanism.
+        Never raises for a missing record.
+        """
+        cleaned = (molecule_chembl_id or "").strip().upper()
+
+        if not cleaned:
+            return []
+
+        try:
+            data = self._get(
+                "mechanism.json",
+                params={
+                    "molecule_chembl_id": cleaned,
+                    "limit": 50,
+                },
+            )
+        except Exception:
+            return []
+
+        if not isinstance(data, dict):
+            return []
+
+        raw = data.get("mechanisms") or []
+        out: List[Dict[str, Any]] = []
+
+        for m in raw:
+            if not isinstance(m, dict):
+                continue
+            tid = m.get("target_chembl_id")
+            if not tid:
+                continue
+            out.append({
+                "molecule_chembl_id": m.get("molecule_chembl_id"),
+                "target_chembl_id": str(tid).strip().upper(),
+                "mechanism_of_action": m.get("mechanism_of_action"),
+                "action_type": m.get("action_type"),
+                "direct_interaction": m.get("direct_interaction"),
+            })
+
+        return out
+
     @staticmethod
     def validate_activity_target(
         activity: Dict[str, Any],
@@ -229,10 +504,10 @@ class ChEMBLClient:
         if activity.get("target_chembl_id") != expected_id:
             return False
 
-        if expected_target_name:
-            if activity.get("target_pref_name") != expected_target_name:
-                return False
-
+        # ChEMBL target names can legitimately differ from the
+        # preferred biological name (for example multi-target records
+        # such as "EGFR/PPP1CA"). The validated ChEMBL target ID is
+        # the authoritative identity check; organism remains required.
         if activity.get("target_organism") != expected_organism:
             return False
 
@@ -348,6 +623,21 @@ class ChEMBLClient:
         )
 
         activities = data.get("activities", [])
+
+        # Some ChEMBL targets may not expose quantitative measurements
+        # (IC50/Ki/Kd/etc.) even though legitimate activity records exist.
+        # If the filtered query returns nothing, perform one unfiltered
+        # fallback so qualitative/observational records are not silently lost.
+        # No potency value is inferred from these records.
+        if not activities and standard_types:
+            fallback = self.get_activities(
+                target_chembl_id=target_chembl_id,
+                molecule_chembl_id=molecule_chembl_id,
+                standard_types=None,
+                limit=limit,
+                offset=offset,
+            )
+            activities = fallback.get("activities", [])
 
         validated: List[Dict[str, Any]] = []
 
